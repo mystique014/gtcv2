@@ -1,0 +1,833 @@
+<?php
+# GRR : fichier de langue italienne
+# Translation realized by Marc HENNETIER and Antony AUDOUARD
+# Last modification : 10/07/2007
+
+# Charset (jeu de caractères) utilisé dans l'en-tête des pages HTML
+$charset_html = "iso-8859-1";
+
+$vocab = array();
+
+//
+//
+$vocab["deux_points"] = "&nbsp;: ";
+
+# Used in admin_config_sso.php
+$vocab["admin_config_sso.php"]     = "Configuration SSO"; // A traduire
+$vocab["Ne_pas_activer_Service_sso"] = "Ne pas activer la prise en compte d'un SSO."; // A traduire
+$vocab["config_cas_title"] = "Presa in considerazione di un ambiente CAS (SSO)";
+$vocab["CAS_SSO_explain"] = "Se disporte di un ambiente <b>CAS</b> (Central Authentification Service), potete attivare la presa in considerazione di questo servizio con <B>GRR</B> sotto. Rinviate alla documentazione di GRR per sapere più.";
+$vocab["Statut_par_defaut_utilisateurs_importes"] = "Statuto per difetto degli utenti importati";
+$vocab["choix_statut_CAS_SSO"] = "Scegliete lo statuto che sarà attribuito alle persone quando si collegano a GRR per la prima volta utilizzando il servizio CAS. Potrete in seguito modificare questo valore per ogni utente";
+$vocab["Url_de_deconnexion"] = "Url d'interruzione";
+$vocab["Url_de_deconnexion_explain"] = "Quando un utente si stacca, il navigatore vado verso la pagina la cui URL è precisata sotto.";
+$vocab["Url_de_deconnexion_explain2"] = "Si le champ est vide, selon la valeur du paramètre \$authentification_obli (fichier config.inc.php),l'utilisateur est dirigé soit vers la page d'accueil soit vers la page de déconnexion."; // A traduire
+$vocab["admin_config_lemon.php"]     = "Configuration Lemonldap (SSO)";
+$vocab["config_lemon_title"] = "Presa in considerazione di un ambiente Lemonldap (SSO)";
+$vocab["lemon_SSO_explain"] = "Se disporte di un ambiente <b>Lemonldap</b>, potete attivare la presa in considerazione di questo servizio con <B>GRR</B > sotto. Rinviate andò documentazione di GRR per sapere più.";
+$vocab["choix_statut_lemon_SSO"] = "Scegliete lo statuto che sarà attribuito alle persone quando si collegano a GRR per la prima volta utilizzando il servizio lemonldap. Potrete in seguito modificare questo valore per ogni utente";
+$vocab["config_lcs_title"] = "Prise en compte d'un environnement SSO d'un serveur LCS"; // A traduire
+$vocab["lcs_SSO_explain"] = "Si vous installez GRR sur un serveur <b>LCS</b>, vous pouvez activer ci-dessous la prise en compte du système d'authentification par <B>GRR</B>. Reportez-vous à la documentation de GRR pour en savoir plus."; // A traduire
+$vocab["choix_statut_lcs_SSO"] = "Activez la prise en compte du service <b>SSO</b> de LCS et choisissez ci-dessous le statut qui sera attribué aux personnes lorsqu'elles se connectent à GRR pour la première fois en utilisant le service CAS. Vous pourrez par la suite modifier cette valeur pour chaque utilisateur."; // A traduire
+$vocab["active_lcs"] = "Activez la prise en compte du service SSO de LCS"; // A traduire
+$vocab["statut_eleve"] = "Statut des élèves"; // A traduire
+$vocab["statut_non_eleve"] = "Statut des autres utilisateurs (non élève)"; // A traduire
+
+# Used in admin_config_ldap.php
+$vocab["admin_config_ldap.php"]     = "Configurazione LDAP";
+
+# Used in login.php
+$vocab["msg_login1"]     = "<b>GRR</b> è un' applicazione PHP/MySql sotto licenza GPL, adattato da <a href='http://mrbs.sourceforge.net'>MRBS</a>.<br>Per ogni informazione che riguarda <b>GRR</b>, andare sul sito : ";
+$vocab["msg_login3"]     = "Il sito è temporaneamente inaccessibile. Scusateci di questa perturbazione! !";
+$vocab["autor_contact"]  = "contattare l'autore";
+$vocab["pwd"]            = "Password";
+$vocab["identification"] = "Identificazione";
+$vocab["wrong_pwd"]      = "Identificatore o password sbagliato";
+$vocab["grr_version"]    = "Versione ";
+$vocab["importation_impossible"] = "Identificazione corretta ma l'importazione del profilo è impossibile. Segnalare questo problema all'amministratore GRR";
+$vocab["echec_connexion_GRR"] = "Fallimento di collegamento a GRR.";
+$vocab["causes_possibles"] = "Cause possibili :";
+$vocab["echec_authentification_ldap"] = "Fallimento dell'autenticazione LDAP";
+$vocab["authentification_CAS"] = "Autenticarsi presso il Servizio Centrale d'Autenticazione";
+$vocab['Activer_module_multisite'] = "Abilitare la funzione \"multisite\"";
+$vocab['type_de_creneaux'] = "Configurazione del tipo di nicchia";
+$vocab['duree_par_defaut_reservation_area'] = "Durata predefinita di una prenotazione in secondi (deve essere un multiplo del valore precedente)";
+$vocab['configuration_ressource'] = "Configurazione caratteristica";
+$vocab['description complete'] = "Descrizione completa (visibile in dettaglio)";
+$vocab['description complete2'] = " - È possibile utilizzare i tag HTML";
+$vocab['Afficher_description_complete_dans_titre_plannings'] = "Visualizza descrizione completa nei prospetti titolo.";
+$vocab['save_and_back'] = "Salva e ritorno";
+$vocab['Pas image disponible'] = "Nessuna immagine disponibile";
+$vocab['user_admin_site_list'] = "Délégation site";
+
+# Used in logout.php
+$vocab["msg_logout1"] = "Avete chiuso la vostra sessione GRR.";
+$vocab["msg_logout2"] = "Vostra sessione GRR è scaduta, o siete stati staccati,<br/>o bene non eravate collegati.";
+$vocab["msg_logout3"] = "Aprire una sessione";
+
+# Used in functions.inc
+$vocab["fonctions"]               = "Visualizza le caratteristiche";
+$vocab["welcome"]               = "Accoglienza";
+$vocab["welcome_to"]            = "Benvenuto ";
+$vocab["mrbs"]                  = "GRR : Gestion et Réservation de Ressources (gestione e prenotazione di risorse)";
+$vocab["report"]                = "Report";
+$vocab["admin"]                 = "Amministrazione";
+$vocab["help"]                  = "Aiuto";
+$vocab["not_php3"]              = "<H1>ATTENZIONE : Quest'applicazione può non funzionare correttamente con PHP3</H1>";
+$vocab["connect"]               = "Collegarsi";
+$vocab["disconnect"]            = "Staccarsi";
+$vocab["manage_my_account"]     = "Gestire il mio conto";
+$vocab["technical_contact"]     = "Contattare il supporto tecnico";
+$vocab["administrator_contact"] = "Contattare l'amministratore";
+$vocab["subject_mail1"]         = "GRR : opinione ";
+$vocab["subject_mail_creation"] = " - Nuova prenotazione";
+$vocab["subject_mail_modify"]   = " - Modifica di una prenotazione";
+$vocab["subject_mail_delete"]   = " - Soppressione di una prenotazione";
+$vocab["title_mail"]            = "Messaggio automatico emesso dal sito GRR : ";
+$vocab["the_user"]              = "L'utente ";
+$vocab["creation_booking"]      = " ha prenotato ";
+$vocab["modify_booking"]        = " ha modificato la prenotazione di ";
+$vocab["delete_booking"]        = " ha eliminato la prenotazione di ";
+$vocab["the_room"]              = "la risorsa : ";
+$vocab["start_of_the_booking"]  = "Inizio della prenotazione : ";
+$vocab["msg_no_email"]          = "Se non desiderate ricevere più questi messaggi automatici, scrivete in questo senso all'amministratore di Grr : ";
+$vocab["created_by"]            = " effettuata da ";
+$vocab["created_by_you"]        = " che avevate effettuato.";
+$vocab["title_mail_creation"]   = "Una prenotazione su GRR è stata registrata :\n";
+$vocab["title_mail_modify"]     = "Una prenotazione su GRR è stata modificata :\n";
+$vocab["title_mail_delete"]     = "Una prenotazione su GRR è stata cancellata :\n";
+$vocab["user_name"]             = "Cognome et nome dell'utente :";
+$vocab["email"]                 = "Posta elettronica dell'utente :";
+$vocab["tentative_reservation_ressource_indisponible"] = "PROBLEMA : Avete tentato di prenottare una risorsa temporaneamente inalienabile !";
+$vocab["suppression_automatique"] = "Le délai de confirmation de réservation a été dépassé.\nSuppression automatique de la réservation de ";  // A traduire
+
+# Used in day.php
+$vocab["bookingsfor"]       = "Prenotazione per<br>";
+$vocab["bookingsforpost"]   = "";
+$vocab["areas"]             = "Categoria&nbsp;:&nbsp;";
+$vocab["daybefore"]         = "Andare al giorno precedente";
+$vocab["dayafter"]          = "Andare al giorno seguente";
+$vocab["gototoday"]         = "Oggi";
+$vocab["goto"]              = " Attaccare";
+$vocab["number_max"]        = " persona max.";
+$vocab["number_max2"]       = " persone max.";
+$vocab["one_connected"]     = " persona collegata";
+$vocab["several_connected"] = " persone collegate";
+$vocab["week"] = "Settimana";
+$vocab["month"] = "Mese";
+$vocab["ressource_temporairement_indisponible"] = "Temporaneamente inalienabile";
+$vocab["fiche_ressource"] = "Fiche di presentazione della risorsa";
+$vocab["Configurer la ressource"] = "Configurare la risorsa";
+$vocab["cliquez_pour_effectuer_une_reservation"] = "Cliquez pour effectuer une réservation"; // A traduire
+$vocab["reservation_impossible"] = "Réservation impossible";  // A traduire
+
+# Used in trailer.inc
+$vocab["viewday"]   = "Vedere il giorno";
+$vocab["viewweek"]  = "Vedere la settimana";
+$vocab["viewmonth"] = "Vedere il mese";
+$vocab["ppreview"]  = "Formato stampabile";
+
+# Used in edit_entry.php
+$vocab["addentry"]                          = "Aggiungere una prenotazione";
+$vocab["editentry"]                         = "Modificare una prenotazione";
+$vocab["editseries"]                        = "Modificare una periodicità";
+$vocab["namebooker"]                        = "Breve descrizione";
+$vocab["nameuser"]                          = "riserva Subscriber";
+$vocab["fulldescription"]                   = "Descrizione piena: (Numero di persone, ecc.)";
+$vocab["date"]                              = "Début de la réservation"; // A traduire
+$vocab["datereser"]                         = "Data e ora della prenotazione"; // A traduire
+$vocab["fin_reservation"]                   = "Fin de la réservation"; // A traduire
+$vocab["start_date"]                        = "Data d'inizio";
+$vocab["end_date"]                          = "Data di fine :";
+$vocab["time"]                              = "Ora&nbsp;:";
+$vocab["duration"]                          = "Durata :";
+$vocab["seconds"]                           = "secondo(i)";
+$vocab["minutes"]                           = "minuto(i)";
+$vocab["hours"]                             = "ora(e)";
+$vocab["days"]                              = "giorno(i)";
+$vocab["weeks"]                             = "settimana(e)";
+$vocab["years"]                             = "anni";
+$vocab["all_day"]                           = "Giorno intero";
+$vocab["type"]                              = "Tipo";
+$vocab["save"]                              = "Registrare";
+$vocab["rep_type"]                          = "Tipo di periodicità :";
+$vocab["rep_type_0"]                        = "Nessuna";
+$vocab["rep_type_1"]                        = "Ogni giorno";
+$vocab["rep_type_2"]                        = "Ogni settimana";
+$vocab["rep_type_3"]                        = "Ogni mese, la stessa data";
+$vocab["rep_type_4"]                        = "Ogni anno, la stessa data";
+$vocab["rep_type_5"]                        = "Ogni mese, lo stesso giorno della settimana";
+$vocab["rep_type_6"]                        = "tutti i N settimane";
+$vocab["rep_end_date"]                      = "Data di fine di periodicità :";
+$vocab["rep_rep_day"]                       = "Giorno :";
+$vocab["rep_for_weekly"]                    = "(per una periodicità settimanale)";
+$vocab["rep_freq"]                          = "Frequenza :";
+$vocab["rep_num_weeks"]                     = "Intervallo di settimane";
+$vocab["rep_for_nweekly"]                   = "(per N-settimane)";
+$vocab["ctrl_click"]                        = "CTRL + clic mouse per scegliere più di una risorsa";
+$vocab["entryid"]                           = "Prenotazione N° ";
+$vocab["repeat_id"]                         = "periodicità N° ";
+$vocab["you_have_not_entered"]              = "Non avete inserito ";
+$vocab["valid_time_of_day"]                 = "un ora valida.";
+$vocab["brief_description"]                 = "la descrizione breve.";
+$vocab["useful_n-weekly_value"]             = "un intervallo di settimane valido.";
+$vocab["no_compatibility_with_repeat_type"] = "Il tipo di periodicità che avete scelto è incompatibile con la scelta : giorno (per N-settimane).";
+$vocab['choose_a_day'] = "Choisissez au moins un jour dans la semaine."; // A traduire
+$vocab["no_compatibility_n-weekly_value"]   = "Non potete definire un intervallo di settimane se scegliete questo tipo di periodicità.";
+$vocab["message_records_invite"]            = "Se prenotate con un senza licenza chiesto il club non è responsabile!";
+$vocab["message_records"]                   = "Le modifiche sono state registrate !";
+$vocab["click_here_for_series_open"]                   = ">>>Cliccare qui per aprire le opzioni di periodicità<<<";
+$vocab["click_here_for_series_close"]                   = ">>>Cliccare qui per chiudere le opzioni di periodicità<<<";
+$vocab["choose_a_type"]   = "Dovete scegliere un tipo di prenotazione.";
+$vocab["choose_a_partenaire"]   = "È necessario scegliere un partner.";
+$vocab["every week"] =  "ogni settimana";
+$vocab["week 1/2 "] =  "una settimana su 2";
+$vocab["week 1/3"] =  "una settimana su 3";
+$vocab["week 1/4"] =  "una settimana su 4";
+$vocab["week 1/5"] =  "una settimana su 5";
+$vocab["choose"] =  "(scegliete)";
+$vocab["signaler_reservation_en_cours"] =  "Segnalare che la prenotazione è in corso d'utilizzo (riservare agli amministratore della risorsa)";
+$vocab["reservation_en_cours"] =  "Prenotazione in corso d'utilizzo.";
+$vocab["une_seule_reservation_en_cours"] = "Osservazione : per una risorsa specifica, una sola prenotazione puo essere segnalata \"in corso d'utilizzo\".";
+$vocab["period"] = "Créneau :"; // A traduire
+$vocab["periods"] = "créneau(x)"; // A traduire
+$vocab["adversaire"] = "avversario :";
+
+# Used in view_entry.php
+$vocab["description"]      = "Descrizione :";
+$vocab["room"]             = "Risorsa";
+$vocab["court"]            = "Campo";
+$vocab["createdby"]        = "Creata da :";
+$vocab["lastupdate"]       = "Ultimo aggiornamento :";
+$vocab["deleteentry"]      = "Cancellare una prenotazione";
+$vocab["deleteseries"]     = "Cancellare una periodicità";
+$vocab["confirmdel"]       = "Siete sicuri\\ndi volere cancellare\\nquesta prenotazione ?\\n\\n";
+$vocab["returnprev"]       = "Ritorno alla pagina precedente";
+$vocab["invalid_entry_id"] = "N° di prenotazione non valido";
+$vocab["reservation_a_confirmer_au_plus_tard_le"] = "Réservation à confirmer au plus tard le :";  // A traduire
+$vocab["avertissement_reservation_a_confirmer"] = "(les réservations non confirmées sont automatiquement supprimées)";  // A traduire
+$vocab["Reservation confirmee"] = "Réservation confirmée";  // A traduire
+$vocab["confirmer reservation"] = "Cocher la case pour confirmer la réservation";  // A traduire
+
+# Used in edit_entry_handler.php
+$vocab["error"]                   = "Errore";
+$vocab["sched_conflict"]          = "Conflitto tra prenotazioni ";
+$vocab["conflict"]                = "La nuova prenotazione entra in conflitto con (loro) la prenotazione(s) seguente(s): ";
+$vocab["too_may_entrys"]          = "Le opzioni scelte creeranno troppe prenotazioni.<BR>Choisissez des options différentes !";
+$vocab["returncal"]               = "Ritorno al calendario";
+$vocab["failed_to_acquire"]       = "Errore, impossibile di ottenere l'accesso esclusivo alla database";
+$vocab["booking_in_past"]         = "Prenotazione precedente alla data attualeantérieure à la date actuelle";
+$vocab["booking_in_past_explain"] = "La data d'inizio della nuova prenotazione è passata. Volete scegliere una data d'inizio di prenotazione posteriore alla data attuale: ";
+$vocab["booking_in_past_explain_with_periodicity"] = "Una o più prenotazioni pongono problemi poiché si situano in passato.<br>Volete scegliere date di fine di prenotazione posteriori alla data attuale: ";
+$vocab["error_delais_max_resa_room"] = "Non siete autorizzati a riservare questa risorsa così a lungo in anticipo.";
+$vocab["error_delais_min_resa_room"] = "Non siete autorizzati a riservare questa risorsa o effettuare questa modifica: i tempo minimo di prenotazione di questa risorsa è superato.";
+$vocab["del_entry_in_conflict"] = "Eliminare la (le) prenotazione(i) quì sopra allo scopo di convalidare la nuova prenotazione.";
+$vocab["error_booking_week"] = "Un giocatore ha usato la sua quota di ore per la settimana!";
+$vocab["error_invite"] = "Hai invitato altro, grazie a trasferirsi al club !";
+$vocab["del_entry_in_conflict"] = "Rimuovere le riserve sopra per convalidare la nuova prenotazione.";
+$vocab["error_date_confirm_reservation"] = "Vous devez choisir une date de confirmation inférieure à la date de début de réservation."; // A traduire
+$vocab["error_same_date_other_room"] = "E 'vietato riservare diverse breve per un'ora!"; 
+$vocab["error_max_all_ressources"] = "Un giocatore supera la quota, prenotazione attiva, autorizzato sulle strutture !"; 
+
+# Authentication stuff
+$vocab["accessdenied"]               = "Accesso rifiutato";
+$vocab["norights"]                   = "Non avete i diritti sufficienti per effettuare quest'operazione.";
+$vocab["nobookings"]                 = "Non una prenotazione possibile per questa data!";
+$vocab["msg_max_booking"]            = "Il numero massimo di prenotazioni di questa risorsa per utente è stato fissato a: ";
+$vocab["accessdeniedtoomanybooking"] = "Accesso rifiutato: La vostra domanda di prenotazione è respinta poiché supererebbe il massimo di prenotazioni autorizzato!";
+$vocab["msg_max_booking_week_illimite"]   = "Il numero di prenotazioni di questa risorsa per utente a settimana non è limitata !";
+$vocab["accessdeniedtoomanybooking"] = "Accesso negato: La vostra richiesta di prenotazione viene rifiutata perché avrebbe superare il limite massimo autorizzato prenotazioni !";
+
+# Used in search.php
+$vocab["invalid_search"]  = "Ricerca non valida.";
+$vocab["search_results"]  = "Risultati della ricerca per: ";
+$vocab["nothing_found"]   = "Nessuna prenotazione è stata trovata.";
+$vocab["records"]         = "Registrazioni ";
+$vocab["through"]         = " a ";
+$vocab["of"]              = " su ";
+$vocab["previous"]        = "Precedente";
+$vocab["next"]            = "Secondo";
+$vocab["entry"]           = "Prenotazione";
+$vocab["view"]            = "Vedere";
+$vocab["advanced_search"] = "Ricerca avanzata";
+$vocab["search_button"]   = "Ricerca";
+$vocab["search_for"]      = "Ricercare";
+$vocab["from"]            = "A partire da";
+$vocab["dans les champs suivants : "] = "Nei campi seguenti&nbsp;: ";
+
+# Used in report.php
+$vocab["report_on"]          = "Relazione delle prenotazioni : ";
+$vocab["report_start"]       = "Data d'inizio della relazione : ";
+$vocab["report_end"]         = "Data di fine della relazione : ";
+$vocab["match_area"]         = "settore";
+$vocab["match_descr"]        = "Descrizione completa&nbsp;";
+$vocab["include"]            = "includere : ";
+$vocab["report_only"]        = "il rappport soltanto";
+$vocab["summary_only"]       = "il riassunto soltanto";
+$vocab["report_and_summary"] = "la relazione ed il riassunto";
+$vocab["summarize_by"]       = "Riassunto da : ";
+$vocab["sum_by_descrip"]     = "Breve descrizione";
+$vocab["sum_by_creator"]     = "Creatore";
+$vocab["entry_found"]        = "prenotazione trovata";
+$vocab["entries_found"]      = "prenotazioni trovate";
+$vocab["summary_header"]     = "Sconto delle ore riservate";
+$vocab["total"]              = "Totale";
+$vocab["submitquery"]        = "Pubblicare la relazione";
+$vocab["match_login"]        = "Creatore (identificatore)";
+$vocab["csv"]        = "Teletrasmettere l'archivio CSV";
+$vocab["indexcsv"]           = "Archivi CSV della relazione delle prenotazioni";
+$vocab["dlresumecsv"]       = ">>>Teletrasmettere la CSV del riassunto<<<";
+$vocab["dlrapportcsv"]       = ">>>Teletrasmettere la CSV della relazione<<<";
+$vocab["summary_header_per"]     = "Décompte des créneaux réservées"; // A traduire
+$vocab["summary_header_resa"]     = "Décompte des réservations"; // A traduire
+$vocab["trier_par"]     = "Trier par"; // A traduire
+
+# Used in week.php
+$vocab["weekbefore"] = "Vedere la settimana precedente";
+$vocab["weekafter"]  = "Vedere la settimana seguente";
+$vocab["allday"]     = "Giorno";
+
+# Used in week_all.php
+$vocab["all_rooms"] = "Tutte le risorse";
+
+# Used in month.php
+$vocab["monthbefore"] = "Vedere il mese precedente";
+$vocab["monthafter"]  = "Vedere il mese seguente";
+
+# Used in month_all.php
+$vocab["all_areas"] = "Tutte le prenotazioni";
+$vocab["change_view"] = "Cambiare il modo di visualizzazione";
+
+# Used in {day week month}.php
+$vocab["no_rooms_for_area"] = "Nessuno risorsa non è definito per questo settore.";
+
+# Used in admin_room.php
+$vocab["edit"]     = "Modificare";
+$vocab["delete"]   = "Eliminare";
+$vocab["rooms"]    = "Risorse";
+$vocab["in"]       = "di:";
+$vocab["noareas"]  = "Non un settore";
+$vocab["addarea"]  = "Aggiungere un settore";
+$vocab["name"]     = "Nome";
+$vocab["noarea"]   = "Scegliete inizialmente un settore.";
+$vocab["addroom"]  = "Aggiungere una risorsa";
+$vocab["capacity"] = "Numero di persone massime autorizzato nella sala (0 se non si tratta di una sala)";
+$vocab["norooms"]  = "Nessuna risorsa è creata per questo settore.";
+$vocab['access']   = "Accesso ristretto";
+$vocab["edittype"]    = "Types de réservations";  // A traduire
+
+# Used in admin_type_modify.php// A traduire
+$vocab["admin_type_modify_create.php"] = "Ajout d'un nouveau type de réservation";
+$vocab["admin_type_modify_modify.php"] = "Modification d'un type de réservation";
+$vocab["msg_type_created"]             = "Vous venez de créer un nouveau type de réservation.";
+$vocab["update_type_failed"]  = "La mise à jour du type de réservation a échoué : ";
+$vocab["explications_active_type"] = "<b>Remarque : </b>quand un type est décoché, celui-ci n'est plus proposé à l'utilisateur effectuant ou modifiant une réservation, mais les réservations déjà effectuées continuent d'apparaître sur les plannings avec ce type, bien que désactivé.";
+
+# Used in admin_type.php // A traduire
+$vocab["admin_type.php"] = "Tipi di prenotazioni";
+$vocab["display_add_type"]          = "Aggiungere un tipo di prenotazione";
+$vocab["type_num"]                  = "Accesso";
+$vocab["type_name"]                 = "Tipo Nome";
+$vocab["type_order"]                = "Ordine di visualizzazione";
+$vocab["type_color"]                = "Colore";
+$vocab["type_valide_domaine"]      = "Tipo valido per il campo";
+$vocab["admin_type_explications"]  = "Per impostazione predefinita, quando si crea un nuovo tipo di prenotazioni, è comune a tutte le aree. È quindi possibile specificare per ogni campo, i tipi valido o meno.";
+
+# Used in admin_group_modify.php// A traduire
+$vocab["admin_group_modify_create.php"] = "L'aggiunta di un nuovo gruppo di utenti";
+$vocab["admin_group_modify_modify.php"] = "Modifica di un gruppo di utenti";
+$vocab["msg_group_created"]             = "È stato creato un nuovo gruppo di utenti.";
+$vocab["update_group_failed"]  = "L'aggiornamento del gruppo di utenti non è riuscita : ";
+$vocab["explications_active_group"] = "<b>Nota: </ b> quando un gruppo di utenti non è selezionata, le prenotazioni già fatte ancora compare progettazioni con questo gruppo di utenti, anche se portatori di handicap.";
+$vocab["admin_group.php"] 			= "Groupes d'utilisateurs";
+$vocab["display_add_group"]          = "Aggiungere un gruppo di utenti";
+$vocab["group_num"]                  = "Accesso";
+$vocab["group_name"]                 = "Nome gruppo";
+$vocab["group_order"]                = "Ordine di visualizzazione";
+$vocab["group_color"]                = "colore";
+$vocab["group"]                		= "Gruppo";
+$vocab["group_valide_domaine"]      = "Gruppo valido per il dominio";
+$vocab["admin_group_explications"]  = "Questa caratteristica permette un club, un comune di gestire diversi gruppi di utenti nello stesso database. Ogni gruppo utente può prenotare on risorse del dominio cui è assegnato! <br> Esempio: I giocatori del gruppo TENNIS possono prenotare sui campi da tennis.";
+# Used in admin_abt_modify.php// A traduire
+$vocab["admin_abt_modify_create.php"] = "L'aggiunta di un nuovo abbonamento";
+$vocab["admin_abt_modify_modify.php"] = "Cambiare un abbonamento";
+$vocab["msg_abt_created"]             = "Avete appena creato una nuova sottoscrizione.";
+$vocab["update_abt_failed"]  = "L'abbonamento aggiornamento non è riuscito: ";
+$vocab["explications_active_abt"] = "<b>Nota: </ b> Abbonamenti identificare abbonati e la loro regolazione.";
+$vocab["admin_abt.php"] 			= "Elenco Sottoscrizioni";
+$vocab["display_add_abt"]          = "Aggiungere abbonamento";
+$vocab["admin_abt_explications"]  = "Permette di gestire i tipi di abbonamenti offerti dal club!";
+$vocab["admin_compta_rap.php"]     = "riconciliazione bancaria";
+$vocab["admin_compta_rap_explications"]    = "Consente per la riconciliazione delle registrazioni contabili e gli estratti conto bancari";
+$vocab["admin_compta_abonnes.php"] = "Abbonati alle scritture contabili";
+$vocab["admin_compta_compte_tresorerie.php"] = "Conti di tesoreria";
+$vocab["admin_abt.php"] 			= "Elenco Sottoscrizioni";
+$vocab["export"]     				= "Export CSV magazzino";
+$vocab["purge"]     				= "Conti di spurgo (5 anni mantenuti)";
+$vocab["purge_ef"]     				= "Spurgo fatto !";
+$vocab["admin_compta_bilan.php"] = "Bilancio";
+$vocab["admin_compta_bilan_explications"] = "Consente di visualizzare un bilancio da sportivi dell'anno.";
+# Used in admin_edit_room.php
+$vocab["editarea"]            = "Modificare il settore";
+$vocab["editroom"]            = "Modificare la risorsa";
+$vocab["update_room_failed"]  = "L'aggiornamento della risorsa è fallito: ";
+$vocab["error_room"]          = "Errore : risorsa ";
+$vocab["not_found"]           = " non trovata";
+$vocab["update_area_failed"]  = "L'aggiornamento del settore è fallito: ";
+$vocab["error_area"]          = "Errore: settore";
+$vocab["order_display"]       = "Ordine di visualizzazione";
+$vocab["max_booking"]         = "Numero massimo di prenotazioni per utente (-1 se no di restrizione)";
+$vocab["explain_max_booking"] = "La restrizione non si applica agli amministratori della risorsa.";
+$vocab["declarer_ressource_indisponible"] = "Dichiarare questa risorsa temporaneamente inalienabile. Le prenotazioni sono allora impossibili.";
+$vocab["declarer_ressource_indisponible"] = "Dichiarare questo Risorsa temporaneamente non disponibile. Le prenotazioni sono quindi impossibili.";
+$vocab["montrer_fiche_présentation_ressource"] = "Rendere visibile la scheda di presentazione della risorsa nell'interfaccia pubblica.";
+$vocab["choisir_image_ressource"] = "Scegliere un'immagine della risorsa per la scheda di presentazione (png, jpg e gif)";
+$vocab["supprimer_image_ressource"] = "Eliminare l'immagine attuale della risorsa.";
+$vocab["description complète"] = "Descrizione completa (visibile nella scheda di presentazione) - Potete utilizzare segnali HTML.";
+$vocab['ip_adr']   = "Indirizzo IP cliente";
+$vocab['ip_adr_explain']   = "<b>Osservazione sull'indirizzo IP cliente: </b>
+<br>Se l'indirizzo IP della macchina cliente è identico a quest'indirizzo, questo settore diventa il settore per difetto.
+<br>Ciò suppone d'altra parte che:
+<br>1) l'amministratore non ha definito un settore per difetto nella pagina di configurazione generale,
+<br>2) l'utente non ha definito un settore per difetto che gli è proprio nella pagina di gestione del suo conto.";
+$vocab["morningstarts_area"] = "Ora d'inizio di giorno";
+$vocab["eveningends_area"] = "Ora di fine di giorno (superiore all'ora d'inizio di giorno)";
+$vocab["resolution_area"] = "Più piccolo blocco prenotabile, in secondi (1800 secondi = 1/2 ora)";
+$vocab["eveningends_minutes_area"] = "Numero di minuti da aggiungere all'ora di fine di giorno per avere la fine reale di un giorno.";
+$vocab["weekstarts_area"] = "Inizio della settimana";
+$vocab["twentyfourhour_format_area"] = "Formato di visualizzazione del tempo";
+$vocab["twentyfourhour_format_12"] = "Visualizzazione 12 ore.";
+$vocab["twentyfourhour_format_24"] = "Visualizzazione 24 ore.";
+$vocab["configuration_plages_horaires"] = "Configurazione della visualizzazione delle pianificazioni delle risorse di questo settore";
+$vocab["delais_max_resa_room"] = "Numero massimo di giorni al di la di cui l'utente non può riservare o modificare una prenotazione (-1 se nessuna restrizione).
+<br><b>Esempio</b> : un valore uguale a 30 significa che un utente può riservare una risorsa soltanto 30 giorni in anticipo al massimo.
+<br><i>Questa limitazione non tocca gli amministratori delle risorse, come gli amministratori del settore.</i>";
+$vocab["delais_max_resa_room_2"] = "<b>Numero massimo di giorni</b> al di la di cui l'utente non può riservare o modificare una prenotazione :";
+$vocab["delais_min_resa_room"] = "Tempo <b>in minuti</b> al di sotto di cui l'utente non può riservare o modificare una prenotazione (0 se nessuna restrizione).
+<br><b>Esempio</b> : un valore uguale a 60 significa che un utente non può riservare una risorsa o modificare una prenotazione meno di 60 minuti prima dell'inizio della prenotazione.
+<br><i>Questa limitazione non tocca gli amministratori delle risorse come gli amministratori del settore.</i>";
+$vocab["delais_min_resa_room_2"] = "<b>Tempo in minuti</b> al di sotti di cui l'utente non può riservare o modificare una prenotazione :";
+$vocab["allow_action_in_past"] = "Permettere la prenotazione nel passato come le modifiche/soppressioni di prenotazioni scorse.";
+$vocab["dont_allow_modify"] = "Ne pas permettre aux utilisateurs (hormis les gestionnaires et les administrateurs) de modifier ou de supprimer leurs propres réservations."; // A traduire
+$vocab["allow_action_in_past_explain"] = "Se il box non è biffata, un utente (né anche un amministratore o un amministratore ristretto) non può effettuare una prenotazione nel passato, né modificare o eliminare una prenotazione scorsa. Solo l'amministratore generale ha questa possibilità.";
+$vocab["avertissement_change_type"] = "ATTENTION : les deux types de configuration des créneaux sont incompatibles entre eux : un changement du type de créneaux entraîne donc, après validation, un effacement de toutes les réservations de ce domaine."; // A traduire
+$vocab["intitule_creneau"] = "Intitulé du créneau n° "; // A traduire
+$vocab["nombre_de_creneaux"] = "Nombre de créneaux"; // A traduire
+$vocab["creneaux_de_reservation_temps"] = "Les créneaux de réservation sont basés sur le temps."; // A traduire
+$vocab["creneaux_de_reservation_pre_definis"] = "Les créneaux de réservation sont basés sur des intitulés pré-définis."; // A traduire
+$vocab["msg_option_de_reservation"] = "<b>Poser des réservations \"sous réserve\"</b> : indiquer une valeur différente de 0 pour activer cette fonctionnalité.<br>La valeur ci-contre désigne le nombre maximal de jours pour confirmer une réservation"; // A traduire
+$vocab["type_affichage_reservation"] = "Pour une nouvelle réservation ou modification d'une réservation, l'utilisateur spécifie";
+$vocab["affichage_reservation_duree"] = " date/heure de début de réservation et <b>durée de la réservation</b>";  // A traduire
+$vocab["affichage_reservation_date_heure"] = " date/heure de début de réservation et <b>date/heure de fin de réservation</b>";  // A traduire
+$vocab["cocher_jours_a_afficher"] = "Cochez ci-dessous les jours à afficher sur les différents plannings.<br><b>Remarque </b>: si vous décidez de ne pas afficher certains jours, veillez également à désactiver ces jours dans le \"Calendrier hors réservation\"."; // A traduire
+
+# Used in admin_room_del.php
+$vocab["deletefollowing"] = "Eliminerete le prenotazioni seguenti: ";
+$vocab["sure"]            = "essete certi?";
+$vocab["YES"]             = "SÌ";
+$vocab["NO"]              = "NON";
+$vocab["delarea"]         = "Dovete eliminare tutte le risorse di questo settore prima di potere eliminarlo<p>";
+
+# Used in help.php
+$vocab["about_mrbs"]        = "A proposito di GRR (Gestione e prenotazione di risorse)";
+$vocab["database"]          = "Database: ";
+$vocab["system"]            = "System: ";
+$vocab["please_contact"]    = "Contattate ";
+$vocab["for_any_questions"] = "se avete una questione che non è trattata qui.";
+
+# Used in mysql.inc AND pgsql.inc
+$vocab["failed_connect_db"] = "Errore grave: Fallimento del collegamento alla database";
+
+# Used in admin_room.php
+$vocab["admin_room.php"]          = "Categoria e risorse";
+$vocab["admin_menu_site_area_room"]= "Siti e risorse Domini";
+$vocab["admin_user.php"]          = "Utenti";
+$vocab["admin_right.php"]         = "Gestione delle risorse da parte degli utenti";
+$vocab["admin_group.php"]		  = "Gruppi di utenti";
+$vocab["admin_right_admin.php"]   = "Amministrazione dei settori da parte degli utenti";
+$vocab["admin_access_area.php"]   = "Accesso ai settori ristretti";
+$vocab["admin_email_manager.php"] = "Mails automatici";
+$vocab["admin_config.php"]        = "Configurazione generale";
+$vocab["admin_compta.php"]        = "Club Accounting";
+$vocab["admin_calend.php"]     = "Prenotazione giorni interi";
+$vocab["admin_overload.php"] = "Champs additionnels"; // A traduire
+$vocab["admin_menu_general"] = "Général"; // A traduire
+$vocab["admin_menu_arearoom"] = "Domaines et ressources"; // A traduire
+$vocab["admin_menu_user"] = "Utilisateurs et accès"; // A traduire
+$vocab["admin_menu_various"] = "Divers"; // A traduire
+$vocab["admin_menu_auth"] = "Authentification et ldap"; // A traduire
+$vocab["admin_menu_compta"] = "Contabilità";
+
+# Used in admin_right_admin.php
+$vocab["admin_right_admin_explain"] = "Oltre ai suoi diritti normali, l'amministratore di un settore ha la possibilità di gestire interamente un settore: creazione, soppressione, modifica di una risorsa, aggiunta e soppressione di amministratori delle prenotazioni, gestione dei mails automatici.";
+$vocab["administration_domaine"]     = "Amministrazione del settore: ";
+$vocab["no_admin_this_area"]            = "Attualmente nessuno, eccetto gli amministratori, non è autorizzato a dirigere il settore qui di fronte!";
+$vocab["user_admin_area_list"]           = "Elenco delle persone autorizzate a gestire il settore qui di fronte (eccetto gli amministratori): ";
+
+# Used in admin_right.php
+$vocab["select"]              = "(Scegliete)";
+$vocab["select_all"]          = "(tutte)";
+$vocab["no_area"]             = "Nessun settore è stato scelto.";
+$vocab["no_restricted_area"]  = "Nessun settore ad accesso ristretto è stato definito.";
+$vocab["administration1"]     = "Gestione della risorsa: ";
+$vocab["administration2"]     = "Gestione delle risorse seguenti: ";
+$vocab["user_list"]           = "Elenco delle persone autorizzate a gestire/i risorsa (s) a fianco (eccetto gli amministratori):";
+$vocab["add_user_to_list"]    = "Aggiungere un utente all'elenco: ";
+$vocab["no_admin"]            = "Attualmente nessuno, eccetto gli amministratori, non è autorizzato a gestire la risorsa qui di fronte!";
+$vocab["no_admin_all"]        = "Attualmente nessuno, eccetto gli amministratori, non è autorizzato a gestire tutte le risorse a fianco!";
+$vocab["warning_exist"]       = "L'utente che avete tentato di aggiungere appartiene già all'elenco!";
+$vocab["nobody"]              = "(nessuno)";
+$vocab["admin_right_explain"] = "Oltre ai suoi diritti normali, l'amministratore di una risorsa ha la possibilità di modificare o eliminare qualsiasi prenotazione questo di risorsa. Più delle restrizioni relative al numero massimo di prenotazioni della risorsa non si applicano.";
+
+# Used in admin_access_area.php
+$vocab["user_area_list"] = "Elenco delle persone aventi accesso a questo settore (eccetto gli amministratori):";
+$vocab["no_user_area"]   = "Attualmente nessuno, eccetto gli amministratori, non ha accesso a questo settore!";
+
+# Used in admin_email_manager.php
+$vocab["no_room"]                 = "Nessuno risorsa non è stato scelto in questo settore.";
+$vocab["mail_user_list"]          = "Elenco degli utenti prevenuti da mail: ";
+$vocab["no_mail_user_list"]       = "Non ci sono utenti attualmente nell'elenco!";
+$vocab["explain_automatic_mail2"] = "D'altra parte, quando un utente <b>riserva una risorsa</b>, <b>modifica</b> o <b>elimina</b> prenotazione, alcuni utenti possono essere prevenuti da posta elettronica. Per ogni risorsa, potete designare uno o più utenti da prevenire: ";
+$vocab["explain_automatic_mail3"] = "Quando un utente <b>modifica</b> o <b>elimina</b> prenotazione effettuata da un altro utente, quest'ultimo (se il campo posta elettronica è stato informato) ne è informato automaticamente da un messaggio posta elettronica.";
+$vocab["add_user_succeed"]        = "Un utente è stato aggiunto all'elenco.";
+$vocab["del_user_succeed"]        = "Un utente è stato eliminato dell'elenco.";
+$vocab["attention_mail_automatique_désactive"] = "ATTENZIONE: la spedizione di mails automazioni è attualmente disattivata. Per attivarlo, appuntamento nel pannello di configurazione generale.";
+
+# Used in admin_user_modify.php
+$vocab["admin_user_modify_create.php"] = "Aggiunta di un nuovo utente";
+$vocab["admin_user_modify_modify.php"] = "Modifica di un utente esistente";
+$vocab["please_enter_name"]            = "Volete entrare un nome ed un nome per l'utente!";
+$vocab["error_exist_login"]            = "*** Attenzione! Un utente avente lo stesso login esiste già. Registrazione impossibile! ***";
+$vocab["msg_login_created"]            = "Avete appena creato un nuovo utente. Per difetto, quest'utente è considerato come attivo.";
+$vocab["msg_login_created_error"]      = "Un problema si è verificato in occasione della creazione di un nuovo utente! Volete contattare l'appoggio tecnico.";
+$vocab["message_records_error"]        = "Errore in occasione della registrazione dei dati";
+$vocab["only_letters_and_numbers"]     = "L'identificatore dell'utente deve essere costituito soltanto da lettere e da cifre!";
+$vocab["change_pwd"]                   = "Cambiare el password";
+$vocab["activ_no_activ"]               = "Stato";
+$vocab["activ_user"]                   = "Attivo";
+$vocab["no_activ_user"]                = "Non attivo";
+$vocab["required"]                     = "I campi segnati di uno * sono obbligatori.";
+$vocab["statut_user"]                  = "Utente";
+$vocab["statut_visitor"]               = "Ospite";
+$vocab["statut_administrator"]         = "Amministratore";
+$vocab["entrainement"]                 = "Formazione";
+$vocab["simple"]                       = "Semplice";
+$vocab["ecole"]                        = "Scuola";
+$vocab["ecole2h"]                      = "Scuola 2h";
+$vocab["rien"]                         = "---";
+$vocab["mail_user"]                    = "Email";
+$vocab["pwd_toot_short"]               = "Password (a confermare)";
+$vocab["confirm_pwd"]                  = "Password (a confermare)";
+$vocab["Changer_source_utilisateur_local"] = "Intaccare la scatola qui di fronte perché l'autenticazione sia locale (rende l'autenticazione esterna come ldap, CAS SSO o Lemonldap definitivamente impossibile) procedura irreversibile.";
+$vocab['duplique_domaine'] = "Campo duplicati";
+$vocab['duplique_ressource'] = "Risorsa duplicata";
+$vocab["Changer_source_utilisateur_local"] = "Cocher la case ci-contre pour que l'authentification soit locale (rend l'authentification externe telle que ldap, CAS SSO, ou Lemonldap définitivement impossible) procédure irréversible.";
+$vocab["administrateur du domaine"] = "Administrateur du domaine"; // A traduire
+$vocab["gestionnaire des resources suivantes"] = "Gestionnaire des resource(s) suivante(s) :"; // A traduire
+$vocab["liste_privileges"] = "Liste des privilèges  de l'utilisateur ";                    // A traduire
+$vocab["pas de privileges"] = "Pas de privilèges";                                  // A traduire
+$vocab["a acces au domaine"] = "Cet utilisateur a accès à ce domaine restreint.";                        // A traduire
+$vocab["est prevenu par mail"] = "Cet utilisateur est averti automatiquement par mail pour le(s) ressource(s) suivante(s).";       // A traduire
+$vocab["administrateur general"] = "Administrateur général"; // A traduire
+$vocab["photo"] = "ID foto per scaricare: ";
+$vocab["tel"] = "numero di telefono ";
+$vocab["adresse"] = "Indirizzo";
+$vocab["code"] = "codice postale ";
+$vocab["ville"] = "Città "; 
+$vocab["championnat"] = "Campionato individuale ";
+$vocab["solo"] = "Singolo giocatore ";
+
+# Used in admin_user.php
+$vocab["display_add_user"]          = "Aggiungere un utente";
+$vocab["display_add_user_list_csv"] = "Importare in GRR un archivio di utenti (formato CSV)";
+$vocab["display_all_user.php"]      = "Pubblicare: tutti gli utenti";
+$vocab["display_user_on.php"]       = "gli utenti attivi";
+$vocab["display_user_off.php"]      = "gli utenti inattivi";
+$vocab["mail_user_on.php"]          = "Controllare tutti";
+$vocab["mail_user_off.php"]         = "Deseleziona tutto";
+$vocab["OK"]                        = "Convalidare";
+$vocab["abonnement"]                = "Abbonamento";
+$vocab["statut"]                    = "Statuto";
+$vocab["licence"]                   = "licenza";
+$vocab["classement"]                = "Classifica";
+$vocab["ajoutlicence"]              = "Messa registrazione della licenza";
+$vocab["actif_inactif"]             = "La registrazione di massa attiva / non attiva";
+$vocab["login_name"]                = "Nome di login";
+$vocab["names"]                     = "Nome";
+$vocab["annee"]                     = "Anno";
+$vocab["bilanannee"]                = "Equilibrio degli abbonati per anno";
+$vocab["anneeenr"]                	= "Indicare il record dell'anno sportivo ex: _2013";
+$vocab["authentification"]          = "Autenticazione: ";
+$vocab["Externe"] = "Externe";
+$vocab["privileges"] = "privilèges"; // A traduire
+$vocab["maj_base_locale"] = "Nettoyage de la base locale"; // A traduire
+$vocab["mess_maj_base_locale"] = "Recherche et suppression de la base locale de GRR, des utilisateurs LCS qui ne sont plus présents dans la base LCS. Cliquez sur OK pour continuer."; // A traduire
+$vocab["mess2_maj_base_locale"] = "Les utilisateurs suivants ont été supprimés de la base locale car ils n'étaient plus présents dans la base LCS :"; // A traduire
+$vocab["mess3_maj_base_locale"] = "Il n'y a aucun utilisateur à supprimer de la base locale."; // A traduire
+$vocab["synchro_base_locale"] = "Mise à jour de la base locale"; // A traduire
+$vocab["mess_synchro_base_locale"] = "Mise à jour des utilisateurs de la base locale de GRR à partir des informations de la base LCS et insertion dans la base locale de GRR des utilisateurs LCS qui ne sont pas présents localement. Cliquez sur OK pour continuer (cette opération peut être longue !)."; // A traduire
+$vocab["liste_nouveaux_utilisateurs"] = "Liste des nouveaux utilisateurs inséré dans la base locale : "; // A traduire
+$vocab["liste_pb_insertion"] = "Problème : les utilisateurs suivants n'ont pas pu être insérés dans la base locale : "; // A traduire
+$vocab["liste_utilisateurs_modifie"] =  "Liste des utilisateurs mis à jour dans la base locale : "; // A traduire
+$vocab["liste_pb_update"] =  "Problème : les utilisateurs suivants n'ont pas pu être mis à jour dans la base locale : "; // A traduire
+$vocab["photo"] =  "Foto"; //
+$vocab["ok"] =  "Bene"; //
+$vocab["courrier"] =  "e-mail"; //
+$vocab["datenais"] =  "Data di nascita"; //
+$vocab["telport"] =  "Cellulare"; //
+$vocab["invite"] =  "contatore visitatori"; //
+$vocab["display_admins.php"] =  "Amministratori"; //
+$vocab["code_badge"]     		= "codice distintivo NFC / RFID";
+
+$vocab["admin_compta_tresorerie.php"]    = "Club Cash";
+$vocab["admin_compta_tresorerie_explications"]     = "Permette per i trasferimenti tra conti di cassa";
+# Used in admin_config.php
+$vocab['logo']							 = "Logo del club";
+$vocab['edit_logo']						= "Club cambiamento logo";
+$vocab['admin_admin_site.php'] = "Siti di amministrazione";
+$vocab['administration_site'] = "Amministrazione del sito";
+$vocab['no_admin_this_site'] = "Actuellement personne, hormis les administrateurs généraux, n'est autorisé à administrer le site ci-contre !";
+$vocab["title_disable_login"]            = "Attivazione/decontaminazione dei collegamenti";
+$vocab["explain_disable_login"]          = "Disattivando i collegamenti, rendete impossibile il collegamento alla località per gli utenti, eccetto gli amministratori. Inoltre, gli utenti attualmente collegati sono automaticamente staccati.
+<br>Tuttavia, se il collegamento non è obbligatorio per l'accesso alla località in visualizzazione, quest'accesso resta possibile.";
+$vocab["disable_login_on"]               = "Disattivare i collegamenti";
+$vocab["disable_login_off"]              = "Attivare i collegamenti";
+$vocab["submit"]                         = "Inviare";
+$vocab["miscellaneous"]                  = "Informazioni diverse";
+$vocab["title_home_page"]                = "Grande titolo della pagina di collegamento";
+$vocab["message_home_page"]              = "Messaggio d'avvertimento della pagina di collegamento";
+$vocab["company"]                        = "Nome dello stabilimento";
+$vocab["webmaster_name"]                 = "Nome dell'amministratore del sito";
+$vocab["webmaster_email"]                = "Email dell'amministratore del sito";
+$vocab["technical_support_email"]        = "Email dell'appoggio tecnico";
+$vocab["grr_url"]                        = "Indirizzo del sito";
+$vocab["title_session_max_length"]       = "Durata di una sessione";
+$vocab["session_max_length"]             = "Durata massima d'inattività (in minuti): ";
+$vocab["explain_session_max_length"]     = "Questa durata indica il tempo massimo d'inattività alla fine del quale un utente è automaticamente staccato.";
+$vocab["title_booking_max_all_ressources"]      = "Numero di prenotazioni attivi, da utente su tutte le risorse :";
+$vocab["title_bookingdouble"]      	 	 = "Ti consentono agli abbonati di prenotare due slot consecutivi sulla stessa risorsa ? ";
+$vocab["bookingdouble"]      	 	 	 = "( -1 : nessuna restrizione, 1 : Divieto di prenota 2 ore consecutive ";
+$vocab["bookingdouble_no"]      	 	 = "2 slot consecutivi vietati !";
+$vocab["explain_bookingdouble"]    		 = "Questo parametro consente o meno un libro successivo su un campo";
+$vocab["max_all_ressources"]             = "Numero di possibili prenotazioni ( -1 : nessuna restrizione) :";
+$vocab["explain_booking_max_all_ressources"]     = "Questo numero indica possibile le riserve attivi, da parte dell'utente su tutti corta.";
+$vocab["title_invite"]       			 = "Ospite contatore";
+$vocab["compteur_invite"]                = "valore contatore:";
+$vocab["explain_compteur_invite"]        = "Questo contatore consente di impostare il numero massimo di biglietti 'Ospite'";
+$vocab["title_automatic_mail"]           = "Spedizione automatica di emails";
+$vocab["warning_message_mail"]           = "Alcuni hébergeurs disattivano la spedizione automatica di mails dai loro server. In questo caso, la funzionalità seguente non funzionerà.";
+$vocab["explain_automatic_mail"]         = "Quando un utente modifica o elimina prenotazione effettuata da un altro utente, quest'ultimo (se il campo posta elettronica è stato informato) ne è informato automaticamente da un messaggio posta elettronica. Quando un utente riserva una risorsa, modifica o elimina prenotazione, alcuni utenti designati dall'amministratore (nella rubrica di gestione dei mails automatici) possono essere prevenuti da posta elettronica. Desiderate utilizzare quest'opzione?";
+$vocab["mail_admin_on"]                  = "Prevenire per mail gli utenti";
+$vocab["mail_admin_off"]                 = "Non prevenire per mail";
+$vocab["title_backup"]                   = "Salvaguardia della database GRR";
+$vocab["explain_backup"]                 = "Creazione di un archivio di salvaguardia completo della base GRR. In caso di problema sulla base GRR, utilizzate un attrezzo come PHPMYADMIN per restaurare la base.";
+$vocab["warning_message_backup"]         = "Se un messaggio del tipo \"Maximum execution time exceeded \" appare alcuni momenti dopo avere lanciato la salvaguardia, ciò significa che la salvaguardia è fallita!";
+$vocab["submit_backup"]                  = "Lanciare una salvaguardia";
+$vocab["title_begin_end_bookings"]       = "Inizio e fine delle prenotazioni";
+$vocab["begin_bookings"]                 = "Data d'inizio delle prenotazioni: ";
+$vocab["begin_bookings_explain"]         = "Non un prenotazione possibile prima di questa data. Più delle prenotazioni già effettuate prima di questa data saranno cancellate della base.";
+$vocab["end_bookings"]                   = "Data di fine delle prenotazioni: ";
+$vocab["end_bookings_explain"]           = "Non un prenotazione possibile dopo questa data. Più delle prenotazioni già effettuate dopo questa data saranno cancellate della base.";
+$vocab["default_parameter_values_title"] = "Scelta dei parametri di visualizzazione per difetto";
+$vocab["default_room_all"]               = "Tutte le risorse (visualizzazione 'giorno ')";
+$vocab["default_room_week_all"]          = "Tutte le risorse (visualizzazione 'settimana')";
+$vocab["default_room_month_all"]          = "Toutes les ressources (affichage 'mois')"; // A traduire
+$vocab["default_room_month_all_bis"]          = "Toutes les ressources (affichage 'mois' bis)"; // A traduire
+$vocab["display_week"]                   = "(visualizzazione 'settimana ')";
+$vocab["default_area"]                   = "Settore per difetto: ";
+$vocab["default_room"]                   = "Risorsa(e) pubblicato (i): ";
+$vocab["default_year"]                   = "Anno sportivo : ";
+$vocab["choose_an_area"]                 = "(Scegliete un settore)";
+$vocab["explain_default_parameter"]      = "Scegliete in questa rubrica, la visualizzazione per difetto della pagina d'accoglienza. Sono i parametri che saranno applicati se l'utente stesso non ha scelto parametri di visualizzazione per difetto.";
+$vocab["restricted"]                     = "restretto";
+$vocab["explain_default_year"]           = "Impostare l'anno sportivo per la gestione delle scritture contabili";
+$vocab["explain_area_list_format"]       = "Liste Tipo di visualizzazione di aree e risorse";
+$vocab["liste_area_list_format"]         = "Visualizzazione come un albero";
+$vocab["select_area_list_format"]        = "Visualizzazione sotto forma d'elenco che svolge";
+$vocab["explain_default_area_and_room"]  = "Domaine et risorsa per difetto";
+$vocab["explain_css"]                    = "Scelta dello stile/tema";
+$vocab["choose_css"]                     = "Scegliete nell'elenco qui di fronte: ";
+$vocab["explain_infos"]                  = "Inserisci il testo da visualizzare pagina di login : ";
+$vocab["admin_infos.php"]                = "Notizia da prima pagina";
+$vocab["reset"]                          = "Valori per difetto";
+$vocab["choose_language"]                = "Scelta della lingua per difetto";
+$vocab["mess_avertissement_config"] = "Remarque : en plus des paramètres ci-dessous, d'autres paramètres de configuration de GRR sont à votre disposition dans le fichier « config.inc.php » (Consulter la documentation de GRR)."; // A traduire
+
+# Used in admin_change_pwd.php.php
+$vocab["passwd_error"]       = "Errore in occasione della battitura dello password, volete ricominciare!";
+$vocab["update_pwd_failed"]  = "Errore in occasione dell'aggiornamento dello password!";
+$vocab["update_pwd_succeed"] = "I Password è stata cambiata!";
+$vocab["back"]               = "Ritorno";
+$vocab["pwd_change"]         = "Cambiamento dello password";
+$vocab["login"]              = "Identificatore";
+$vocab["last_name"]          = "Nome";
+$vocab["first_name"]         = "Nome";
+$vocab["pwd_msg_warning"]    = "Attenzione: la parola d'ordine deve comportare ".$pass_leng." caratteri minimi (lettere, cifre...). È fortemente consigliato non di scegliere una parola d'ordine troppo semplice.";
+$vocab["new_pwd1"]           = "Nuovo password (".$pass_leng." caratteri minimi)";
+$vocab["new_pwd2"]           = "Nuovo password (a confermare)";
+$vocab["pwd_msg_warning2"]   = "Per ragioni di sicurezza, volete utilizzare il modulo \"Gestire il mio conto \" accessibile a partire dalla pagina d'accoglienza per cambiare la vostra parola d'ordine!";
+
+# Used in my_account.php
+$vocab["wrong_pwd2"]            = "Errore in occasione della battitura dello password, volete ricominciare!";
+$vocab["wrong_old_pwd"]        = "La vecchia password non è corretta!";
+$vocab["update_email_succeed"] = "L'indirizzo e_mail è stato modificato!";
+$vocab["old_pwd"]              = "Vecchia password";
+$vocab["click_here_to_modify_pwd"] = ">>>Premete qui per modificare el vostro password<<<";
+
+# Used in admin_import_users_csv.php
+$vocab["admin_import_users_csv0"]  = "Archivio CSV da importare: ";
+$vocab["admin_import_users_csv1"]  = "L'archivio da importare comporta una prima linea di rubrica, ignorare";
+$vocab["admin_import_users_csv2"]  = "<p>L'archivio d'importazione deve essere al formato csv (separatore: punto virgola)<br>
+L'archivio deve contenere i diversi campi seguenti:<br>
+--> <B>Identificatore</B> : l'identificatore dell'utente<br>
+--> <B>Cognome</B><br>
+--> <B>Nome</B><br>
+--> <B>password</B><br>
+--> <B>email</B><br>";
+$vocab["admin_import_users_csv3"]  = "<p><b>ALCUNE PRECISIONS: </b><br><br><b>Identificatore</b><br>
+20 caratteri massimi. Può trattarsi di qualsiasi seguito di caratteri e/o di cifre senza spazio. Il carattere _ è anche autorizzato. Se questo formato non è rispettato, il seguito di caratère ??? appare al posto dell'identificatore. Gli identificatori che appaiono in rossi corrispondono a nomi di utenti già esistenti nella base GRR. I dati esistenti saranno allora schiacciati dai dati presenti nell'archivio importato!<br><br>
+<b>Cognome</b><br>
+Cognome dell'utente. 30 caratteri massimi. Può trattarsi di qualsiasi seguito di caratteri e/o di cifre con eventualmente spazi ed apostrofi.<br><br>
+<b>Nome</b><br>
+Nome dell'utente. Anche osserva che per il nome. I nomi e nomi che appaiono in blu corrispondono ad utenti che esistono nella base GRR e che portano gli stessi cognomi e nomi.<br><br>
+<b>Password</b><br>
+".$pass_leng." caratteri minimi e 30 caratteri massimi.<br><br>
+<b>Email</b><br>
+100 caratteri massimi. Mettere il simbolo \"-\" se no email<br><br>
+</p>";
+$vocab["admin_import_users_csv4"]  = "Impossibile di aprire l'archivio CSV";
+$vocab["admin_import_users_csv5"]  = "Prima fase dell'importazione: ";
+$vocab["admin_import_users_csv6"]  = "entrate individuate!";
+$vocab["admin_import_users_csv7"]  = "<p><b>AVVERTIMENTO</b> : i logins che appaiono in rossi corrispondono ad un login che esiste già nella base GRR. I dati esistenti saranno dunque schiacciati dai dati presenti nell'archivio da importare!</p>";
+$vocab["admin_import_users_csv8"]  = "<p><b>ATTENZIONE</b> : i nomi e nomi che appaiono in blu corrispondono ad utenti che esistono già nella base GRR e che portano gli stessi nomi e nomi.</p>";
+$vocab["admin_import_users_csv9"]  = "<p><b>AVVERTIMENTO</b> : i simboli <b>???</b> significano che il campo in questione non è valido. L'operazione d'importazione dei dati non può continuare normalmente.</b> Volete correggere l'archivio da importare.<br></p>";
+$vocab["admin_import_users_csv10"] = "L'importazione è fallita!";
+$vocab["admin_import_users_csv11"] = "Nessun archivio è stato scelto!";
+$vocab["admin_import_users_csv12"] = "L'utente è stato creato!";
+$vocab["admin_import_users_csv13"] = "photo ID di importazione : ";
+
+# Used in admin_calend_ignore.php
+$vocab["admin_calend_ignore.php"]     = "Calendario off prenotazione"; // A traduire
+$vocab["calendrier_des_jours_hors_reservation"] = "Giorni di calendario off prenotazione";// A traduire
+$vocab["les_journees_cochees_sont_ignorees"] = "I giorni passavano corrispondono ai giorni in cui non è possibile prenotare. <br> Per quanto riguarda le prenotazioni con periodicità, in questi giorni vengono ignorati durante la convalida della prenotazione. <br> <B > Attenzione </ b>: se le prenotazioni sono già state registrate nei giorni passavano, questi saranno <b> eliminati automaticamente e in modo permanente </ b>. Inoltre, coloro che sono colpiti dai tagli non saranno evitato dal email.";// A traduire
+
+# Used in admin_calend.php
+$vocab["check_all_the"]   = "Intaccare tutti ";
+$vocab["uncheck_all_the"] = "Scoccare tutti ";
+$vocab["uncheck_all_"]    = "Tutto scoccare";
+$vocab["admin_calendar_title.php"] = "Réservation/Suppression en bloc de journées entières";
+$vocab["admin_calendar_explain_1.php"] = "cette procédure vous permet de <b>réserver</b> ou de <b>libérer</b> très rapidement des journées entières simultanément sur plusieurs ressources de plusieurs domaines et selon un calendrier.
+<br><br><b>Exemple : </b>Vous pouvez ainsi bloquer à l'année certains jours tels que les week-end, les vacances, les jours fériés ...
+<br><b>Attention :</b> s'il y a conflit avec des réservations existantes, celles-ci seront
+<b>automatiquement et irrémédiablement supprimées</b> au profit de la nouvelle réservation. De plus, les personnes concernées
+par les suppressions ne seront pas prévenues par email.
+<br><br>Cette procédure se déroule en trois étapes :
+<ul>
+<li>Choix du (des) domaine(s) et du type d'action</li>
+<li>Choix des ressources à réserver, nom, description et type des réservations</li>
+<li>Choix des dates à réserver sur un calendrier
+</ul>
+<b>Les modifications effectives des réservations n'interviennent qu'à l'issue de la troisième étape.</b>";
+$vocab["etape_n"] = "Etape N° ";
+$vocab["choix_domaines"] = "Choisissez le ou les domaines sur lesquels porteront les réservations ou les suppressions de réservations :";
+$vocab["choix_action"] = "Choisissez le type d'action :";
+$vocab["choose_a_room"] = "Vous devez choisir au moins une ressource.";
+$vocab["reservation_en_bloc"] = "Réservation de journées entières";
+$vocab["reservation_en_bloc_result"] = "La procédure de réservation est terminée.";
+$vocab["reservation_en_bloc_result2"] = "<b>Des réservations entrant en conflit avec les nouvelles réservations ont été supprimées au nombre de : </b>";
+$vocab["suppression_en_bloc"] = "Suppression de réservations sur des journées entières";
+$vocab["suppression_en_bloc_result"] = "La procédure de suppression de réservations est terminée. <br><b>Nombre de suppressions effectuées : </b>";
+
+# Used in admin_confirm_change_date_bookings.php
+$vocab["cancel"]                                 = "Annullare";
+$vocab["admin_confirm_change_date_bookings.php"] = "Conferma di cambiamento delle date d'inizio e di fine delle prenotazioni";
+$vocab["msg_del_bookings"]                       = "Attenzione, i cambiamenti delle date d'inizio e di fine delle prenotazioni che avete effettuato comporterà la soppressione definitiva delle prenotazioni già effettuate oltre alle nuove date autorizzate! <br><br>Essete sicuri di volere continuare?";
+
+# Used in admin_view_connexions.php
+$vocab["admin_view_connexions.php"] = "Seguito dei collegamenti";
+$vocab["users_connected"]           = "Utenti attualmente collegati";
+$vocab["sen_a_mail"]                = "Inviare un mail";
+$vocab["deconnect_changing_pwd"]    = "Staccare cambiando el password";
+$vocab["log"]                       = "Giornale dei collegamenti da allora ";
+$vocab["msg_explain_log"]           = "Le date che appaiono in rosse segnano gli utenti staccati automaticamente dopo troppo un lungo termine d'inattività. Le linee che appaiono in verde segnano gli utenti attualmente collegati.";
+$vocab["begining_of_session"]       = "Inizio di sessione";
+$vocab["end_of_session"]            = "Fine di sessione";
+$vocab["ip_adress"]                 = "Indirizzo IP";
+$vocab["navigator"]                 = "Navigatore";
+$vocab["referer"]                   = "Origine";
+$vocab["start_history"]             = "Inizio della cronistoria";
+$vocab["erase_log"]                 = "Le entrate del giornale precedenti alla data qui di seguito saranno cancellate.";
+$vocab["cleaning_log"]              = "Pulizia del giornale";
+$vocab["logs_number"]               = "Numero di entrate attualmente presenti nel giornale di collegamento: ";
+$vocab["older_date_log"]            = "Attualmente, il giornale contiene la cronistoria dei collegamenti da allora ";
+$vocab["delete_up_to"]              = "Cancellare a ";
+
+# Used for functions.js
+$vocab["confirm_del"] = "Confermate la supression";
+
+# Used in mincals.inc
+$vocab["see_month_for_this_room"]       = "Vedere le prenotazioni del mese per questo risorsa";
+$vocab["see_week_for_this_room"]        = "Vedere le prenotazioni della settimana per questa risorsa";
+$vocab["see_all_the_rooms_for_the_day"] = "Vedere tutte le risorse del settore per questo giorno";
+$vocab["see_all_the_rooms_for_the_month"] = "Vedere le prenotazioni del mese per tutte le risorse";
+$vocab["see_week_for_this_area"]        = "Vedere le prenotazioni della settimana per tutte le risorse";
+
+# Used in admin_maj.inc
+$vocab["admin_maj.php"]              = "Numero di versione ed aggiornamento";
+$vocab["num_version_title"]          = "Numero di versione di GRR";
+$vocab["num_version"]                = "Numero di versione: <b>GRR";
+$vocab["maj_bdd"]                    = "Aggiornamento della base di dati (accesso amministratore)";
+$vocab["maj_bdd_not_update"]         = "ATTENZIONE: La vostra base di dati non sembra essere aggiornata.";
+$vocab["maj_version_bdd"]            = "Numero di versione della database: GRR";
+$vocab["maj_do_update"]              = "Premete saputo il bottone seguente per effettuare l'aggiornamento verso la versione GRR";
+$vocab["maj_submit_update"]          = "Aggiornare";
+$vocab["maj_no_update_to_do"]        = "Non avete aggiornamenti della base di dati ad effettuare.";
+$vocab["maj_go_www"]                 = "Appuntamento saputo la località di GRR per conoscere l'ultima versione: ";
+$vocab["maj_good"]                   = "Aggiornamento effettuato (leggete attentamente il risultato dell'aggiornamento, in fondo pagina)";
+$vocab["please_go_to_admin_maj.php"] = "È fortemente consigliato di aggiornare la vostra base rendendoli nella parte gestione.";
+
+# Used in admin_maj.inc
+$vocab["capacity_2"] = "Capacità: ";
+$vocab["Pas d'image disponible"] = "Non un'immagine disponibile";
+$vocab["Image de la ressource"] = "Immagine della risorsa&nbsp;";
+
+# Used in csv.php
+$vocab["enrecherchant"] = "ricercando: ";
+# Used in annonce.php
+$vocab["dispos"] = "la mia disponibilità";
+
+# Used in view_rights_room.php  // A traduire
+$vocab["utilisateurs ayant privileges"] = "Liste des utilisateurs ayant des privilèges sur cette ressource (hormis les administrateurs généraux) :";
+$vocab["utilisateurs gestionnaires ressource"] = "Les utilisateurs suivants sont gestionnaires de cette ressource :";
+$vocab["utilisateurs mail automatique"] = "Les utilisateurs suivants sont avertis par email :";
+$vocab["utilisateurs acces restreint"] = "Les utilisateurs suivants sont autorisés à accéder à cette ressource :";
+$vocab["utilisateurs administrateurs"] = "Les utilisateurs suivants sont administrateurs du domaine contenant cette ressource :";
+$vocab["aucun autilisateur"] = "Aucun utilisateur ne dispose de privilèges";
+
+# Used in view_rights_area.php  // A traduire
+$vocab["utilisateurs ayant privileges sur domaine"] = "Liste des utilisateurs ayant des privilèges sur ce domaine (hormis les administrateurs généraux) :";
+$vocab["utilisateurs acces restreint domaine"] = "Les utilisateurs suivants sont autorisés à accéder à ce domaine :";
+$vocab["utilisateurs administrateurs domaine"] = "Les utilisateurs suivants sont administrateurs du domaine :";
+
+# Used in admin_overload.php // A traduire
+$vocab["explication_champs_additionnels"] = "In questa pagina, è possibile definire settore per settore, ulteriori campi di vostra scelta e appaiono nelle prenotazioni moduli di iscrizione come tanti campi aggiuntivi opzionali.";
+$vocab["fieldname"] = "Campo Titolo";
+$vocab["fieldtype"] = "Tipo di campo";
+$vocab["add"] = "Aggiungere";
+$vocab["del"] = "Cancellare";
+$vocab["change"] = "Cambiamento";
+$vocab["type_text"] = "Una riga (testo)";
+$vocab["type_area"] = "Multilinea (textarea)";
+$vocab["avertissement_suppression_champ_additionnel"] = "L'eliminazione di un campo aggiuntivo è definitiva e rimuoverà i dati corrispondenti nelle prenotazioni già effettuate.";
+# Used in use_change_pwd.php // A traduire
+$vocab["init"] = "Reimpostazione della password";
+$vocab["msg_init"] = "Password dimenticata ! ";
+$vocab["user_mail"] = "Inserisci il tuo ID e il tuo indirizzo email per ricevere la password:";
+$vocab["adresse_mail1"] = "Il tuo indirizzo e-mail";
+$vocab["adresse_mail2"] = "Il tuo indirizzo e-mail (conferma) ";
+$vocab["error_mail"] = "Errore di ingresso nel vostro indirizzo e-mail ";
+$vocab["message_mail"] = "La password è stata reimpostata, si prega di prendere nota :   ";
+$vocab["sujet_mail"] = "Reimpostare la password ! ";
+$vocab["error_mail_empty"] = "Questo indirizzo non esiste nel database ! ";
+$vocab["msg_mail"] = "La password è stata reimpostata ! ";
+?>
