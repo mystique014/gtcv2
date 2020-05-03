@@ -82,6 +82,7 @@ echo begin_page(getSettingValue("company").get_vocab("deux_points").get_vocab("m
 <h2><?php echo getSettingValue("company"); ?></h2>
 <IMG SRC="img_grr/logo.gif" ALT="Logo" TITLE="Logo du club"><br><br>
 
+
 <?php echo getSettingValue("message_home_page");
 if ((getSettingValue("disable_login"))=='yes') echo "<br><br><font color='red'>".get_vocab("msg_login3")."</font>";
 ?>
@@ -129,7 +130,7 @@ if (getSettingValue('sso_statut') == 'lcs') {
 </fieldset>
 <br>
 <?php 
-echo "<a href=\"".getSettingValue("grr_url")."week.php?area=1&amp;room=1\">[".get_vocab("welcome")."]</A><br><br>\n";
+echo "<a href=\"".getSettingValue("grr_url")."\">[".get_vocab("welcome")."]</A><br><br>\n";
 echo "<a href=\"".getSettingValue("grr_url")."help.php\">[Voir les fonctionnalit&eacute;s]</A><a href=\"#reg\"></a><br><br>\n";
 echo "<a href=\"mailto:".getSettingValue("webmaster_email")."\">[".get_vocab("administrator_contact")."]</A><br>\n";
 
@@ -138,6 +139,58 @@ echo "<a href=\"mailto:".getSettingValue("webmaster_email")."\">[".get_vocab("ad
 //echo "<br>".get_vocab("msg_login1")."<a href=\"".$grr_devel_url."\">".$grr_devel_url."</a>";
 //echo "<br><a href=\"mailto:".$grr_devel_email."\"> - ".get_vocab("autor_contact")." - </a></p>";
 //?>
+<br>
+<table align= center border=1 cellpadding=3>
+<tr>
+<td style="text-align: center; width: 25% font-variant: small-caps;">Identifiant</td>
+<td style="text-align: center; width: 25% font-variant: small-caps;">Mot de passe</td>
+<td style="text-align: center; width: 25% font-variant: small-caps;">Statut</td>
+<td style="text-align: center; width: 25%; font-variant: small-caps;">Groupe utilisateur</td>
+</tr>
+<tr>
+<td style="text-align: center; width: 25% font-variant: small-caps;">admin</td>
+<td style="text-align: center; width: 25% font-variant: small-caps;">admin</td>
+<td style="text-align: center; width: 25%">Administrateur</td>
+<td style="text-align: center; width: 25%;"></td>
+</tr>
+<tr>
+<td bgcolor="#FFFF99" style="text-align: center; width: 25% font-variant: small-caps;">joueur1</td>
+<td bgcolor="#FFFF99" style="text-align: center; width: 25% font-variant: small-caps;">20090909</td>
+<td bgcolor="#FFFF99" style="text-align: center; width: 25%">Utilisateur</td>
+<td bgcolor="#FFFF99" style="text-align: center; width: 25%;">Tennis</td>
+</tr>
+<tr>
+<td bgcolor="#FFFF99" style="text-align: center; width: 25% font-variant: small-caps;">joueur2</td>
+<td bgcolor="#FFFF99" style="text-align: center; width: 25% font-variant: small-caps;">20090909</td>
+<td bgcolor="#FFFF99" style="text-align: center; width: 25%">Utilisateur</td>
+<td bgcolor="#FFFF99" style="text-align: center; width: 25%;">Tennis</td>
+</tr>
+<tr>
+<td bgcolor="#FF6666"style="text-align: center; width: 25% font-variant: small-caps;">joueur3</td>
+<td bgcolor="#FF6666"style="text-align: center; width: 25% font-variant: small-caps;">20090909</td>
+<td bgcolor="#FF6666"style="text-align: center; width: 25%">Utilisateur</td>
+<td bgcolor="#FF6666"style="text-align: center; width: 25%;">Badminton</td>
+</tr>
+<tr>
+<td bgcolor="#FF6666"style="text-align: center; width: 25% font-variant: small-caps;">joueur4</td>
+<td bgcolor="#FF6666"style="text-align: center; width: 25% font-variant: small-caps;">20090909</td>
+<td bgcolor="#FF6666"style="text-align: center; width: 25%">Utilisateur</td>
+<td bgcolor="#FF6666"style="text-align: center; width: 25%;">Badminton</td>
+</tr>
+<tr>
+<td bgcolor="#DAA520"style="text-align: center; width: 25% font-variant: small-caps;">joueur5</td>
+<td bgcolor="#DAA520"style="text-align: center; width: 25% font-variant: small-caps;">20090909</td>
+<td bgcolor="#DAA520"style="text-align: center; width: 25%">Utilisateur</td>
+<td bgcolor="#DAA520"style="text-align: center; width: 25%;">Squash</td>
+</tr>
+<tr>
+<td bgcolor="#DAA520"style="text-align: center; width: 25% font-variant: small-caps;">joueur6</td>
+<td bgcolor="#DAA520"style="text-align: center; width: 25% font-variant: small-caps;">20090909</td>
+<td bgcolor="#DAA520"style="text-align: center; width: 25%">Utilisateur</td>
+<td bgcolor="#DAA520"style="text-align: center; width: 25%;">Squash</td>
+</tr>
+</table>
+
 </div>
 </body>
 </html>

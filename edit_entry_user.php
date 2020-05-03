@@ -425,10 +425,12 @@ $row = grr_sql_row($res, 0);
 $area_id = $row[0];
 $type= 'A';
 
+echo'<div class="container-fluid">'.PHP_EOL;
+echo'<div class="row">'.PHP_EOL;
+echo'<div class="col-md-3 col-md-offset-4 center">'.PHP_EOL;
 
-echo "<h2>$A</H2>
+echo "<h4 align='center'>$A</H2>
 <FORM name=\"main\" action=\"edit_entry_handler.php\" method=\"get\">
-
 <input type=hidden name=room value=\"$room\">
 <input type=hidden name=area value=\"$area_id\">
 <input type=hidden name=name value=\"$name\">
@@ -438,10 +440,10 @@ echo "<h2>$A</H2>
 <input type=hidden name=minute value=\"$start_min\">
 
 
-<TABLE border=\"0\" class=\"EditEntryTable\">
-<TR><TD class=\"E\"><B>$B</B></TD></TR>
+<TABLE class='table table-responsive text-center table-striped' border=\"0\" class=\"EditEntryTable\">
+<tbody><TR><TD class=\"E\"><B>$B</B></TD></TR>
 <TR><TD class=\"CL\"><B>$name</B></TD></TR>
-<tr><td>\n";
+\n";
 // Champs additionneles : on récupère les données de la réservation si il y en a
 $overload_data = mrbsEntryGetOverloadDesc($id);
 // Boucle sur les areas
@@ -464,7 +466,7 @@ foreach ($allareas_id as $idtmp) {
         echo "</table>\n";
     }
 }
-echo "</td></tr>\n";
+//echo "</td></tr>\n";
 
 // Début réservation
 // Choix de l'adversaire
@@ -601,7 +603,7 @@ else
   // Date de début de réservation
   echo "<TR><TD class=\"E\"><B>".get_vocab("fin_reservation").get_vocab("deux_points")."</B></TD></TR>\n";
   echo "<TR><TD class=\"CL\" >";
-  echo "<table border = 1><tr><td>\n";
+  echo "<table border = 0><tr><td>\n";
   genDateSelector("end_", $end_day, $end_month, $end_year,"");
   echo "</TD>";
   // Heure ou créneau de fin de réservation
@@ -999,13 +1001,20 @@ else
     }
 
 }
+echo'</div>'.PHP_EOL;
+echo'</div>'.PHP_EOL;
+echo'</div>'.PHP_EOL;
 
 
+?>
+<SCRIPT type="text/javascript" LANGUAGE="JavaScript">
+document.writeln ( '<div id="fixe"><INPUT TYPE="button" VALUE="<?php echo get_vocab("save")?>" ONCLICK="validate_and_submit()"></div>' );
+</SCRIPT>
+<NOSCRIPT>
+<INPUT TYPE="submit" VALUE="<?php echo get_vocab("save")?>">
+</NOSCRIPT>
+<?php
 
-
-
-
-echo "<center><INPUT TYPE='button' VALUE=".get_vocab("save")." ONCLICK=\"validate_and_submit()\"></center>";
 
 
 //echo "<script type=\"text/javascript\">alert('".get_vocab("message_records_invite")."');</script>";

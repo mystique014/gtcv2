@@ -118,6 +118,19 @@ if ((!isset($verif_reservation_auto)) or ($verif_reservation_auto == 0))
     #Affiche les informations dans l'header
 print_header($day, $month, $year, $area, $type_session);
 
+ #Affiche le calendrier des 3 mois
+    $cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
+	if ($cal == 1)
+	{
+	echo'<div class="row">'.PHP_EOL;
+	echo'<div class="col-md-12 center">'.PHP_EOL;
+    echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
+	minicals($year, $month, $day, $area, -1, 'day');
+	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
+
+	echo'</div>'.PHP_EOL;
+	echo'</div>'.PHP_EOL;
+	}
 // Affichage d'un message pop-up
 if (!($javascript_info_disabled)) {
     echo "<script type=\"text/javascript\" language=\"javascript\">";
@@ -139,11 +152,30 @@ if ($enable_periods=='y') {
     $eveningends = 12;
     $eveningends_minutes = count($periods_name)-1;
 }
+//Création d'une row pour le lien montrer/cacher le header
+echo'<div class="container-fluid">'.PHP_EOL;
+echo'<div class="row">'.PHP_EOL;
+echo'<div class="col-md-12 center">'.PHP_EOL;
+$v= mktime(0,0,0,$month,$day,$year);
+$yea = date("Y",$v);
+$mm = date("m",$v);
+$dd = date("d",$v);
 
+if ($cal == 1)
+{
+echo "</td><td align='center'><a href=\"month.php?year=$yea&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a></td></tr></table>\n";
+} else {
+echo "</td><td align='center'><a href=\"month.php?year=$yea&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr></table>\n";
+}  
+echo'</div>'.PHP_EOL;
+echo'</div>'.PHP_EOL;
+echo'</div>'.PHP_EOL;
 // Si format imprimable ($_GET['pview'] = 1), on n'affiche pas cette partie
 if ($_GET['pview'] != 1) {
+	echo'<div class="container-fluid">'.PHP_EOL;
+	
     #Table avec areas, rooms, minicals.
-    echo "<table width=\"100%\" cellspacing=1 border=0><tr><td>";
+    
     $this_area_name = "";
     $this_room_name = "";
     if (isset($_SESSION['default_list_type']) or ($authentification_obli==1))
@@ -153,26 +185,32 @@ if ($_GET['pview'] != 1) {
         #Affiche une liste déroulante ou bien un liste HTML
     if ($area_list_format != "list")
     {
-        echo make_area_select_html($type_month_all.'.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
+        echo'<div class="row">'.PHP_EOL;
+		echo'<div class="col-xs-6 left">'.PHP_EOL;
+		echo make_area_select_html($type_month_all.'.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
+		echo'</div>'.PHP_EOL;
+		echo'<div class="col-xs-3 left">'.PHP_EOL;
         echo make_room_select_html('month', $area, $room, $year, $month, $day);
+		echo'</div>'.PHP_EOL;
     }
     else
     {
-        echo "<table cellspacing=15><tr><td>";
-        echo make_area_list_html($type_month_all.'.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
+        //echo "<table cellspacing=15><tr><td>";
+		//echo "<table width=\"100%\" cellspacing=1 border=1><tr><td>";
+		echo'<div class="row">'.PHP_EOL;
+		echo'<div class="col-xs-6 left">'.PHP_EOL;       
+		echo make_area_list_html($type_month_all.'.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
         #Montre toutes les rooms du domaine affiché
-        echo "</td><td>";
+        //echo "</td><td>";
         make_room_list_html('month.php', $area, $room, $year, $month, $day);
-        echo "</td></tr></table>";
+        //echo "</td></tr></table>";
+		echo'</div>'.PHP_EOL;
+		echo'</div>'.PHP_EOL;
     }
-    echo "</td>\n";
-    #Affiche le calendrier des 3 mois
-    $cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
-	if ($cal == 1)
-	{
-    minicals($year, $month, $day, $area, $room, 'month');
-	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
-	}
+    //echo "</td>\n";
+	
+	echo'</div>'.PHP_EOL;
+	
 }
 $this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
 $this_room_name = grr_sql_query1("select room_name from grr_room where id=$room");
@@ -191,20 +229,10 @@ if (($this_room_name_des) and ($this_room_name_des!="-1"))
 else
     $this_room_name_des = "";
 
-echo "<td VALIGN=MIDDLE><h2 align=center>" . ucfirst(utf8_strftime("%B %Y", $month_start))
+echo "<td VALIGN=MIDDLE><h4 align=center>" . ucfirst(utf8_strftime("%B %Y", $month_start))
   . " - ".ucfirst($this_area_name)." - $this_room_name $this_room_name_des</h2>\n";
+  
 
-$v= mktime(0,0,0,$month,$day,$year);
-$yea = date("Y",$v);
-$mm = date("m",$v);
-$dd = date("d",$v);
-
-if ($cal == 1)
-{
-echo "</td><td align='right'><a href=\"month.php?year=$yea&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a></td></tr></table>\n";
-} else {
-echo "</td><td align='right'><a href=\"month.php?year=$yea&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr></table>\n";
-}  
 
 # Show Go to month before and after links
 #y? are year and month of the previous month.
@@ -381,13 +409,13 @@ if ($debug_flag)
     }
     echo "</pre>\n";
 }
-echo "<table border=2 width=\"100%\">\n<tr>";
+echo "<table class='table text-center' border=1 width=\"100%\">\n<tr>";
     #Affichage des jours en entête
 for ($weekcol = 0; $weekcol < 7; $weekcol++)
 {
     $num_week_day = ($weekcol + $weekstarts)%7;
     if ($display_day[$num_week_day] == 1)  // on n'affiche pas tous les jours de la semaine
-    echo "<th width=\"14%\">" . day_name(($weekcol + $weekstarts)%7) . "</th>";
+    echo "<th class='text-center' width=\"14%\">" . day_name(($weekcol + $weekstarts)%7) . "</th>";
 }
 echo "</tr><tr>\n";
     #Ne pas tenir compte des jours avant le début du mois

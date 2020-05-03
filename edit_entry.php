@@ -429,7 +429,7 @@ $row = grr_sql_row($res, 0);
 $area_id = $row[0];
 
 
-echo "<h2>$A</H2>
+echo "<center><h2>$A</H2>
 <FORM name=\"main\" action=\"edit_entry_handler.php\" method=\"get\">
 
 <input type=hidden name=room value=\"$room\">
@@ -976,7 +976,7 @@ document.writeln ( '<div id="fixe"><INPUT TYPE="button" VALUE="<?php echo get_vo
 <INPUT TYPE="submit" VALUE="<?php echo get_vocab("save")?>">
 </NOSCRIPT>
 </center></TD></TR>
-</TABLE>
+</TABLE><center>
 
 <INPUT TYPE=HIDDEN NAME="returl"    VALUE="<?php echo $back ?>">
 <INPUT TYPE=HIDDEN NAME="create_by" VALUE="<?php echo $create_by?>">

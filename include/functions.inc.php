@@ -203,64 +203,68 @@ function page_accueil($param='no') {
 
 function begin_page($title,$page="with_session")
 {
-if ($page=="with_session")
-  {
-    if (isset($_SESSION['default_style'])) $sheetcss = "themes/".$_SESSION['default_style']."/css/style.css";
-    else $sheetcss="themes/default/css/style.css";
+	if ($page=="with_session")
+	{
+		if (isset($_SESSION['default_style'])) $sheetcss = "themes/".$_SESSION['default_style']."/css/style.css";
+		else $sheetcss="themes/default/css/style.css";
 
-    if (isset($_GET['default_language']))
-      {
+		if (isset($_GET['default_language']))
+		{
         $_SESSION['default_language'] = $_GET['default_language'];
-        if (isset($_SESSION['chemin_retour']) and ($_SESSION['chemin_retour'] != ''))
+			if (isset($_SESSION['chemin_retour']) and ($_SESSION['chemin_retour'] != ''))
             header("Location: ".$_SESSION['chemin_retour']);
-        else
+			else
             header("Location: ".$_SERVER['PHP_SELF']);
-        die();
-      }
-  }
- else
-   {
-     if (getSettingValue("default_css")) $sheetcss = "themes/".getSettingValue("default_css")."/css/style.css";
-     else $sheetcss="themes/default/css/style.css";
-   }
-
+			die();
+		}
+	}
+	else
+	{
+		if (getSettingValue("default_css")) $sheetcss = "themes/".getSettingValue("default_css")."/css/style.css";
+		else $sheetcss="themes/default/css/style.css";
+		if (isset($_GET['default_language']))
+		{
+			$_SESSION['default_language'] = $_GET['default_language'];
+			if (isset($_SESSION['chemin_retour']) && ($_SESSION['chemin_retour'] != ''))
+				header("Location: ".$_SESSION['chemin_retour']);
+			else
+				header("Location: ".traite_grr_url());
+			die();
+		}
+	}
 
  global $vocab, $charset_html, $unicode_encoding, $clock_file;
  header("Content-Type: text/html;charset=". ((isset($unicode_encoding) and ($unicode_encoding==1)) ? "utf-8" : $charset_html)); header("Pragma: no-cache");                          // HTTP 1.0
  header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");    // Date in the past
-//$a='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-$a='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-$a.='<html>
-<HEAD>
-<link rel="stylesheet" href="'.$sheetcss.'" type="text/css" />'."\n";
-// Pour le format imprimable, on impose un fond de page blanc
-if ((isset($_GET['pview'])) and ($_GET['pview'] == 1))
-    $a .= '<link rel="stylesheet" href="themes/print/css/style.css" type="text/css" />'."\n";
-/*
-if (function_exists("getSettingValue")) {
-    $ad_site = getSettingValue("grr_url");
-    if (substr(getSettingValue("grr_url"), -1) != "/") $ad_site .= "/";
-    $a.='<LINK REL="SHORTCUT ICON" href="'.$ad_site.'favicon.ico">';
-}
-*/
-$a.='<style type="text/css">div#fixe   { position: fixed; bottom: 5%; right: 5%;}</style>'."\n";
-$a.='<link rel="SHORTCUT ICON" href="./favicon.ico" />';
-$a .="\n<title>$title</title>";
-$a .="\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
-if ($unicode_encoding)
-    $a .= "utf-8";
-else
-    $a .= $charset_html;
-$a .= "\" />";
-$a .="\n</head>\n
-<BODY TEXT=\"black\" LINK=\"#5B69A6\" VLINK=\"#5B69A6\" ALINK=\"red\">\n";
 
-$a .='<script src="functions.js" type="text/javascript" ></script>';
-if (@file_exists($clock_file)) {
-   $a .='<script type="text/javascript" src="'.$clock_file.'"></script>';
-}
+
+	$a = '<!DOCTYPE html>'.PHP_EOL;
+	$a .= '<html lang="fr">'.PHP_EOL;
+	$a .= '<head>'.PHP_EOL;
+	$a .= '<meta charset="utf-8">'.PHP_EOL;
+	$a .= '<meta http-equiv="X-UA-Compatible" content="IE=edge">'.PHP_EOL;
+	$a .= '<meta name="viewport" content="width=device-width, initial-scale=1">'.PHP_EOL;
+	$a .= '<meta name="Robots" content="noindex" />'.PHP_EOL;
+	$a .= '<title>'.$title.'</title>'.PHP_EOL;
+	$a .= '<link rel="shortcut icon" href="./favicon.ico" />'.PHP_EOL;
+
+
+    $a .= '<link rel="stylesheet" href="'.$sheetcss.'" type="text/css" />'.PHP_EOL;
+		// Pour le format imprimable, on impose un fond de page blanc
+		if ((isset($_GET['pview'])) and ($_GET['pview'] == 1))
+        $a .= '<link rel="stylesheet" type="text/css" href="themes/print/css/style.css"  />'.PHP_EOL;
+		$a .= '<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />'.PHP_EOL;
+		$a .= '<script type="text/javascript" src="js/functions.js" ></script>'.PHP_EOL;
+		
+		if (@file_exists($clock_file)) 
+		{
+		$a .='<script type="text/javascript" src="'.$clock_file.'"></script>';
+		}
 # show a warning if this is using a low version of php
 if (substr(phpversion(), 0, 1) == 3)  $a .=get_vocab('not_php3');
+
+	$a .= '</head>'.PHP_EOL;
+	$a .= '<body>'.PHP_EOL;
 return $a;
 }
 
@@ -272,65 +276,114 @@ function print_header($day, $month, $year, $area, $type="with_session", $page="n
    else
        echo begin_page(getSettingValue("company").get_vocab("deux_points").get_vocab("mrbs"),"no_session");
    // Si nous ne sommes pas dans un format imprimable
-   if ((!isset($_GET['pview'])) or ($_GET['pview'] != 1)) {
+   if ((!isset($_GET['pview'])) or ($_GET['pview'] != 1)) 
+   {
+		# If we dont know the right date then make it up
+		if(!$day) $day   = date("d");
+		if(!$month)$month = date("m");
+		if(!$year) $year  = date("Y");
+		if (!(isset($search_str))) $search_str = get_vocab("search_for");
+		if (empty($search_str)) $search_str = "";
+   }
+  //----------------------------------------------------------------
+  // Début d'élément à cacher
+  //-----------------------------------------------------------------
+?>
 
-   # If we dont know the right date then make it up
-   if(!$day) $day   = date("d");
-   if(!$month)$month = date("m");
-   if(!$year) $year  = date("Y");
-   if (!(isset($search_str))) $search_str = get_vocab("search_for");
-   if (empty($search_str)) $search_str = "";
-   ?>
-   <SCRIPT type="text/javascript" LANGUAGE="JavaScript">
-    chaine_recherche = "<?php echo $search_str; ?>";
-   </SCRIPT>
-
-   <TABLE WIDTH="100%">
-    <TR>
-      <TD class="border_banner">
-       <TABLE WIDTH="100%" BORDER=0>
-        <TR>
-         <TD CLASS="banner">
-     <?php
-          $param= 'yes';
-          echo "&nbsp;<A HREF=\"".page_accueil($param)."day=$day&amp;year=$year&amp;month=$month\">".get_vocab("welcome")."</A>";
-          echo " - <b>".getSettingValue("company")."</b>";
-          if ($type == 'no_session') {
-              echo "<br>&nbsp;<a href='login.php'>".get_vocab("connect")."</a>";
-			  echo "&nbsp;&nbsp;-&nbsp;&nbsp;<A HREF=\"user_change_pwd.php\">".get_vocab('msg_init')."</a>";
-          } else {
-        echo "<br>&nbsp;<b>".get_vocab("welcome_to").$_SESSION['nom']." ".$_SESSION['prenom']."</b>";
-             if ($_SESSION['statut'] != 'visiteur')
-                echo "<br>&nbsp;<a href=\"my_account.php?day=".$day."&amp;year=".$year."&amp;month=".$month."\">".get_vocab("manage_my_account")."</a>";
-             //if ($type == "with_session") {
-                 $parametres_url = '';
-                 $_SESSION['chemin_retour'] = '';
-                 if (isset($_SERVER['QUERY_STRING']) and ($_SERVER['QUERY_STRING'] != '')) {
-                     // Il y a des paramètres à passer
-                     $parametres_url = $_SERVER['QUERY_STRING']."&amp;";
-                     $_SESSION['chemin_retour'] = $_SERVER['PHP_SELF']."?". $_SERVER['QUERY_STRING'];
-                 }
-                 echo " - <a href=\"".$_SERVER['PHP_SELF']."?".$parametres_url."default_language=fr\"><img src=\"img_grr/fr_dp.png\" alt=\"France\" title=\"france\" width=\"20\" height=\"13\" align=\"middle\" border=\"0\" /></a>\n";
-                 echo "<a href=\"".$_SERVER['PHP_SELF']."?".$parametres_url."default_language=de\"><img src=\"img_grr/de_dp.png\" alt=\"Deutch\" title=\"deutch\" width=\"20\" height=\"13\" align=\"middle\" border=\"0\" /></a>\n";
-                 echo "<a href=\"".$_SERVER['PHP_SELF']."?".$parametres_url."default_language=en\"><img src=\"img_grr/en_dp.png\" alt=\"English\" title=\"English\" width=\"20\" height=\"13\" align=\"middle\" border=\"0\" /></a>\n";
-                 echo "<a href=\"".$_SERVER['PHP_SELF']."?".$parametres_url."default_language=it\"><img src=\"img_grr/it_dp.png\" alt=\"Italiano\" title=\"Italiano\" width=\"20\" height=\"13\" align=\"middle\" border=\"0\" /></a>\n";
-                 echo "<a href=\"".$_SERVER['PHP_SELF']."?".$parametres_url."default_language=es\"><img src=\"img_grr/es_dp.png\" alt=\"Spanish\" title=\"Spanish\" width=\"20\" height=\"13\" align=\"middle\" border=\"0\" /></a>\n";
-
-             //}
-             if (!((getSettingValue("sso_statut") == 'lcs') and ($_SESSION['source_login']=='ext') and ($is_authentified_lcs == "yes")))
-               if ($authentification_obli == 1) {
-                 echo "<br>&nbsp;<a href=\"./logout.php?auto=0\" >".get_vocab('disconnect')."</a>";
-				} else {
-                 echo "<br>&nbsp;<a href=\"./logout.php?auto=0&amp;authentif_obli=no\" >".get_vocab('disconnect')."</a>";
-				}
-          }
-   ?>  
-</TD><TD CLASS="banner" ALIGN=CENTER>
-<?php    echo "<img src=\"img_grr/logo.gif\" alt=\"logo\" title=\"Logo du club\" height=\"100%\" align=\"middle\" border=\"0\" /></TD>";
+<script type="text/javascript">
      
+    function ouvrirFermerSpoiler(div)
+    {
+        var divContenu = div.getElementsByTagName('div')[1];
+         
+        if(divContenu.style.display == 'block')
+            divContenu.style.display = 'none';
+        else
+            divContenu.style.display = 'block';
+    }
+     
+</script>
+<?php
+echo '<div class="spoilerDiv" onclick="ouvrirFermerSpoiler(this);">';
+	//echo '<span class="lienAfficher">Clique pour afficher</span>';
+	echo '<div class="spoiler">';
+		echo '<div class="contenuSpoiler">';
+			echo'<div class="container-fluid">'.PHP_EOL;
+				echo'<div class="row">'.PHP_EOL;
+					echo'<div class="col-md-3 center">'.PHP_EOL;
+					$param= 'yes';
+		
+		  
+		
+	//Affichage de l'heure
+	if (@file_exists($clock_file)) 
+	{
+        echo "<script type=\"text/javascript\" LANGUAGE=\"javascript\">";
+		echo "<!--\n";
+		echo "new LiveClock();\n";
+		echo "//-->";
+		echo "</SCRIPT><br>";
+    }
+	
+		//Affichage de la version de GTC
+		echo "<span class=\"small\">".affiche_version()."</span> - ";
+		echo "<A HREF=\"help.php\">".get_vocab("help")."</A><br>";
+		if (($type == "with_session") or (isset($allow_search_for_not_connected) and ($allow_search_for_not_connected==1))) 
+		{
+			echo "<a href=\"".getSettingValue("grr_url")."annonce.php\"><img src=\"img_grr/adversaire.jpg\" alt=\"Adversaires\" border=\"0\" title=\"Recherche d'adversaire\" width=\"30\" height=\"30\" /></a><br>\n";
+		}
+				$_SESSION['chemin_retour'] = '';
+				if (isset($_SERVER['QUERY_STRING']) and ($_SERVER['QUERY_STRING'] != '')) 
+				{
+                    // Il y a des paramètres à passer
+                    $parametres_url = $_SERVER['QUERY_STRING']."&amp;";
+                    $_SESSION['chemin_retour'] = $_SERVER['PHP_SELF']."?". $_SERVER['QUERY_STRING'];
+					//Affichage des langues
+					echo '<a onclick="charger();"href="'.$_SERVER['PHP_SELF'].'?'.$parametres_url.'default_language=fr"><img src="img_grr/fr_dp.png" alt="France" title="france" width="20" height="13" align="middle" border="0" /></a>'.PHP_EOL;
+					echo '<a onclick="charger();"href="'.$_SERVER['PHP_SELF'].'?'.$parametres_url.'default_language=de"><img src="img_grr/de_dp.png" alt="Deutch" title="deutch" width="20" height="13" align="middle" border="0" /></a>'.PHP_EOL;
+					echo '<a onclick="charger();"href="'.$_SERVER['PHP_SELF'].'?'.$parametres_url.'default_language=en"><img src="img_grr/en_dp.png" alt="English" title="English" width="20" height="13" align="middle" border="0" /></a>'.PHP_EOL;
+					echo '<a onclick="charger();"href="'.$_SERVER['PHP_SELF'].'?'.$parametres_url.'default_language=it"><img src="img_grr/it_dp.png" alt="Italiano" title="Italiano" width="20" height="13" align="middle" border="0" /></a>'.PHP_EOL;
+					echo '<a onclick="charger();"href="'.$_SERVER['PHP_SELF'].'?'.$parametres_url.'default_language=es"><img src="img_grr/es_dp.png" alt="Spanish" title="Spanish" width="20" height="13" align="middle" border="0" /></a>'.PHP_EOL;
+		
+                }
+			
+		//echo "<A HREF=\"".page_accueil($param)."day=$day&amp;year=$year&amp;month=$month\">".get_vocab("welcome")."</A>";
+			if ($type == 'no_session') 
+			{
+			
+				echo "<br>&nbsp;<a href='login.php'>".get_vocab("connect")."</a>";
+				echo "&nbsp;&nbsp;-&nbsp;&nbsp;<A HREF=\"user_change_pwd.php\">".get_vocab('msg_init')."</a>";
+			} else 
+			{
+				echo "<br>&nbsp;<b>".get_vocab("welcome_to").$_SESSION['nom']." ".$_SESSION['prenom']."</b>";
+				if ($_SESSION['statut'] != 'visiteur')
+				echo "<br>&nbsp;<a href=\"my_account.php?day=".$day."&amp;year=".$year."&amp;month=".$month."\">".get_vocab("manage_my_account")."</a>";
+				//if ($type == "with_session") {
+				$parametres_url = '';
+				
+                 
+				//}
+				if (!((getSettingValue("sso_statut") == 'lcs') and ($_SESSION['source_login']=='ext') and ($is_authentified_lcs == "yes")))
+				if ($authentification_obli == 1) 
+				{
+                 echo "<br>&nbsp;<a href=\"./logout.php?auto=0\" >".get_vocab('disconnect')."</a>";
+				} else 
+				{
+					echo "<br>&nbsp;<a href=\"./logout.php?auto=0&amp;authentif_obli=no\" >".get_vocab('disconnect')."</a>";
+				}
+			}
+	echo'</div>'.PHP_EOL;   
+	echo'<div class="col-md-3 center hidden-xs bordure" >'.PHP_EOL; 
+		echo "<img src=\"img_grr/logo.gif\" class=\"img-fluid\" alt=\"logo\" title=\"grr\" height=\"100%\" align=\"middle\" border=\"0\" /></TD>";
+    echo'</div>'.PHP_EOL;
+	echo'<div class="col-md-3 center hidden-xs bordure">'.PHP_EOL;
+		
+	echo "<h3><a href='".page_accueil($param)."day=$day&amp;year=$year&amp;month=$month'>".get_vocab('welcome')."</a>";
+	echo "<a href='login.php'>-".getSettingValue("company")."</a>";
+	
      if ($page=="no_admin") {
      ?>
-         <TD CLASS="banner"  ALIGN=CENTER>
+         <?php /*
            <FORM ACTION="day.php" METHOD=GET>
            <?php
            genDateSelector("", $day, $month, $year,"");
@@ -341,7 +394,7 @@ function print_header($day, $month, $year, $area, $type="with_session", $page="n
            <?php
            // Il faut être connecté pour avoir accès à l'outil de recherche
            // Ou bien il faut que $allow_search_for_not_connected=1
-           if (($type == "with_session") or (isset($allow_search_for_not_connected) and ($allow_search_for_not_connected==1))) {
+           
            ?>
            <FORM METHOD=GET ACTION="search.php">
            <INPUT TYPE=TEXT   NAME="search_str" VALUE="<?php echo $search_str ?>" onFocus="if (this.value==chaine_recherche) {this.value=''}" SIZE=10>
@@ -353,37 +406,27 @@ function print_header($day, $month, $year, $area, $type="with_session", $page="n
            if (!empty($area)) echo "<INPUT TYPE=HIDDEN NAME=area VALUE=$area>"
            ?>
            </FORM>
-           <?php  
-		   echo "<a href=\"".getSettingValue("grr_url")."annonce.php\"><img src=\"img_grr/adversaire.jpg\" alt=\"Adversaires\" border=\"0\" title=\"Recherche d'adversaire\" width=\"30\" height=\"30\" /></a><br>\n";
-		   } ?>
-         </TD>
+		  */ ?>
+		          
          <?php
      }
-     if ($type == "with_session") {
-          if(authGetUserLevel(getUserName(),-1,'area') >= 4) {
-           echo "<TD CLASS=\"banner\" ALIGN=CENTER>";
-           echo "<A HREF='admin_accueil.php?day=$day&amp;month=$month&amp;year=$year'>".get_vocab("admin")."</A>\n
-           <br><form action=\"admin_save_mysql.php\" method=\"GET\" name=sav>\n
-           <input type=\"submit\" value=\"".get_vocab("submit_backup")."\" >\n
-           </form></TD>";
-      }
-     }
-      ?>
-          <TD CLASS="banner" ALIGN=CENTER>
-      <?php
-      if (@file_exists($clock_file)) {
-            echo "<script type=\"text/javascript\" LANGUAGE=\"javascript\">";
-        echo "<!--\n";
-        echo "new LiveClock();\n";
-        echo "//-->";
-        echo "</SCRIPT><br>";
-      }
-      echo "<A HREF=\"help.php\">".get_vocab("help")."</A><br>";
-	  if (($type == "with_session") and ($_SESSION['statut'] != 'visiteur')) {
+     
+     
+     echo'</div>'.PHP_EOL;
+	 echo'<div class="col-md-3 center">'.PHP_EOL;
+	//minicals($year, $month, $day, $area, -1, 'day');
+	 //Choix affichage en fonction du niveau de connexion
+	 if(authGetUserLevel(getUserName(),-1,'area') >= 4) {
+	 
+	 if (($type == "with_session") and ($_SESSION['statut'] != 'visiteur')) {
           echo "<A HREF=\"report.php\">".get_vocab("report")."</A><br>";
       }
-      echo "<span class=\"small\">".affiche_version()."</span> - ";
-      if ($type == "with_session") {
+     } else {
+       echo'<div class="col-md-3 center hidden-xs">'.PHP_EOL;
+	 }
+     	  
+      //echo "<span class=\"small\">".affiche_version()."</span> - ";
+     /* if ($type == "with_session") {
           if ($_SESSION['statut'] == 'administrateur') {
               echo "<a href='mailto:".getSettingValue("technical_support_email")."'>".get_vocab("technical_contact")."</a><br>";
           } else {
@@ -392,25 +435,25 @@ function print_header($day, $month, $year, $area, $type="with_session", $page="n
       } else {
            echo "<a href='mailto:".getSettingValue("webmaster_email")."'>".get_vocab("administrator_contact")."</a><br>";
       }
-
-          ?>
-         </TD>
-        </TR>
-       </TABLE>
-      </TD>
-     </TR>
-    </TABLE>
-<?php
-  }
-?>
-<style type="text/css">
-div#fixe   {
-  position: fixed;
-  bottom: 5%;
-  right: 5%;
-}
-</style>
-<?php
+	  */
+	  
+		//Affichage lien poursauvegarde
+		if ($type == "with_session") {
+          if(authGetUserLevel(getUserName(),-1,'area') >= 4) {
+          
+           echo "<A HREF='admin_accueil.php?day=$day&amp;month=$month&amp;year=$year'>".get_vocab("admin")."</A>\n
+           <br><form action=\"admin_save_mysql.php\" method=\"GET\" name=sav>\n
+           <input type=\"submit\" value=\"".get_vocab("submit_backup")."\" >\n
+           </form>";
+      }
+     }
+	echo'</div>'.PHP_EOL;
+    echo'</div>'.PHP_EOL;
+    echo'</div>'.PHP_EOL;
+	echo '</div>';
+  echo '</div>';
+echo '</div>';
+   echo '</div>';
 }
 
 // Tr    ansforme $dur en un nombre entier
@@ -715,7 +758,7 @@ function tdcell_rowspan($colclass , $step)
 # Display the entry-type color key. This has up to 2 rows, up to 10 columns.
 function show_colour_key($area_id)
 {
-    echo "<table border=0><tr>\n";
+    echo "<table border=0  width=\"100%\"><tr>\n";
     $nct = 0;
     $sql = "SELECT DISTINCT t.id, t.type_name, t.type_letter FROM grr_type_area t
     LEFT JOIN grr_j_type_area j on j.id_type=t.id

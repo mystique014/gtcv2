@@ -149,6 +149,33 @@ if (empty($room))
 // Récupération des données concernant l'affichage du planning du domaine
 get_planning_area_values($area);
 
+#Draw the three month calendars
+   $cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
+	if ($cal == 1)
+	{
+	echo'<div class="row">'.PHP_EOL;
+	echo'<div class="col-md-12">'.PHP_EOL;
+	echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
+	minicals($year, $month, $day, $area, -1, 'day');
+	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
+	echo'</div>'.PHP_EOL;
+	echo'</div>'.PHP_EOL;
+	}
+	echo'<div class="row">'.PHP_EOL;
+	echo'<div class="col-md-12 center">'.PHP_EOL;
+	$v= mktime(0,0,0,$month,$day,$year);
+$yy = date("Y",$v);
+$mm = date("m",$v);
+$dd = date("d",$v);
+if ($cal == 1)
+{
+echo "</td><td align='center'><a href=\"week_all.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a></td></tr>\n";
+} else {
+echo "</td><td align='center'><a href=\"week_all.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr>\n";
+}
+echo'</div>'.PHP_EOL;
+echo'</div>'.PHP_EOL;
+
 if($enable_periods=='y') {
     $resolution = 60;
     $morningstarts = 12;
@@ -199,8 +226,12 @@ $date_end = mktime($eveningends, $eveningends_minutes, 0, $month_week, $day_week
 
 // Si format imprimable ($_GET['pview'] = 1), on n'affiche pas cette partie
 if ($_GET['pview'] != 1) {
+	
+	echo'<div class="container-fluid">'.PHP_EOL;
+	echo'<div class="row">'.PHP_EOL;
+	echo'<div class="col-md-3">'.PHP_EOL;
     # Table with areas, rooms, minicals.
-    echo "\n<table width=\"100%\" cellspacing=15><tr><td>\n";
+    echo "<table width=\"100%\" cellspacing=1  border=0><tr><td>\n";
     $this_area_name = "";
     $this_room_name = "";
 
@@ -209,11 +240,16 @@ if ($_GET['pview'] != 1) {
     } else {
         $area_list_format = getSettingValue("area_list_format");
     }
-
+	
     # show either a select box or the normal html list
     if ($area_list_format != "list") {
+		echo "\n<table cellspacing=1 border=0><tr><td>\n";
         echo make_area_select_html('week_all.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
-        echo make_room_select_html('week', $area, "", $year, $month, $day);
+        echo "</td><td>";
+		echo'</div>'.PHP_EOL;
+		echo'<div class="col-md-3 ">'.PHP_EOL;
+		echo make_room_select_html('week', $area, "", $year, $month, $day);
+		echo "</td></tr></table>";
     # echo make_room_select_html('month', $area, $room, $year, $month, $day);
     } else {
         echo "\n<table cellspacing=1 border=0><tr><td>\n";
@@ -222,16 +258,13 @@ if ($_GET['pview'] != 1) {
         echo "</td><td>";
         make_room_list_html('week.php', $area, "", $year, $month, $day);
         echo "</td></tr></table>";
+		echo'</div>'.PHP_EOL;
     }
     echo "</td>\n";
-
-    #Draw the three month calendars
-   $cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
-	if ($cal == 1)
-	{
-    minicals($year, $month, $day, $area, $room, 'week_all');
-	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
-	}
+	echo "</table>\n";
+	
+	echo'</div>'.PHP_EOL;
+    echo'</div>'.PHP_EOL;
 }
 
 $this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
@@ -260,20 +293,11 @@ switch ($dateformat) {
     $dformat = "%A %d %b";
     break;
 }
-$v= mktime(0,0,0,$month,$day,$year);
-$yy = date("Y",$v);
-$mm = date("m",$v);
-$dd = date("d",$v);
 
 
- echo "<td VALIGN=MIDDLE><h2 align=center>".get_vocab("week").get_vocab("deux_points").utf8_strftime($dformat, $date_start)." - ". utf8_strftime($dformat, $date_end)
+ echo "<td VALIGN=MIDDLE><h4 align=center>".utf8_strftime($dformat, $date_start)." - ". utf8_strftime($dformat, $date_end)
   . "<br> $this_area_name - ".get_vocab("all_rooms")."</h2></center>\n";
-if ($cal == 1)
-{
-echo "</td><td align='right'><a href=\"week_all.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a></td></tr></table>\n";
-} else {
-echo "</td><td align='right'><a href=\"week_all.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr></table>\n";
-}
+
 
 
 #y? are year, month and day of the previous week.
@@ -480,8 +504,9 @@ if ($debug_flag)
     }
     echo "</pre>\n";
 }
-
-echo "\n<table border=2 width=\"100%\">\n<tr>";
+	echo'<div class="row">'.PHP_EOL;
+	echo'<div class="col-md-12">'.PHP_EOL;
+echo "\n<table class='table text-center' border=1 width=\"100%\">\n<tr>";
 
 # We need to know what all the rooms area called, so we can show them all
 # pull the data from the db and store it. Convienently we can print the room
@@ -635,6 +660,9 @@ if (grr_sql_count($res) == 0)
     }
 }
 echo "</table>\n";
+	echo'</div>'.PHP_EOL;
+    echo'</div>'.PHP_EOL;
+
 show_colour_key($area);
 
 include "include/trailer.inc.php";

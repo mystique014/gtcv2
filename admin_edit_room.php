@@ -361,10 +361,10 @@ if ((!empty($room)) or (isset($area_id))) {
     if (($row["type_affichage_reser"]) == 0) echo " checked ";
     echo "/>";
     echo get_vocab("affichage_reservation_duree");
-    echo "<br><input type=\"radio\" name=\"type_affichage_reser\" value=\"1\" ";
+    /*echo "<br><input type=\"radio\" name=\"type_affichage_reser\" value=\"1\" ";
     if (($row["type_affichage_reser"]) == 1) echo " checked ";
     echo "/>";
-    echo get_vocab("affichage_reservation_date_heure");
+    echo get_vocab("affichage_reservation_date_heure");*/
     echo "</TD>\n";
     echo "</TR>\n";
     echo "</table>\n<TABLE border=\"1\" cellspacing=\"0\" cellpadding=\"6\">\n";

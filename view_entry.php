@@ -225,7 +225,7 @@ $login_partenaire = '';
 }
 ?>
 
- <table border="0">
+ <center><table border="0">
    <tr><td><?php echo $name ?></td><td><?php    echo nl2br($description)  ?></td></tr>
 	 <tr><td><?php echo '<img src="images/'.$row_user_login[3].'.jpg" border="0" />';?></td><td><?php echo '<img src="images/'.$login_partenaire.'.jpg" border="0" />';?></td></tr>
    <?php
@@ -308,42 +308,42 @@ if($rep_type != 0)
 }
 ?>
 
-</table>
+</table> </center>
 <p>
 <?php
 
 if ((getWritable($create_by, getUserName(),$id)) and verif_booking_date(getUserName(), $id, $room_id, -1, $date_now, $enable_periods)) { 
     
 	if(authGetUserLevel(getUserName(),-1) > 2) { ?>
-	<a href="edit_entry.php?id=<?php echo $id ?>&amp;page=<?php echo $page; ?>"><?php echo get_vocab("editentry") ?></a>
+	 <center><a href="edit_entry.php?id=<?php echo $id ?>&amp;page=<?php echo $page; ?>"><?php echo get_vocab("editentry") ?></a></center>
     <?php
     if($repeat_id)
-        echo " - <a href=\"edit_entry.php?id=$id&amp;edit_type=series&amp;day=$day&amp;month=$month&amp;year=$year&amp;page=$page\">".get_vocab("editseries")."</a>";
+        echo " -  <center><a href=\"edit_entry.php?id=$id&amp;edit_type=series&amp;day=$day&amp;month=$month&amp;year=$year&amp;page=$page\">".get_vocab("editseries")."</a></center>";
 }?>
 	
-    <BR>
-    <A HREF="del_entry.php?id=<?php echo $id ?>&amp;series=0&amp;page=<?php echo $page; ?>" onClick="return confirm('<?php echo get_vocab("confirmdel") ?>');"><?php echo get_vocab("deleteentry") ?></A>
+    
+     <center><A HREF="del_entry.php?id=<?php echo $id ?>&amp;series=0&amp;page=<?php echo $page; ?>" onClick="return confirm('<?php echo get_vocab("confirmdel") ?>');"><?php echo get_vocab("deleteentry") ?></A></center>
     <?php
 
     if($repeat_id)
-        echo " - <A HREF=\"del_entry.php?id=$id&amp;series=1&amp;day=$day&amp;month=$month&amp;year=$year&amp;page=$page\" onClick=\"return confirm('".get_vocab("confirmdel")."');\">".get_vocab("deleteseries")."</A>";
+        echo " -  <center><A HREF=\"del_entry.php?id=$id&amp;series=1&amp;day=$day&amp;month=$month&amp;year=$year&amp;page=$page\" onClick=\"return confirm('".get_vocab("confirmdel")."');\">".get_vocab("deleteseries")."</A> <center>";
 
 } ?>
-<BR>
-<a href="<?php echo $back ?>"><?php echo get_vocab("returnprev") ?></a>
+
+ <center><a href="<?php echo $back ?>"><?php echo get_vocab("returnprev") ?></a></center>
 <?php
 
 // Si l'utilisateur est administrateur, possibilité de modifier le statut de la réservation (en cours / libérée)
 if ( isset($_SESSION['login']) and (authGetUserLevel($_SESSION['login'],$room_id) >= 3))          {
     echo "<form name=\"form\" action=\"view_entry.php\" method=\"GET\">";
     echo "<br>
-    <table border=\"1\" width=\"100%\"><tr><td align=\"center\" valign=\"middle\">
+     <center><table border=\"1\" width=\"100%\"><tr><td align=\"center\" valign=\"middle\">
     <font size=\"+1\">".get_vocab("signaler_reservation_en_cours")."</font>".get_vocab("deux_points")."<input type=\"checkbox\" name=\"statut_id\" value=\"y\" ";
     if ($statut_id=='y') echo " checked ";
     echo " />
     <br><font size=\"-1\">".get_vocab("une_seule_reservation_en_cours")."</font>
     <center><input type=\"submit\" name=\"ok\" value=\"Envoyer\" /></center>
-    </td></tr></table>\n";
+    </td></tr></table></center>\n";
     echo "<input type=\"hidden\" name=\"day\" value=\"".$day."\" />";
     echo "<input type=\"hidden\" name=\"month\" value=\"".$month."\" />";
     echo "<input type=\"hidden\" name=\"year\" value=\"".$year."\" />";

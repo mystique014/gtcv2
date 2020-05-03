@@ -131,7 +131,7 @@ get_planning_area_values($area);
         $monthName = utf8_strftime("%B",$date);
         $prevMonth = $this->getCalendarLink($this->month - 1 >   0 ? $this->month - 1 : 12, $this->month - 1 >   0 ? $this->year : $this->year - 1);
         $nextMonth = $this->getCalendarLink($this->month + 1 <= 12 ? $this->month + 1 :  1, $this->month + 1 <= 12 ? $this->year : $this->year + 1);
-        $s .= "<table border = \"0\" class=\"calendar\">\n";
+        $s .= "<table border = \"0\" class=\"calendar\" align=\"center\">\n";
         $s .= "<tr><td></td>\n";
         $s .= "<td align=center valign=top class=\"calendarHeader\" colspan=".$nb_display_day.">";
             #Permet de récupérer le numéro de la 1ere semaine affichée par le mini calendier.
@@ -170,7 +170,7 @@ get_planning_area_values($area);
             {
                 $j = ($i + 7 + $weekstarts) % 7;
                 if ($display_day[$j] == "1") {// début condition "on n'affiche pas tous les jours de la semaine"
-                $s .= "<td class=\"calendar\" align=right valign=top>";
+                $s .= "<td class=\"calendar\" align=center valign=top>";
                 if ($d > 0 && $d <= $daysInMonth)
                 {
                     $link = $this->getDateLink($d, $this->month, $this->year);
