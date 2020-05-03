@@ -110,13 +110,32 @@ get_planning_area_values($area);
 // Si aucun domaine n'est défini
 if ($area == 0) {
    print_header($day, $month, $year, $area,$type_session);
-   echo "<H1>".get_vocab("noareas")."</H1>";
+   echo "<H2>".get_vocab("noareas")."</H1>";
    echo "<A HREF='admin_accueil.php'>".get_vocab("admin")."</A>\n
    </BODY>
    </HTML>";
    exit();
 }
+# print the header
+print_header($day, $month, $year, $area, $type_session);
+$cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
 
+
+		
+			
+	
+	if ($cal == 1)
+	{
+	echo'<div class="row">'.PHP_EOL;
+	echo'<div class="col-md-12">'.PHP_EOL;
+	echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
+	minicals($year, $month, $day, $area, -1, 'day');
+	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
+	echo'</div>'.PHP_EOL;
+	echo'</div>'.PHP_EOL;
+	}
+	
+	
 if((authGetUserLevel(getUserName(),-1) < 1) and ($authentification_obli==1))
 {
     showAccessDenied($day, $month, $year, $area,$back);
@@ -139,8 +158,26 @@ if (check_begin_end_bookings($day, $month, $year))
 if ((!isset($verif_reservation_auto)) or ($verif_reservation_auto == 0))
     verify_confirm_reservation();
 
-# print the page header
-print_header($day, $month, $year, $area, $type_session);
+
+//Création d'une row pour le lien montrer/cacher le header
+echo'<div class="container-fluid">'.PHP_EOL;
+echo'<div class="row">'.PHP_EOL;
+echo'<div class="col-md-12 center">'.PHP_EOL;
+$v= mktime(0,0,0,$month,$day,$year);
+$yea = date("Y",$v);
+$mm = date("m",$v);
+$dd = date("d",$v);
+	if ($cal == 1)
+	{
+	echo "<table width=\"100%\" border=0><tr><td align='center'><a href=\"day.php?year=$yea&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a></td></tr></table>\n";
+	} 
+	else 
+	{
+	echo "<table width=\"100%\" border=0><tr><td align='center'><a href=\"day.php?year=$yea&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr></table>\n";
+	}
+	
+echo'</div>'.PHP_EOL;
+echo'</div>'.PHP_EOL;
 ?>
 <script type="text/javascript" src="functions.js" language="javascript"></script>
 <?php
@@ -175,29 +212,25 @@ if (!($javascript_info_disabled)) {
 }
 unset ($_SESSION['displ_msg']);
 
-echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
-
-if (isset($_SESSION['default_list_type']) or ($authentification_obli==1)) {
-    $area_list_format = $_SESSION['default_list_type'];
-} else {
-    $area_list_format = getSettingValue("area_list_format");
-}
-
 #Show all avaliable areas
 # need to show either a select box or a normal html list,
+
 if ($area_list_format != "list") {
-    echo make_area_select_html('day.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
-} else {
-    echo make_area_list_html('day.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
-}
-echo "</td>\n";
-#Draw the three month calendars
-$cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
-	if ($cal == 1)
-	{
-minicals($year, $month, $day, $area, -1, 'day');
-	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
+   	echo make_area_select_html('day.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
+	} else {
+   	echo make_area_list_html('day.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
 	}
+
+
+if (isset($_SESSION['default_list_type']) or ($authentification_obli==1)) {
+ 	$area_list_format = $_SESSION['default_list_type'];
+} else {
+	$area_list_format = getSettingValue("area_list_format");
+}
+
+
+
+
 
 // fin de la condition "Si format imprimable"
 }
@@ -220,24 +253,14 @@ $pm7=mktime($eveningends,$eveningends_minutes,0,$month,$day,$year);
 
 #Show current date
 $this_area_name = grr_sql_query1("select area_name from grr_area where id='".protect_data_sql($area)."'");
-echo "<td VALIGN=MIDDLE><h2 align=center>" . ucfirst(utf8_encode(strftime($dformat, $am7))) . " - ".$this_area_name." - ".get_vocab("all_areas")."</h2>\n";
+echo "<td><h4 align=center>" .$this_area_name." - ". ucfirst(utf8_strftime($dformat, $am7)) . " <br> ".get_vocab("all_areas")."</h4></td></tr></table>\n";
 
-$v= mktime(0,0,0,$month,$day,$year);
-$yea = date("Y",$v);
-$mm = date("m",$v);
-$dd = date("d",$v);
 
-if ($cal == 1)
-{
-echo "</td><td align='right'><a href=\"day.php?year=$yea&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a></td></tr></table>\n";
-} else {
-echo "</td><td align='right'><a href=\"day.php?year=$yea&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr></table>\n";
-}
 
 // Si format imprimable ($_GET['pview'] = 1), on n'affiche pas cette partie
 if ($_GET['pview'] != 1) {
     #Show Go to day before and after links
-    echo "<table width=\"100%\"><tr>\n<td>\n<a href=\"day.php?year=$yy&amp;month=$ym&amp;day=$yd&amp;area=$area\">&lt;&lt; ".get_vocab('daybefore')."</a></td>\n<td align=center><a href=\"day.php?area=$area\">".get_vocab('gototoday')."</a></td>\n<td align=right><a href=\"day.php?year=$ty&amp;month=$tm&amp;day=$td&amp;area=$area\">".get_vocab('dayafter')." &gt;&gt;</a></td>\n</tr></table>\n";
+    echo "<table width=\"100%\" border='0'><tr>\n<td align=left>\n<a href=\"day.php?year=$yy&amp;month=$ym&amp;day=$yd&amp;area=$area\">&lt;&lt; ".get_vocab('daybefore')."</a></td>\n<td align=center><a href=\"day.php?area=$area\">".get_vocab('gototoday')."</a></td>\n<td align=right><a href=\"day.php?year=$ty&amp;month=$tm&amp;day=$td&amp;area=$area\">".get_vocab('dayafter')." &gt;&gt;</a></td>\n</tr></table>\n";
 }
 
 #We want to build an array containing all the data we want to show
@@ -353,8 +376,9 @@ if (grr_sql_count($res) == 0)
 }
 else
 {
-    #This is where we start displaying stuff
-    echo "<table cellspacing=0 border=1 width=\"100%\">";
+	#This is where we start displaying stuff
+    echo "<table class='table text-center' cellspacing=0 border=1
+	width=\"100%\">";
 
     // Première ligne du tableau
     echo "<tr>\n<th width=\"1%\">&nbsp;</th>";
@@ -372,18 +396,17 @@ else
             $temp="";
         }
         if ($statut_room[$id_room[$i]] == "0") $temp .= "<br><font color=\"#BA2828\"><font size=\"+1\"><b>".get_vocab("ressource_temporairement_indisponible")."</b></font></font>"; // Ressource temporairement indisponible
-        echo "<th width=\"$room_column_width%\"";
+        echo "<th class='text-center' width=\"$room_column_width%\"";
         // Si la ressource est temporairement indisponible, on le signale
         if ($statut_room[$id_room[$i]] == "0") echo " class='avertissement' ";
         echo ">" . htmlspecialchars($row[0])."\n";
         if (htmlspecialchars($row[3]. $temp != '')) {
-            if (htmlspecialchars($row[3] != '')) $saut = "<br>"; else $saut = "";
-            echo "<br>-".$saut."<i><span class =\"small\">". htmlspecialchars($row[3]) . $temp."\n</span></i>";
+            //if (htmlspecialchars($row[3] != '')) $saut = "<br>"; else $saut = "";
+           // echo "<br>-".$saut."<i><span class =\"small\">". htmlspecialchars($row[3]) . $temp."\n</span></i>";
         }
-        echo "<br>";
+        //echo "<br>";
         if ($row[5] == 'y')
-            echo "<A href='javascript:centrerpopup(\"view_room.php?id_room=$id_room[$i]\",600,480,\"scrollbars=yes,statusbar=no,resizable=yes\")' \" title=\"".get_vocab("fiche_ressource")."\">
-           <img src=\"img_grr/details.png\" alt=\"détails\" border=\"0\" /></a>";
+            echo "<A href='javascript:centrerpopup(\"view_room.php?id_room=$id_room[$i]\",600,480,\"scrollbars=yes,statusbar=no,resizable=yes\")' \" title=\"".get_vocab("fiche_ressource")."\"><img src=\"img_grr/details.png\" alt=\"détails\" border=\"0\" /></a>";
         if (authGetUserLevel(getUserName(),$id_room[$i]) > 2)
             echo "<a href='admin_edit_room.php?room=$id_room[$i]'><img src=\"img_grr/editor.png\" alt=\"configuration\" border=\"0\" title=\"".get_vocab("Configurer la ressource")."\" width=\"30\" height=\"30\" /></a>";
         echo "</th>";
@@ -542,7 +565,7 @@ else
     echo "<tr>\n<th>&nbsp;</th>";
     for ($i = 0; $i < $nbcol; $i++)
     {
-        echo "<th";
+        echo "<th class='text-center'";
         if ($statut_room[$id_room[$i]] == "0") echo " class='avertissement' ";
         echo ">" . htmlspecialchars($room_name[$i])."</th>";
     }
@@ -551,6 +574,5 @@ else
     echo "</table>";
     show_colour_key($area);
 }
-
 include "include/trailer.inc.php";
 ?>

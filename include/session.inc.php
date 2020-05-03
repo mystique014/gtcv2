@@ -263,7 +263,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
 
     // Session starts now
     session_name(SESSION_NAME);
-    @session_start();
+    session_start();
 
     // Is this user already connected ?
     $sql = "select SESSION_ID from grr_log where SESSION_ID = '" . session_id() . "' and LOGIN = '" . protect_data_sql($_login) . "' and now() between START and END";
@@ -276,8 +276,8 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
         $res = grr_sql_query($sql);
         return "1";
     } else {
-        session_unset();
-//      session_destroy();
+		session_unset();
+	// session_destroy();
     }
 
     // reset $_SESSION
@@ -298,7 +298,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
 	$_SESSION['group_id'] = $row[12];
 
     // It's a new connection, insert into log
-     if (isset($_SERVER["HTTP_REFERER"])) $httpreferer = $_SERVER["HTTP_REFERER"]; else $httpreferer = '';
+    if (isset($_SERVER["HTTP_REFERER"])) $httpreferer = $_SERVER["HTTP_REFERER"]; else $httpreferer = '';
     $sql = "insert into grr_log (LOGIN, START, SESSION_ID, REMOTE_ADDR, USER_AGENT, REFERER, AUTOCLOSE, END) values (
                 '" . $_SESSION['login'] . "',
                 '" . $_SESSION['start'] . "',
@@ -311,6 +311,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
             )
         ;";
     $res = grr_sql_query($sql);
+	//error_log("Voici les valeurs passées : ".$sql."", 1,"steduchemin@gmail.com");
     return "1";
 }
 
@@ -331,7 +332,7 @@ function grr_resumeSession()
     global $is_authentified_lcs;
     // Resuming session
     session_name(SESSION_NAME);
-   @session_start();
+    session_start();
     // un utilisateur LCS connecté via son espace LCS est déconnecté si la session LCS est fermée
     if ((getSettingValue('sso_statut') == 'lcs') and ($is_authentified_lcs == 'no') and ($_SESSION['source_login'] == "ext")) {
         return (false);
@@ -388,7 +389,7 @@ function grr_closeSession(&$_auto)
 {
     settype($_auto,"integer");
     session_name(SESSION_NAME);
-    @session_start();
+    session_start();
     // Sometimes 'start' may not exist, because the session was previously closed by another window
     // It's not necessary to grr_log this, then
     if (isset($_SESSION['start'])) {

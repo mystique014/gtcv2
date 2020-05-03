@@ -274,7 +274,7 @@ if ($msg)
 				$sql2 = "select group_name from grr_group WHERE id=$user_group";
 				$gr = grr_sql_query1($sql2);
 echo "<form name=\"nom_formulaire\" action=\"my_account.php\" method='POST'>";
-echo "<br><TABLE BORDER=0 width=\"100%\"><tr><td>".get_vocab("login").get_vocab("deux_points"). $_SESSION['login']."</td><td><a title=\"".htmlspecialchars(get_vocab("see_all_the_rooms_for_the_day"))."\" href=\"day.php\">>>>RETOUR Planning<<<</a></td></tr>";
+echo "<br><TABLE BORDER=0 width=\"100%\"><tr><td>".get_vocab("login").get_vocab("deux_points"). $_SESSION['login']."</td><td><a title=\"".htmlspecialchars(get_vocab("see_all_the_rooms_for_the_day"))."\" href=\"day.php?".$default_area."\">>>>RETOUR Planning<<<</a></td></tr>";
 echo "<tr><td>".get_vocab("last_name").get_vocab("deux_points").$user_nom."</td><td>".get_vocab("first_name").get_vocab("deux_points").$user_prenom."</td></tr>";
 echo "<tr><td>".get_vocab("mail_user").get_vocab("deux_points")."";
 if (($user_source == 'ext') and (getSettingValue("sso_statut") == "lcs")) {

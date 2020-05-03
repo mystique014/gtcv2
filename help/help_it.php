@@ -1,15 +1,17 @@
 <?php
 #########################################################################
-#                            help_it.php                                #
+#                            help_fr.php                                #
 #                                                                       #
-#                     Aide en allemand sur GRR                          #
-#                Dernière modification : 27/07/2005                     #
+#                     Aide en italien sur GTC                          #
+#                Dernière modification : 05/03/2017                     #
 #                                                                       #
 #########################################################################
 /*
- * Copyright 2003-2005 Laurent Delineau - Antony AUDOUARD
+ * Copyright 2003-2005 Laurent Delineau
  * D'après http://mrbs.sourceforge.net/
- *
+ * 
+ * Ce fichier n'est plus utilisé dans le site GTC
+ * Il peut servir à recopier un exemple de contenu avec des balises html dans la page d'édition du fichier "help.fr"
  * This file is part of GRR.
  *
  * GRR is free software; you can redistribute it and/or modify
@@ -26,110 +28,8 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+?>
 
 
-//include "config.inc.php";
-//include "misc.inc.php";
-echo encode_message_utf8("</menu>
-<p><B><A name=top>Autenticazione</A></B> </p>
-<MENU><a href=\"#authenticate\"><U>Come accedo?</U></A><BR>
-<a href=\"#meeting_delete\"><U>Non perché io il cancella/altera una riunione?</U></A><BR>
-</MENU><B>Riunioni di</B> fabbricazione alterare <MENU><A
-  href=\"#repeating\"><U>Come faccio un ricorrere incontrando?</U></A><BR>
-<A
-  href=\"#repeating_delete\"><U>Come cancello un caso di un ricorrere incontrando?</U></A><BR>
-<A
-  href=\"#multiple_sites\"><U>Come fa pianifico delle stanze ai luoghi</U> diversi</A><BR>
-<A
-  href=\"#too_many\"><U>La mia riunione ha fallito essere creato a causa di \"<I>troppe
-entrate \"!</I></U></A><BR>
-<A
-  href=\"#multiple_users\"><U>Che succede del se le persone multiple pianificano
-la stessa riunione?</U></A><BR>
-</MENU><B>Miscellaneo</B> <MENU><A
-  href=\"#internal_external\"><U>Che è la differenza tra \"Interno\" ed \"Esterno\"</U></A><BR>
-<HR>
-<P><A name=authenticate><B>Come accedo?</B></A> <MENU>Il sistema può essere configurato
-per usare uno di parecchi metodi di autenticazione, includendo LDAP, il Netware,
-e SMB. Vedere il suo amministratore di sistema se lei ha abbattere di difficoltà
-in. Alcuni funziona sono limitato ai certi operatori, e gli altri operatori prenderanno
-il messaggio <I>Lei non ha accesso che i diritti a modificare quest'articolo.</I>
-Vedere il suo amministratore di sistema se questo non lavora correttamente per
-lei. Se il sistema è configurato per usare l'autenticazione di LDAP, questo significa
-che lei accede con lo stessi nome utente e con la parola d'ordine come lei usa
-per l'email di prendere cioè il Marchio\" \"Belanger \"MyPassword\". </MENU><A
-href=\"#top\">Cima</A>
-<HR>
-<P></P>
-<P><A name=meeting_delete><B>Non perché io il cancella/altera una riunione?</B></A>
-<MENU>Per cancellare o alterare una riunione, lei deve essere abbattuto in come
-la stessa persona che ha fatto la riunione. Contattare uno degli amministratori
-di stanza di riunione o la persona che hanno fatto inizialmente la riunione averlo
-ha cancellato o cambiato. </MENU><A
-href=\"#top\">Cima</A>
-<HR>
-<P></P>
-<P><A name=repeating><B>Come faccio un ricorrere incontrando?</B></A> <MENU>Scattare
-sul tempo desiderato la porta nello schermo di prenotazione. Scegliere l'appropriato
-<B>per Ripetere il Tipo.</B> La stanza sarà pianificata allo stesso tempo, finché
-il <B>Ripete la Data</B> di Fine, sui giorni determinati dal <B>Ripete il Tipo.</B>
-<P>Un ripete <I>Quotidianamente</I> i programme ogni giorno. Un ripete <I>Settimanalmente</I>
-  i programme quei giorni della settimana che lei controlla sotto <B>Ripete il
-  Giorno.</B> Per esempio, l'uso ripete Settimanalmente per pianificare la stanza
-  ogni lunedì, martedì, e giovedì; controlla quei giorni sotto Ripete il Giorno.
-  Se lei controlla nessuni giorni sotto Ripete il Giorno, il programma ripeterà
-  sullo stesso giorno di ogni settimana come il giorno dapprima pianificato. Un
-  ripete <I>Mensilmente</I> i programme lo stesso giorno di ogni mese, per esempio
-  il 15 del mese. Un <I>Annuale</I> ripete dei programme lo stesso mese ed il
-  giorno del mese, per esempio ogni marzo 15. Finalmente, un <I>Mensile, corrispondendo
-  il giorno</I> ripete i programme un giorno ogni mese, lo stesso giorno feriale
-  e la posizione ordinale entro il mese. Usare questo ripete il tipo per pianificare
-  il primo lunedì, secondo martedì, o quarto venerdì di ogni mese, per esempio.
-  Non usare questo ripete il tipo dopo il giorno 28 del mese. </P>
-</MENU><A
-href=\"#top\">Cima</A>
-<HR>
-<P></P>
-<P><A name=repeating_delete><B>Come cancello un caso ricorrendo la riunione?</B></A>
-<MENU>Scegliere il giorno/la stanza/il tempo che lei vuole cancellare e scegliere
-<B>Cancellare l'Entrata.</B> </MENU><A
-href=\"#top\">Cima</A>
-<HR>
-<P></P>
-<P><A name=multiple_sites><B>Di come pianifico le stanze ai luoghi</B></A> diversi?
-<MENU>Lei fa non. Attualmente il sistema non può riservare 2 stanze diverse simultaneamente.
-Lei deve pianificare ogni un separatamente. Assicurarsi che il tempo che lei vuole
-è disponibile a entrambi i luoghi prima di fare una prenotazione. </MENU><A
-href=\"#top\">Cima</A>
-<HR>
-<P></P>
-<P><A name=too_many><B>La mia riunione ha fallito essere creato a causa di \"<I>troppe
-  entrate \"!</I></B></A> <MENU>Qualunque riunione non può creare più di 365 entrate.
-Lí i bisogni di essere del limite sul numero di riunioni create. Questo numero
-può essere aumentato se necessario. </MENU><A
-href=\"#top\">Cima</A>
-<HR>
-<P></P>
-<P><A name=multiple_users><B>Che succede del se le persone multiple pianificano
-  la stessa riunione?</B></A> <MENU>La risposta breve è: La prima persona scattare
-sul <B>Presenta</B> il bottone vince.<BR>
-Dietro le quinte, il sistema usa un multi-operatore proprio, un multi-infilare
-una base di dati relazionale di può maneggiare molte migliaia di operatori simultanei.
-</MENU><A
-href=\"#top\">Cima</A>
-<HR>
-<P></P>
-<P><A name=internal_external><B>Che è la differenza tra \"Interno\" ed \"Esterno\"</B></A>
-<MENU>Da predefinito, MRBS definisce due tipi di riunione. I mezzi \"<B>interni</B>
-\" che la riunione soltanto sarà assistita a dagli impiegati. Una riunione \" <B>Esterna</B>
-\" anche potrebbe essere assistita a dai clienti, i venditori, gli investitori,
-ecc. Il suo luogo può definire fino a un totale di 10 tipi di riunione, secondo
-i suoi bisogni. Le riunioni sono evidenziate nella veduta di calendario principale
-con un colore corrispondente al loro tipo, ed una chiave di colore di tutti i
-tipi definiti è mostrata al fondo della veduta di calendario principale. </MENU><A
-href=\"#top\">Cima</A>
-<HR>
-<br>
-<p><br>
-</p>");
 
+<p><strong>Le caratteristiche del sistema:</strong></p><menu><a href="#fon">Visualizza le caratteristiche</a></menu><p><strong>regolamento interno</strong></p><menu><a href="#reg">Leggi il regolamento</a></menu><p><strong>Login / Gestisci il tuo account</strong></p><menu><a href="#reserv">Come connettersi a prenotare?</a><br /><a href="#mot">Come cambiare la mia password?</a></menu><p><strong>Crea / Cancella prenotazioni</strong></p><menu><a href="#create">Come prenotare?</a><br /><a href="#email">Come prevenire l avversario che ho scelto?</a><br /><a href="#delete">Come faccio a cancellare una prenotazione?</a><br /> <a href="#multiple_users">Cosa succede se pi&ugrave; persone pianificare la stessa risorsa nello stesso intervallo di tempo?</a></menu><p><strong>Vario</strong></p><menu><a href="#create_ext">Come fare una prenotazione con qualcuno al di fuori del club?</a><br /><hr /><br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /><hr /><p><a name="reserv"></a><strong>Come connettersi a prenotare? ?</strong></p><menu>Per prenotare un campo, &egrave; necessario fare clic su Connetti,<br />Inserisci il tuo nome utente: la prima lettera del nome seguito dal nome e la password: la data di nascita in formato AAAAMMGG (anno mese giorno senza spazi) password pu&ograve; essere modificata nella sezione gestire il mio conto.</menu><p><a href="#top">Inizio pagina</a></p><hr /><p><strong>Come cambiare la mia password? <br /></strong></p><menu>Per modificare la password, &egrave; necessario eseguire il login e si deve cliccare su Gestisci Il mio account<br />quindi controllare la posta elettronica o modificare. --click Clicca qui per cambiare la password passe-- seguire le spiegazioni e confermare facendo clic nella parte inferiore della finestra di invio</menu><p><a href="#top">Inizio pagina</a></p><hr /><p><a name="create"></a><strong>Come prenotare?</strong></p><menu>Dopo aver scelto il campo da tennis:<br />N &deg; 1 (camera)<br />N&deg; 2 (esterno)<br />N&deg; 3 (fuori)<br />Fare clic sulla palla da tennis per il tempo desiderato, viene visualizzata la schermata del libro s.<br />Scegli il tuo avversario dall elenco a discesa dei membri del T. C.<br />Controlla la tua intera prenotazione<br />Quindi fare clic su Salva</menu><p><a href="#top">Inizio pagina</a></p><hr /><p><a name="email"></a><strong>Come prevenire l avversario che ho scelto?</strong></p><menu>Per le prenotazioni di una e-mail automatica viene inviato al tuo avversario se egli ci ha fornito.</menu><p><a href="#top">Inizio pagina</a></p><hr /><p><a name="delete"></a><strong>Come faccio a cancellare una prenotazione?</strong></p><menu>Per cancellare una prenotazione, &egrave; necessario essere la persona che ha creato la prenotazione<br />Effettua il login e selezionare la prenotazione e scegliere Elimina.</menu><p><a name="multiple_users"></a><strong>Cosa succede se pi&ugrave; persone pianificare la stessa risorsa nello stesso intervallo di tempo?</strong></p><menu>Risposta rapida: la prima persona che scatta vince pulsante Salva.</menu><p><a name="create_ext"></a><strong>Come fare una prenotazione con qualcuno al di fuori del club?</strong></p><menu>Per prenotare un campo con una persona da fuori, &egrave; necessario impostare il "biglietto guest"<br />Al momento della prenotazione, scegliere l abbonato "ospite" nel misuratore combo e il vostro "biglietto guest" sar&agrave; diminuito.</menu><p><a href="#top">Inizio pagina</a></p><hr /><p>&nbsp;</p><p><a name="reg"></a><strong>Leggi il regolamento</strong></p><menu>Lo scopo del presente regolamento &egrave; quello di facilitare l uso di breve e di attuare alcune etichetta sportiva. Se auto disciplina non &egrave; sufficiente, gli ufficiali hanno il potere di farla rispettare.<br /><strong>Articolo 1:</strong> abbonati<br />Tutti i giocatori devono ESSERE ABBONATO CT ........ sono considerati gli abbonati del club persone che hanno pagato la loro quota annuale. L anno di tennis inizia il 1 &deg; ottobre e si conclude il 31 settembre dell anno suivante.L abbonato non deve essere dell entrata carta perforata, o prenotare un intervallo di tempo per qualcuno al di fuori del club (famiglia, amici ...) in mancanza della quale il suo conto di prenotazione disabili e carta rimossa. In caso di infortunio, il club non pu&ograve; essere ritenuta responsabile se una persona esterna gioca sui suoi impianti, senza essere abbonati permission.All hanno gli stessi diritti e gli stessi obblighi a tutti i tribunali. Essi sono responsabili per la condizione in cui lasciano il campo dopo aver giocato (di scarto)<br /><strong>Articolo 2:</strong> La scuola di tennis<br />Prima di depositare i loro figli al club, i genitori devono garantire che s c &egrave; un buon istruttore / manager di riceverli. I genitori sono invitati a prendere i loro figli alla fine degli allenamenti.<br /><strong>Articolo 3:</strong> prenotazioni a breve<br />Le prenotazioni possono essere effettuate presso: http: // ....... o club con il PC a vostra disposition.Il devono prenotare due ore consecutive con la stessa persona La prenotazione di una nicchia in uno! insomma, rende impossibile una seconda prenotazione della stessa corte. Quando l intervallo di tempo riservato viene superato, &egrave; possibile prenotare ancora per un altra ora, non consecutivi alla precedente o un altro giorno. Ciascun abbonato deve prenotare un campo con un altro abbonato del club per il suo libro &egrave; breve valid&eacute;e.Un pu&ograve; essere utilizzato per un ora, sia singolo o doppio, a patto che gli attori coinvolti sono brevi tutti gli abbonati TC.Exceptionnellement un giudice pu&ograve; essere riservato da un abbonato con uno, due o tre ospiti oggetto di aver informato l ufficio via e-mail o club@freefree.fr durante la permanenza il Mercoled&igrave; 18-19h Sabato 10-12h prima della sua booking.The prezzo &egrave; di 3 euro per ogni ospite. (Ad esempio abbonato 1 + 3 = 9 euro invitato l ora).<br /><strong>Articolo 4:</strong> voli<br />Il club declina ogni responsabilit&agrave; per perdite o furto sui campi del circolo e le zone circostanti.<br /><strong>Articolo 5:</strong> Le priorit&agrave; di accesso<br />Le priorit&agrave; sono stabilite in alcuni campi per la scuola di tennis, giochi competitivi e squadre di formazione.<br /><strong>Articolo 6:</strong> Altre regole<br />Qualunque sia il tempo di tennis abbigliamento &egrave; obbligatoria. Sui campi, le scarpe da tennis non dovrebbero avere suole nere. Sul campo coperto viene chiesto collezionisti per garantire la chiusura delle porte scorrevoli e le luci spente. Biciclette e motocicli devono essere conservati in slot dedicati effetBoites, bottiglie, carta, ecc devono essere depositate negli appositi contenitori previsti a tale scopo o segnalati domicile.Les diverse installazioni devono essere rispettati.<br /><strong>Articolo 7:</strong> Sanzioni<br />Qualsiasi violazione di tale regolamento pu&ograve; comportare le sanzioni decise dai membri del bureau.Tout regole di prenotazione violazione conduce il suo estraneo nullit&eacute;.Toute per la sorpresa TC di giocare sugli impianti dovrebbe pagare s regolamento di 10 euro per ogni ora giocato.</menu><p><a href="#top">Inizio pagina</a></p><hr /><p>&nbsp;</p><p><a name="fon"></a><strong>Visualizza le caratteristiche :</strong></p><menu>Questo sistema di prenotazione permette di:<br />- Per i membri di prenotare la loro nicchia di tennis.<br />- I manager di gestire completamente un club di tennis tra cui contabilit&agrave;.<br />Vediamo nel dettaglio le possibilit&agrave;:<br /><br /><strong>1 - Per l utente:</strong><br /><br /><span style="text-decoration: underline;">Prenotare :</span><br />Ha un nome utente e una password forniti dai funzionari del club.<br />Il socio pu&ograve; prenotare un ora di tennis sul campo di sua scelta con un membro del club (che ricever&agrave; una mail di conferma) o guest.<br />Se si sceglie di prenotare con un ospite, avr&agrave; preso cura di prima di risolvere "biglietto chiamato" .Il principio &egrave; leader semplici cogliere il numero di ore stabilite dal abonn&eacute;.D&egrave;s ospiti che riserva abbonato con un ospite, il suo contatore viene decrementato automaticamente.<br /><br /><span style="text-decoration: underline;">Gestisci il tuo account:</span><br />L utente pu&ograve; modificare la propria password e riempire la sua posta, si pu&ograve; cambiare l aspetto visivo del sito.<br /><br /><span style="text-decoration: underline;">Pubblica un inserzione:</span><br />Il socio che vuole pu&ograve; visualizzare elenchi e presentare il proprio annuncio a indicare la sua disponibilit&agrave;.<br /><br />2 <strong>- Per i dirigenti:</strong><br /><br /><span style="text-decoration: underline;">Gestisci membri:</span><br />(Nome utente, password, foto, nome, data di nascita, e-mail, telefono, adrese, tipo di abbonamento, invitato metro ...) statistiche Visualizza prenotazione, confrontare abbonamenti su pi&ugrave; e-mail con ann&eacute;es.Envoyer allegati con un solo clic per i membri.<br /><br /><span style="text-decoration: underline;">Gestire i conti del club:</span><br />Gestione per anno di sport abbonati eun costi di gestione del club (stipendi, spese, ecc ...)<br />bilancio Edition<br />Gestione di denaro contante<br /><br /><span style="text-decoration: underline;">Gestire l aspetto del sito:</span><br />Configurare l aspetto del sito (colore, la lingua, menu) annunci Configurare courts.D&eacute;poser in Home page.<br /><br /><span style="text-decoration: underline;">Eseguire / Rimuovi prenotazioni:</span><br />I manager possono effettuare prenotazioni con diverse ore e configurabile per le diverse attivit&agrave; (scuola di tennis, formazione, ...) con intervalli (giornaliero, settimanale, ecc ...) i gestori possono rimuovere i membri di prenotazione, se necessario .</menu><p><a href="#top">Inizio pagina</a></p><hr /><p><br /><br /><br /><br /><br /><br /></p></menu>

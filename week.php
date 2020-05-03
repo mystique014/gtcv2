@@ -156,6 +156,35 @@ $year_week  = date("Y", $time);
 # print the page header
 print_header($day, $month, $year, $area, $type_session);
 
+
+
+
+#Draw the three month calendars
+	$cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
+	if ($cal == 1)
+	{
+	echo'<div class="row">'.PHP_EOL;
+	echo'<div class="col-md-12">'.PHP_EOL;	echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
+	minicals($year, $month, $day, $area, -1, 'day');
+	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
+	echo'</div>'.PHP_EOL;
+	echo'</div>'.PHP_EOL;
+	}
+echo'<div class="row">'.PHP_EOL;
+echo'<div class="col-md-12 center">'.PHP_EOL;
+$v= mktime(0,0,0,$month,$day,$year);
+$yy = date("Y",$v);
+$mm = date("m",$v);
+$dd = date("d",$v);
+if ($cal == 1)
+{
+echo "<a href=\"week.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a>\n";
+} else {
+echo "<a href=\"week.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a>\n";
+}	
+echo'</div>'.PHP_EOL;
+echo'</div>'.PHP_EOL;
+	
 if($enable_periods=='y') {
     $resolution = 60;
     $morningstarts = 12;
@@ -215,39 +244,54 @@ $week_end = mktime($eveningends, $eveningends_minutes, 0, $month_week, $day_week
 $this_area_name = "";
 $this_room_name = "";
 
+
+
 // Si format imprimable ($_GET['pview'] = 1), on n'affiche pas cette partie
 if ($_GET['pview'] != 1) {
+	
+	
+	
     # Table with areas, rooms, minicals.
-    echo "<table width=\"100%\" cellspacing=1 border=0><tr><td>\n";
+    //echo "<table width=\"100%\" cellspacing=0 border=1><tr><td>\n";
 
     if (isset($_SESSION['default_list_type']) or ($authentification_obli==1)) {
         $area_list_format = $_SESSION['default_list_type'];
     } else {
         $area_list_format = getSettingValue("area_list_format");
     }
-
+	
     # show either a select box or the normal html list
     if ($area_list_format != "list") {
+		echo'<div class="row">'.PHP_EOL;
+		echo'<div class="col-xs-3">'.PHP_EOL;
         echo make_area_select_html('week_all.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
-        echo "</td>\n<td>\n";
+        //echo "</td>\n<td>\n";
+		echo'</div>'.PHP_EOL;
+		echo'<div class="col-xs-3 ">'.PHP_EOL;
         echo make_room_select_html('week', $area, $room, $year, $month, $day);
+		echo'</div>'.PHP_EOL;
+		echo'</div>'.PHP_EOL;
+		
     } else {
-        echo "<table width=\"100%\" cellspacing=5><tr><td>\n";
+		echo'<div class="row">'.PHP_EOL;
+		echo'<div class="col-xs-3">'.PHP_EOL;
+        //echo "<table width=\"100%\" cellspacing=0><tr><td>\n";
         echo make_area_list_html('week_all.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
+		echo'</div>'.PHP_EOL;
         # Show all rooms in the current area
-        echo "</td>\n<td>\n";
+        //echo "</td>\n<td>\n";
+		echo'<div class="col-xs-3">'.PHP_EOL;
         make_room_list_html('week.php', $area, $room, $year, $month, $day);
-        echo "</td>\n";
+        //echo "</td>\n";
+		echo'</div>'.PHP_EOL;
+		echo'</div>'.PHP_EOL;
     }
     //echo "</td>\n";
 
-    #Draw the three month calendars
-	$cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
-	if ($cal == 1)
-	{
-    minicals($year, $month, $day, $area, $room, 'week');
-	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
-	}
+    echo'<div class="row">'.PHP_EOL;
+	echo'<div class="col-md-12">'.PHP_EOL;
+	//echo "<table width=\"100%\" cellspacing=1 border=0>\n";
+	
 }
 
 $this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
@@ -261,7 +305,7 @@ $this_delais_option_reservation = grr_sql_query1("select delais_option_reservati
 # Don't continue if this area has no rooms:
 if ($room <= 0)
 {
-    echo "<h1>".get_vocab("no_rooms_for_area")."</h1>";
+    echo "<h4>".get_vocab("no_rooms_for_area")."</h1>";
     include "include/trailer.inc.php";
     exit;
 }
@@ -273,7 +317,7 @@ if (($this_room_name_des) and ($this_room_name_des!="-1")) {
 } else {
     $this_room_name_des = "";
 }
-echo "<td VALIGN=MIDDLE><h2 align=center>".ucfirst($this_area_name)." - $this_room_name $this_room_name_des\n";
+echo "<h4 align=center>".ucfirst($this_area_name)." - $this_room_name $this_room_name_des\n";
 
 if ($this_show_fic_room == 'y')
     echo "<A href='javascript:centrerpopup(\"view_room.php?id_room=$room\",600,480,\"scrollbars=yes,statusbar=no,resizable=yes\")' \" title=\"".get_vocab("fiche_ressource")."\">
@@ -283,19 +327,11 @@ if (authGetUserLevel(getUserName(),$room) > 2)
 
 
 if ($this_statut_room == "0")
-    echo "<h2 align=center><font color=\"#BA2828\">".get_vocab("ressource_temporairement_indisponible")."</font></H2>";
-echo "</h2>";
-$v= mktime(0,0,0,$month,$day,$year);
-$yy = date("Y",$v);
-$mm = date("m",$v);
-$dd = date("d",$v);
+    echo "<h4 align=center><font color=\"#BA2828\">".get_vocab("ressource_temporairement_indisponible")."</font></h4>";
+	echo "</h4>";
+		echo'</div>'.PHP_EOL;
+		echo'</div>'.PHP_EOL;
 
-if ($cal == 1)
-{
-echo "</td><td align='right'><a href=\"week.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a></td></tr></table>\n";
-} else {
-echo "</td><td align='right'><a href=\"week.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr></table>\n";
-}
 
 #y? are year, month and day of the previous week.
 #t? are year, month and day of the next week.
@@ -314,12 +350,15 @@ $td = date("d",$i);
 // Si format imprimable ($_GET['pview'] = 1), on n'affiche pas cette partie
 if ($_GET['pview'] != 1) {
     #Show Go to week before and after links
-    echo "<table width=\"100%\"><tr><td>\n
-      <a href=\"week.php?year=$yy&amp;month=$ym&amp;day=$yd&amp;area=$area&amp;room=$room\">
-      &lt;&lt; ".get_vocab("weekbefore")."</a></td>\n
-      <td>&nbsp;</td>\n
-      <td align=right><a href=\"week.php?year=$ty&amp;month=$tm&amp;day=$td&amp;area=$area&amp;room=$room\">
-      ".get_vocab("weekafter")." &gt;&gt;</a></td>\n</tr></table>\n";
+    //echo "<table width=\"100%\"><tr><td>\n
+	echo'<div class="row">'.PHP_EOL;
+	echo'<div class="col-xs-6">'.PHP_EOL;
+      echo'<a href="week.php?year='.$yy.'&amp;month='.$ym.'&amp;day='.$yd.'&amp;area='.$area.'&amp;room='.$room.'">&lt;&lt; '.get_vocab("weekbefore").'</a>'.PHP_EOL;
+	  echo'</div>'.PHP_EOL;
+	  echo'<div class="col-xs-6">'.PHP_EOL;
+      echo'<span class="pull-right"><a href="week.php?year='.$ty.'&amp;month='.$tm.'&amp;day='.$td.'&amp;area='.$area.'&amp;room='.$room.'">'.get_vocab("weekafter").' &gt;&gt;</a></span>'.PHP_EOL;
+	   echo'</div>'.PHP_EOL;
+	   echo'</div>'.PHP_EOL;
 }
 #Get all appointments for this week in the room that we care about
 # row[0] = Start time
@@ -446,10 +485,10 @@ if ($debug_flag)
 }
 
 #This is where we start displaying stuff
-echo "<table cellspacing=0 border=1 width=\"100%\">";
+echo "<table class='table table-responsive text-center' border=1 width=\"100%\">";
 
 // Affichage de la première ligne contenant le nom des jours (lundi, mardi, ...) et les dates ("10 juil", "11 juil", ...)
-echo "<tr>\n<th width=\"1%\">&nbsp;</th>\n"; // Première cellule vide
+echo "<tr>\n<th class='text-center' width=\"1%\">&nbsp;</th>\n"; // Première cellule vide
 // Les cellules "jours de semaine"
 switch ($dateformat) {
     case "en":
@@ -463,7 +502,7 @@ $k=$day_week;
 $num_week_day = $weekstarts; // Pour le calcul des jours à afficher
 for ($t = $week_start; $t <= $week_end; $t += 86400) {
     if ($display_day[$num_week_day] == 1) // on n'affiche pas tous les jours de la semaine
-        echo "<th width=\"14%\">" . utf8_strftime($dformat, $t) . "</th>\n";
+        echo "<th class='text-center' width=\"14%\">" . utf8_strftime($dformat, $t) . "</th>\n";
     if (!isset($correct_heure_ete_hiver) or ($correct_heure_ete_hiver == 1)) {
         $num_day = strftime("%d", $t);
         // Si le dernier dimanche d'octobre est dans la semaine, on avance d'une heure
@@ -474,7 +513,7 @@ for ($t = $week_start; $t <= $week_end; $t += 86400) {
     $num_week_day++;// Pour le calcul des jours à afficher
     $num_week_day = $num_week_day % 7;// Pour le calcul des jours à afficher
 }
-echo "<th width=\"1%\">&nbsp;</th>\n</tr>\n"; // Dernière cellule vide
+echo "<th class='text-center' width=\"1%\">&nbsp;</th>\n</tr>\n"; // Dernière cellule vide
 // Fin de l'affichage de la première ligne
 
 // Affichage de la deuxième ligne du tableau contenant l'intitulé "Journée" avec lien vers day.php
@@ -693,7 +732,7 @@ $num_week_day = $weekstarts;
 for ($t = $week_start; $t <= $week_end; $t += 86400)
 {
     if ($display_day[$num_week_day] == 1)
-        echo "<th>" . strftime($dformat, $t) ."</th>\n";
+        echo "<th class='text-center'>" . strftime($dformat, $t) ."</th>\n";
     $k++;
     if (!isset($correct_heure_ete_hiver) or ($correct_heure_ete_hiver == 1)) {
         $num_day = strftime("%d", $t);

@@ -28,6 +28,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+function affichetableau($liste,$titre='')
+ {
+  global $chaine, $vocab;
+  if (count($liste) > 0)
+    {
+      echo "<fieldset>\n";
+      echo "<legend>$titre</legend><ul>\n";
+      $k = 0;
+      foreach($liste as $key)
+    {
+      if ($chaine == $key)
+        echo "<li><span class=\"bground\"><b>".get_vocab($key)."</b></span></li>\n";
+      else
+        echo "<li><a href='".$key."'>".get_vocab($key)."</a></li>\n";
+      $k++;
+    }
+      echo "</ul></fieldset>\n";
+    }
+}
+
 echo "<table border=0 cellspacing=4 cellpadding=4>";
 // Affichage de la colonne de gauche
 
@@ -47,26 +67,6 @@ else
   $chaine = '';
 }
 
-function affichetableau($liste,$titre="")
-{
-  global $chaine, $vocab;
-  if (count($liste) > 0)
-    {
-      echo "<fieldset style=\"padding-top: 5px; padding-bottom: 5px; padding-left:5px ; padding-right: 5px ; line-height:1.2em;\">";
-      echo "<legend>$titre</legend>";
-      $k = 0;
-      foreach($liste as $key)
-    {
-      if ($k > 0) echo "<br>";
-      if ($chaine == $key)
-        echo "<li><span class=\"bground\"><b>".get_vocab($key)."</b></span>";
-      else
-        echo "<li><A HREF='".$key."'>".get_vocab($key)."</A>";
-      $k++;
-    }
-      echo "</fieldset>";
-    }
-}
 
 $liste = array();
 if(authGetUserLevel(getUserName(),-1,'area') >= 5)
