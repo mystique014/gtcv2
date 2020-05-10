@@ -82,7 +82,7 @@ $sumby = isset($_GET["sumby"]) ? $_GET["sumby"] : NULL;
 $sortby = isset($_GET["sortby"]) ? $_GET["sortby"] : "a";
 
 // Si la table j_user_area est vide, il faut modifier la requête
-$test_grr_j_user_area = grr_sql_count(grr_sql_query("SELECT * from grr_j_user_area"));
+$test_grr_j_user_area = grr_sql_count(grr_sql_query("SELECT * from ".$_COOKIE["table_prefix"]."_j_user_area"));
 
 
 # Report on one entry. See below for columns in $row[].
@@ -118,11 +118,11 @@ function reporton(&$row, &$last_area_room, $dformat)
     echo "<tr><td class=\"BL\" colspan=2><b>".get_vocab('description')."</b> " .
         nl2br(htmlspecialchars($row[4])) . "</td></tr>\n";
     #Type de réservation
-    $et = grr_sql_query1("select type_name from grr_type_area where type_letter='".$row[5]."'");
+    $et = grr_sql_query1("select type_name from ".$_COOKIE["table_prefix"]."_type_area where type_letter='".$row[5]."'");
     if ($et == -1) $et = "?".$row[5]."?";
     echo "<tr><td class=\"BL\" colspan=2><b>".get_vocab('type')."</b> $et</td></tr>\n";
     #Affichage de "crée par" et de la date de la dernière mise à jour
-    $sql_creator = "SELECT prenom, nom FROM grr_utilisateurs WHERE login = '".$row[6]."'";
+    $sql_creator = "SELECT prenom, nom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".$row[6]."'";
     $res_creator = grr_sql_query($sql_creator);
     if ($res_creator) $row_user = grr_sql_row($res_creator, 0);
 
@@ -483,12 +483,12 @@ if (isset($areamatch))
         . "e.type, e.create_by, "
         .  grr_sql_syntax_timestamp_to_unix("e.timestamp")
         . ", a.area_name, r.room_name, r.description, a.id"
-        . " FROM grr_entry e, grr_area a, grr_room r, grr_type_area t";
+        . " FROM ".$_COOKIE["table_prefix"]."_entry e, ".$_COOKIE["table_prefix"]."_area a, ".$_COOKIE["table_prefix"]."_room r, ".$_COOKIE["table_prefix"]."_type_area t";
 
     // Si l'utilisateur n'est pas administrateur, seuls les domaines auxquels il a accès sont pris en compte
     if(authGetUserLevel(getUserName(),-1) < 5)
         if ($test_grr_j_user_area != 0)
-           $sql .= ", grr_j_user_area j ";
+           $sql .= ", ".$_COOKIE["table_prefix"]."_j_user_area j ";
         $sql .= " WHERE e.room_id = r.id AND r.area_id = a.id";
     // Si l'utilisateur n'est pas administrateur, seuls les domaines auxquels il a accès sont pris en compte
     if(authGetUserLevel(getUserName(),-1) < 5)

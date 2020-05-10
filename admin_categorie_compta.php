@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -76,7 +75,7 @@ if ($valid == "yes") {
         if ($action_modify =='yes') {
 		$temp = $_GET['id_categorie'];
 		
-            $sql = "UPDATE grr_categorie_compta SET name='".protect_data_sql($reg_categorie)."'
+            $sql = "UPDATE ".$_COOKIE["table_prefix"]."_categorie_compta SET name='".protect_data_sql($reg_categorie)."'
             WHERE id='".protect_data_sql($temp)."'";
             if (grr_sql_command($sql) < 0)
                 {fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
@@ -89,7 +88,7 @@ if ($valid == "yes") {
 		//actionssi une nouvelle catégorie comptable est créée
 		//
         } else if ($action_modify !='yes')  {
-          $sql = "INSERT INTO grr_categorie_compta SET
+          $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_categorie_compta SET
                     name='".protect_data_sql($reg_categorie)."'";
                     if (grr_sql_command($sql) < 0)
                         {fatal_error(0, get_vocab("msg_fiche_created_error") . grr_sql_error());
@@ -106,7 +105,7 @@ if ($valid == "yes") {
 // On appelle les informations de la fiche à modifier pour les afficher :
 if ($action_modify =='yes') {
 	$temp = $_GET['id_categorie'];
-    $sql = "SELECT id, name FROM grr_categorie_compta WHERE id='$temp'";
+    $sql = "SELECT id, name FROM ".$_COOKIE["table_prefix"]."_categorie_compta WHERE id='$temp'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -140,7 +139,7 @@ if ($msg)   {
 //
 if ((isset($_GET['action_del']) and ($_GET['js_confirmed'] ==1))) {
 		$temp = $_GET['cat_del'];
-        $sql = "DELETE FROM grr_categorie_compta WHERE id='$temp'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_categorie_compta WHERE id='$temp'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {
            $msg=get_vocab("del_fiche");
         }
@@ -193,7 +192,7 @@ echo "</tr>";
 
 
 // On appelle les informations de l'utilisateur pour les afficher :
-    $sql = "SELECT id, name FROM grr_categorie_compta ORDER BY name";
+    $sql = "SELECT id, name FROM ".$_COOKIE["table_prefix"]."_categorie_compta ORDER BY name";
     $res = grr_sql_query($sql);
     if ($res) {
 	

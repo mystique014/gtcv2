@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -43,7 +42,7 @@ if(authGetUserLevel(getUserName(),-1) < 5)
 
 // Date to delete logs to
 if (isset($_POST['cleanDay']) && isset($_POST['cleanMonth']) && isset($_POST['cleanYear'])) {
-    $sql = "delete from grr_log where START < '" . $_POST['cleanYear'] . "-" . $_POST['cleanMonth'] . "-" . $_POST['cleanDay'] . "' and END < now()";
+    $sql = "delete from ".$_COOKIE["table_prefix"]."_log where START < '" . $_POST['cleanYear'] . "-" . $_POST['cleanMonth'] . "-" . $_POST['cleanDay'] . "' and END < now()";
     $res = grr_sql_query($sql);
 }
 
@@ -60,7 +59,7 @@ echo "<h3>".get_vocab("users_connected")."</h3>";
 <ul>
 <?php
 // compte le nombre d'enregistrement dans la table
-$sql = "select u.login, concat(u.prenom, ' ', u.nom) utilisa, u.email from grr_log l, grr_utilisateurs u where (l.LOGIN = u.login and l.END > now())";
+$sql = "select u.login, concat(u.prenom, ' ', u.nom) utilisa, u.email from ".$_COOKIE["table_prefix"]."_log l, ".$_COOKIE["table_prefix"]."_utilisateurs u where (l.LOGIN = u.login and l.END > now())";
 
 $res = grr_sql_query($sql);
 if ($res) {
@@ -106,7 +105,7 @@ if (!isset($_POST['histDay'])) {
     </tr>
 <?php
 
-$sql = "select u.login, concat(prenom, ' ', nom) utili, l.START, l.SESSION_ID, l.REMOTE_ADDR, l.USER_AGENT, l.REFERER, l.AUTOCLOSE, l.END, u.email from grr_log l, grr_utilisateurs u where l.LOGIN = u.login and l.START > '" . $_POST['histYear'] . "-" . $_POST['histMonth'] . "-" . $_POST['histDay'] . "' order by START desc";
+$sql = "select u.login, concat(prenom, ' ', nom) utili, l.START, l.SESSION_ID, l.REMOTE_ADDR, l.USER_AGENT, l.REFERER, l.AUTOCLOSE, l.END, u.email from ".$_COOKIE["table_prefix"]."_log l, ".$_COOKIE["table_prefix"]."_utilisateurs u where l.LOGIN = u.login and l.START > '" . $_POST['histYear'] . "-" . $_POST['histMonth'] . "-" . $_POST['histDay'] . "' order by START desc";
 
 // $row[0] : log.LOGIN
 // $row[1] : USER
@@ -193,7 +192,7 @@ if ($res) {
 <h3><?php echo get_vocab("cleaning_log"); ?></h3>
 
 <?php
-$sql = "select START from grr_log order by END";
+$sql = "select START from ".$_COOKIE["table_prefix"]."_log order by END";
 $res = grr_sql_query($sql);
 $logs_number = grr_sql_count($res);
 $row = grr_sql_row($res, 0);

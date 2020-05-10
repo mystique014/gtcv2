@@ -700,15 +700,4 @@ $vocab["change"] = "Change";
 $vocab["type_text"] = "One row ligne (text)";
 $vocab["type_area"] = "Multi-rows (textarea)";
 $vocab["avertissement_suppression_champ_additionnel"] = "La suppression d'un champ additionnel est définitive et entraîne la suppression des données correspondantes dans les réservations déjà effectuées."; // A traduire
-# Used in use_change_pwd.php // A traduire
-$vocab["init"] = "Réinitialisation du mot de passe";
-$vocab["msg_init"] = "Forgot your password ! ";
-$vocab["user_mail"] = "Veuillez saisir votre Identifiant et votre adresse de messagerie, pour recevoir votre mot de passe :";
-$vocab["adresse_mail1"] = "Votre adresse de messagerie ";
-$vocab["adresse_mail2"] = "Votre adresse de messagerie (confirmation) ";
-$vocab["error_mail"] = "Erreur de saisie de votre adresse de messagerie ";
-$vocab["message_mail"] = "Votre mot de passe a été réinitialisé, veuillez en prendre note :   ";
-$vocab["sujet_mail"] = "Réinitialisation de votre mot de passe ! ";
-$vocab["error_mail_empty"] = "Cette adresse n'existe pas dans la base ! ";
-$vocab["msg_mail"] = "Votre mot de passe a été réinitialisé ! ";
 ?>

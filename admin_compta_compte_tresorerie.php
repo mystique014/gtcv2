@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -77,7 +76,7 @@ if ($valid == "yes") {
     } else {
 		$temp = $_GET['id_compte'];
 		//controle s'il existe déjà un compte courant actif
-		$nbr = grr_sql_query1 ("SELECT count(id) FROM grr_compte_tresorerie WHERE courant='1' AND id !='$temp'");
+		$nbr = grr_sql_query1 ("SELECT count(id) FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie WHERE courant='1' AND id !='$temp'");
         //
         // action s'il s'agit d'une modification de compte
         //
@@ -85,7 +84,7 @@ if ($valid == "yes") {
 		
 		
 		if (($reg_courant == '' )) {
-		    $sql = "UPDATE grr_compte_tresorerie SET name='".protect_data_sql($reg_compte)."',
+		    $sql = "UPDATE ".$_COOKIE["table_prefix"]."_compte_tresorerie SET name='".protect_data_sql($reg_compte)."',
 			solde ='".protect_data_sql($reg_solde)."',
 			courant ='".protect_data_sql($reg_courant)."'
             WHERE id='".protect_data_sql($temp)."'";
@@ -95,7 +94,7 @@ if ($valid == "yes") {
                 $msg = get_vocab("msg_compte_modified");
 			}
 		} else if ((($reg_courant == '1' )) AND (($nbr =='0'))){
-		$sql = "UPDATE grr_compte_tresorerie SET name='".protect_data_sql($reg_compte)."',
+		$sql = "UPDATE ".$_COOKIE["table_prefix"]."_compte_tresorerie SET name='".protect_data_sql($reg_compte)."',
 			solde ='".protect_data_sql($reg_solde)."',
 			courant ='".protect_data_sql($reg_courant)."'
             WHERE id='".protect_data_sql($temp)."'";
@@ -112,7 +111,7 @@ if ($valid == "yes") {
 		//actionssi une nouvelle catégorie comptable est créée
 		//
         } else if (($reg_courant == '') OR (($reg_courant == '1') AND ($nbr =='0')))  {
-          $sql = "INSERT INTO grr_compte_tresorerie SET
+          $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_compte_tresorerie SET
                     name='".protect_data_sql($reg_compte)."',
 					solde ='".protect_data_sql($reg_solde)."',
 					courant='".protect_data_sql($reg_courant)."'";
@@ -131,7 +130,7 @@ if ($valid == "yes") {
 // On appelle les informations de la fiche à modifier pour les afficher :
 if ($action_modify =='yes') {
 	$temp = $_GET['id_compte'];
-    $sql = "SELECT id, name, solde FROM grr_compte_tresorerie WHERE id='$temp'";
+    $sql = "SELECT id, name, solde FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie WHERE id='$temp'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -166,7 +165,7 @@ if ($msg)   {
 //
 if ((isset($_GET['action_del']) and ($_GET['js_confirmed'] ==1))) {
 		$temp = $_GET['compte_del'];
-        $sql = "DELETE FROM grr_compte_tresorerie WHERE id='$temp'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie WHERE id='$temp'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {
            $msg=get_vocab("del_fiche");
         }
@@ -226,7 +225,7 @@ echo "</tr>";
 
 
 // On appelle les informations de l'utilisateur pour les afficher :
-    $sql = "SELECT id, name, courant, solde FROM grr_compte_tresorerie ORDER BY id";
+    $sql = "SELECT id, name, courant, solde FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie ORDER BY id";
     $res = grr_sql_query($sql);
     if ($res) {
 	

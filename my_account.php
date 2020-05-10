@@ -104,7 +104,7 @@ if ($valid == "yes")
             else
             {
                 $reg_password1 = md5($reg_password1);
-                $sql = "UPDATE grr_utilisateurs SET password='" . protect_data_sql($reg_password1)."' WHERE login='". $_SESSION['login']."'";
+                $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET password='" . protect_data_sql($reg_password1)."' WHERE login='". $_SESSION['login']."'";
                 if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab("update_pwd_failed") . grr_sql_error());
                 else
@@ -117,7 +117,7 @@ if ($valid == "yes")
         else
             $msg = get_vocab("wrong_old_pwd");
     }
-    $sql = "SELECT email, source, tel, telport, adresse, code, ville, licence, classement FROM grr_utilisateurs WHERE login='".$_SESSION['login']."'";
+    $sql = "SELECT email, source, tel, telport, adresse, code, ville, licence, classement FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='".$_SESSION['login']."'";
     $res = grr_sql_query($sql);
     if ($res)
     {
@@ -135,7 +135,7 @@ if ($valid == "yes")
     }
     if ($user_email != $reg_email) 
     {
-        $sql = "UPDATE grr_utilisateurs SET email = '" . protect_data_sql($reg_email)."' WHERE login='". $_SESSION['login']."'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET email = '" . protect_data_sql($reg_email)."' WHERE login='". $_SESSION['login']."'";
         if (grr_sql_command($sql) < 0)
             fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
         else
@@ -143,7 +143,7 @@ if ($valid == "yes")
     }
 	if ($user_tel != $reg_tel) 
     {
-        $sql = "UPDATE grr_utilisateurs SET tel = '" . protect_data_sql($reg_tel)."' WHERE login='". $_SESSION['login']."'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET tel = '" . protect_data_sql($reg_tel)."' WHERE login='". $_SESSION['login']."'";
         if (grr_sql_command($sql) < 0)
             fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
         else
@@ -151,7 +151,7 @@ if ($valid == "yes")
     }
 	if ($user_telport != $reg_telport) 
     {
-        $sql = "UPDATE grr_utilisateurs SET telport = '" . protect_data_sql($reg_telport)."' WHERE login='". $_SESSION['login']."'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET telport = '" . protect_data_sql($reg_telport)."' WHERE login='". $_SESSION['login']."'";
         if (grr_sql_command($sql) < 0)
             fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
         else
@@ -159,7 +159,7 @@ if ($valid == "yes")
     }
 	if ($user_adresse != $reg_adresse) 
     {
-        $sql = "UPDATE grr_utilisateurs SET adresse = '" . protect_data_sql($reg_adresse)."' WHERE login='". $_SESSION['login']."'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET adresse = '" . protect_data_sql($reg_adresse)."' WHERE login='". $_SESSION['login']."'";
         if (grr_sql_command($sql) < 0)
             fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
         else
@@ -167,7 +167,7 @@ if ($valid == "yes")
     }
 	if ($user_code != $reg_code) 
     {
-        $sql = "UPDATE grr_utilisateurs SET code = '" . protect_data_sql($reg_code)."' WHERE login='". $_SESSION['login']."'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET code = '" . protect_data_sql($reg_code)."' WHERE login='". $_SESSION['login']."'";
         if (grr_sql_command($sql) < 0)
             fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
         else
@@ -175,7 +175,7 @@ if ($valid == "yes")
     }
 	if ($user_ville != $reg_ville) 
     {
-        $sql = "UPDATE grr_utilisateurs SET ville = '" . protect_data_sql($reg_ville)."' WHERE login='". $_SESSION['login']."'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET ville = '" . protect_data_sql($reg_ville)."' WHERE login='". $_SESSION['login']."'";
         if (grr_sql_command($sql) < 0)
             fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
         else
@@ -183,7 +183,7 @@ if ($valid == "yes")
     }
 	if ($user_licence != $reg_licence) 
     {
-        $sql = "UPDATE grr_utilisateurs SET licence = '" . protect_data_sql($reg_licence)."' WHERE login='". $_SESSION['login']."'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET licence = '" . protect_data_sql($reg_licence)."' WHERE login='". $_SESSION['login']."'";
         if (grr_sql_command($sql) < 0)
             fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
         else
@@ -191,7 +191,7 @@ if ($valid == "yes")
     }
 	if ($user_classement != $reg_classement) 
     {
-        $sql = "UPDATE grr_utilisateurs SET classement = '" . protect_data_sql($reg_classement)."' WHERE login='". $_SESSION['login']."'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET classement = '" . protect_data_sql($reg_classement)."' WHERE login='". $_SESSION['login']."'";
         if (grr_sql_command($sql) < 0)
             fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
         else
@@ -205,7 +205,7 @@ if (($valid == "yes") or ($valid=="reset"))
     $default_style = isset($_POST["default_css"]) ? $_POST["default_css"] : NULL;
     $default_list_type = isset($_POST["area_list_format"]) ? $_POST["area_list_format"] : NULL;
     $default_language = isset($_POST["default_language"]) ? $_POST["default_language"] : NULL;
-    $sql = "UPDATE grr_utilisateurs SET
+    $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET
         default_area = '" . protect_data_sql($default_area)."',
         default_room = '" . protect_data_sql($default_room)."',
         default_style = '" . protect_data_sql($default_style)."',
@@ -231,7 +231,7 @@ print_header($day, $month, $year, isset($area) ? $area : "");
 <script type="text/javascript" src="functions.js" language="javascript"></script>
 <?php
     #On appelle les informations de l'utilisateur pour les afficher
-$sql = "SELECT nom, prenom, statut, email, default_area, default_room, default_style, default_list_type, default_language, source, invite, tel, telport, adresse, code, ville, licence, classement, group_id  FROM grr_utilisateurs WHERE login='".$_SESSION['login']."'";
+$sql = "SELECT nom, prenom, statut, email, default_area, default_room, default_style, default_list_type, default_language, source, invite, tel, telport, adresse, code, ville, licence, classement, group_id  FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='".$_SESSION['login']."'";
 $res = grr_sql_query($sql);
 if ($res)
 {
@@ -271,10 +271,10 @@ if ($msg)
     unset($msg);
 }
 // Recherche du du nom de groupe de l'utilisateur pour afficher
-				$sql2 = "select group_name from grr_group WHERE id=$user_group";
+				$sql2 = "select group_name from ".$_COOKIE["table_prefix"]."_group WHERE id=$user_group";
 				$gr = grr_sql_query1($sql2);
 echo "<form name=\"nom_formulaire\" action=\"my_account.php\" method='POST'>";
-echo "<br><TABLE BORDER=0 width=\"100%\"><tr><td>".get_vocab("login").get_vocab("deux_points"). $_SESSION['login']."</td><td><a title=\"".htmlspecialchars(get_vocab("see_all_the_rooms_for_the_day"))."\" href=\"day.php?".$default_area."\">>>>RETOUR Planning<<<</a></td></tr>";
+echo "<br><TABLE BORDER=0 width=\"100%\"><tr><td>".get_vocab("login").get_vocab("deux_points"). $_SESSION['login']."</td><td><a title=\"".htmlspecialchars(get_vocab("see_all_the_rooms_for_the_day"))."\" href=\"day.php\">>>>RETOUR Planning<<<</a></td></tr>";
 echo "<tr><td>".get_vocab("last_name").get_vocab("deux_points").$user_nom."</td><td>".get_vocab("first_name").get_vocab("deux_points").$user_prenom."</td></tr>";
 echo "<tr><td>".get_vocab("mail_user").get_vocab("deux_points")."";
 if (($user_source == 'ext') and (getSettingValue("sso_statut") == "lcs")) {
@@ -363,14 +363,14 @@ function ModifierListe(code_item)
    echo "    if (code_item == -1) document.nom_formulaire.id_room.options[0].selected = true;\n";
    echo "  }\n";
    // Cas où un domaine a été précisé
-   $sql = "SELECT id FROM grr_area ORDER BY  order_display, area_name";
+   $sql = "SELECT id FROM ".$_COOKIE["table_prefix"]."_area ORDER BY  order_display, area_name";
    $resultat = grr_sql_query($sql);
    $max_lignes = 0;
    $option_max = '';
     for ($enr = 0; ($row = grr_sql_row($resultat, $enr)); $enr++)
     {
      $sql  = "SELECT id, room_name ";
-     $sql .= "FROM grr_room ";
+     $sql .= "FROM ".$_COOKIE["table_prefix"]."_room ";
      $sql .= "WHERE area_id='".$row[0]."'";
      $sql .= "ORDER BY order_display,room_name";
      $resultat2 = grr_sql_query($sql);
@@ -409,7 +409,7 @@ function ModifierListe(code_item)
 </SCRIPT>
 <?php
     #Liste des domaines
-$sql = "SELECT id, area_name, access FROM grr_area ORDER BY  order_display, area_name";
+$sql = "SELECT id, area_name, access FROM ".$_COOKIE["table_prefix"]."_area ORDER BY  order_display, area_name";
 $resultat = grr_sql_query($sql);
 echo "<h4>".get_vocab("explain_default_area_and_room")."</h4>";
 echo "<table><tr><td>".get_vocab("default_area")."</td><td>";

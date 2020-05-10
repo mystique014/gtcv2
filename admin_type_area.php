@@ -68,7 +68,7 @@ print_header("","","","",$type="with_session", $page="admin");
 <script src="./functions.js" type="text/javascript" language="javascript"></script>
 <?php
 
-$sql = "SELECT id, type_name, order_display, couleur, type_letter FROM grr_type_area
+$sql = "SELECT id, type_name, order_display, couleur, type_letter FROM ".$_COOKIE["table_prefix"]."_type_area
 ORDER BY order_display, type_letter";
 
 
@@ -81,18 +81,18 @@ if (isset($_GET['valider']))  {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
         {
         if (isset($_GET[$row[0]])) {
-            $del = grr_sql_query("delete from grr_j_type_area where id_area='".$area_id."' and id_type = '".$row[0]."'");
+            $del = grr_sql_query("delete from ".$_COOKIE["table_prefix"]."_j_type_area where id_area='".$area_id."' and id_type = '".$row[0]."'");
         } else {
-            $test = grr_sql_query1("select count(id_type) from grr_j_type_area where id_area = '".$area_id."' and id_type = '".$row[0]."'");
+            $test = grr_sql_query1("select count(id_type) from ".$_COOKIE["table_prefix"]."_j_type_area where id_area = '".$area_id."' and id_type = '".$row[0]."'");
             if ($test == 0) {
                 // faire le test si il existe une réservation en cours avec ce type de réservation
-//                $type_id = grr_sql_query1("select type_letter from grr_type_area where id = '".$row[0]."'");
-//                $test1 = grr_sql_query1("select count(id) from grr_entry where type= '".$type_id."'");
-//                $test2 = grr_sql_query1("select count(id) from grr_repeat where type= '".$type_id."'");
+//                $type_id = grr_sql_query1("select type_letter from ".$_COOKIE["table_prefix"]."_type_area where id = '".$row[0]."'");
+//                $test1 = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_entry where type= '".$type_id."'");
+//                $test2 = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_repeat where type= '".$type_id."'");
 //                if (($test1 != 0) or ($test2 != 0)) {
 //                    $msg =  "Suppression impossible : des réservations ont été enregistrées avec ce type.";
 //                } else {
-                    $sql1 = "insert into grr_j_type_area set id_area='".$area_id."', id_type = '".$row[0]."'";
+                    $sql1 = "insert into ".$_COOKIE["table_prefix"]."_j_type_area set id_area='".$area_id."', id_type = '".$row[0]."'";
                     if (grr_sql_command($sql1) < 0) {fatal_error(1, "<p>" . grr_sql_error());}
 //                }
 
@@ -113,7 +113,7 @@ if (($msg) and (!($javascript_info_admin_disabled)))  {
     echo "</script>";
 }
 
-$area_name = grr_sql_query1("select area_name from grr_area where id='".$area_id."'");
+$area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id='".$area_id."'");
 echo "<center><h2>".get_vocab('admin_type.php')."</h2>";
 echo "<h2>".get_vocab("match_area").get_vocab('deux_points')." ".$area_name."</h2></center>";
 
@@ -162,7 +162,7 @@ if ($res) {
     echo "<td bgcolor='".$tab_couleur[$col[$i][5]]."'></td>\n";
     echo "<td>{$col[$i][4]}</td>\n";
     echo "<td><input type=\"checkbox\" name=\"".$col[$i][2]."\" value=\"y\" ";
-    $test = grr_sql_query1("select count(id_type) from grr_j_type_area where id_area = '".$area_id."' and id_type = '".$row[0]."'");
+    $test = grr_sql_query1("select count(id_type) from ".$_COOKIE["table_prefix"]."_j_type_area where id_area = '".$area_id."' and id_type = '".$row[0]."'");
     if ($test < 1) echo " checked";
     echo " /></td>";
     // Fin de la ligne courante

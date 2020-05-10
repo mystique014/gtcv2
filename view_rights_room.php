@@ -68,7 +68,7 @@ if (authGetUserLevel(getUserName(),$id_room) < 4)
 
 echo begin_page(getSettingValue("company").get_vocab("deux_points").get_vocab("mrbs"));
 
-$res = grr_sql_query("SELECT * FROM grr_room WHERE id=$id_room");
+$res = grr_sql_query("SELECT * FROM ".$_COOKIE["table_prefix"]."_room WHERE id=$id_room");
 if (! $res) fatal_error(0, get_vocab('error_room') . $id_room . get_vocab('not_found'));
 
 $row = grr_sql_row_keyed($res, 0);
@@ -77,8 +77,8 @@ grr_sql_free($res);
 ?>
 <h3 ALIGN=CENTER><?php echo get_vocab("room").get_vocab("deux_points")."&nbsp;".htmlspecialchars($row["room_name"]);
 $id_area = mrbsGetRoomArea($id_room);
-$area_name = grr_sql_query1("select area_name from grr_area where id='".$id_area."'");
-$area_access = grr_sql_query1("select access from grr_area where id='".$id_area."'");
+$area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id='".$id_area."'");
+$area_access = grr_sql_query1("select access from ".$_COOKIE["table_prefix"]."_area where id='".$id_area."'");
 echo "<br>(".$area_name;
 if ($area_access == 'r') echo " - <font color=\"#FF0000\">".get_vocab("access")."</font>";
 echo ")";
@@ -88,8 +88,8 @@ echo "</H3>";
     echo "<h2>".get_vocab('utilisateurs ayant privileges')."</h2>";
     $a_privileges = 'n';
     // on teste si des utilateurs administre le domaine
-    $req_admin = "select u.login, u.nom, u.prenom  from grr_utilisateurs u
-    left join grr_j_useradmin_area j on u.login=j.login
+    $req_admin = "select u.login, u.nom, u.prenom  from ".$_COOKIE["table_prefix"]."_utilisateurs u
+    left join ".$_COOKIE["table_prefix"]."_j_useradmin_area j on u.login=j.login
     where j.id_area = '".$id_area."' order by u.nom, u.prenom";
     $res_admin = grr_sql_query($req_admin);
     $is_admin = '';
@@ -105,8 +105,8 @@ echo "</H3>";
     }
 
     // On teste si des utilisateurs administrent la ressource
-    $req_room = "select u.login, u.nom, u.prenom  from grr_utilisateurs u
-    left join grr_j_user_room j on u.login=j.login
+    $req_room = "select u.login, u.nom, u.prenom  from ".$_COOKIE["table_prefix"]."_utilisateurs u
+    left join ".$_COOKIE["table_prefix"]."_j_user_room j on u.login=j.login
     where j.id_room = '".$id_room."' order by u.nom, u.prenom";
     $res_room = grr_sql_query($req_room);
     $is_gestionnaire = '';
@@ -122,8 +122,8 @@ echo "</H3>";
     }
 
     // On teste si des utilisateurs reçoivent des mails automatiques
-    $req_mail = "select u.login, u.nom, u.prenom  from grr_utilisateurs u
-    left join grr_j_mailuser_room j on u.login=j.login
+    $req_mail = "select u.login, u.nom, u.prenom  from ".$_COOKIE["table_prefix"]."_utilisateurs u
+    left join ".$_COOKIE["table_prefix"]."_j_mailuser_room j on u.login=j.login
     where j.id_room = '".$id_room."' order by u.nom, u.prenom";
     $res_mail = grr_sql_query($req_mail);
     $is_mail = '';
@@ -140,8 +140,8 @@ echo "</H3>";
 
     // Si le domaine est restreint, on teste si des utilateurs y ont accès
     if ($area_access == 'r') {
-        $req_restreint = "select u.login, u.nom, u.prenom  from grr_utilisateurs u
-        left join grr_j_user_area j on u.login=j.login
+        $req_restreint = "select u.login, u.nom, u.prenom  from ".$_COOKIE["table_prefix"]."_utilisateurs u
+        left join ".$_COOKIE["table_prefix"]."_j_user_area j on u.login=j.login
         where j.id_area = '".$id_area."' order by u.nom, u.prenom";
         $res_restreint = grr_sql_query($req_restreint);
         $is_restreint = '';

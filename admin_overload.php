@@ -29,7 +29,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 include "include/admin.inc.php";
 
 /** grrDelOverloadFromEntries()
@@ -40,14 +39,14 @@ function grrDelOverloadFromEntries($id_field)
   $begin_string = "<".$id_field.">";
   $end_string = "</".$id_field.">";
   // On cherche à quel domaine est rattaché le champ additionnel
-  $id_area = grr_sql_query1("select id_area from grr_overload where id='".$id_field."'");
+  $id_area = grr_sql_query1("select id_area from ".$_COOKIE["table_prefix"]."_overload where id='".$id_field."'");
   if ($id_area == -1) fatal_error(0, get_vocab('error_area') . $id_area . get_vocab('not_found'));
   // On cherche toutes les ressources du domaine
-  $call_rooms = grr_sql_query("select id from grr_room where area_id = '".$id_area."'");
+  $call_rooms = grr_sql_query("select id from ".$_COOKIE["table_prefix"]."_room where area_id = '".$id_area."'");
   if (! $call_rooms) fatal_error(0, get_vocab('error_room') . $id_room . get_vocab('not_found'));
   for ($i = 0; ($row = grr_sql_row($call_rooms, $i)); $i++) {
       // On cherche toutes les resas de cette resources
-      $call_resa = grr_sql_query("select id, overload_desc from grr_entry where room_id ='".$row[0]."'");
+      $call_resa = grr_sql_query("select id, overload_desc from ".$_COOKIE["table_prefix"]."_entry where room_id ='".$row[0]."'");
       if (! $call_resa) fatal_error(0, get_vocab('invalid_entry_id'));
       for ($j = 0; ($row2 = grr_sql_row($call_resa, $j)); $j++) {
           $overload_desc = $row2[1];
@@ -58,12 +57,12 @@ function grrDelOverloadFromEntries($id_field)
               $debut_new_chaine = substr($overload_desc,0,$begin_pos);
               $fin_new_chaine = substr($overload_desc,$endpos);
               $new_chaine = $debut_new_chaine.$fin_new_chaine;
-              grr_sql_command("update grr_entry set overload_desc = '".$new_chaine."' where id = '".$row2[0]."'");
+              grr_sql_command("update ".$_COOKIE["table_prefix"]."_entry set overload_desc = '".$new_chaine."' where id = '".$row2[0]."'");
           }
 
        }
       // On cherche toutes les resas de cette resources
-      $call_resa = grr_sql_query("select id, overload_desc from grr_repeat where room_id ='".$row[0]."'");
+      $call_resa = grr_sql_query("select id, overload_desc from ".$_COOKIE["table_prefix"]."_repeat where room_id ='".$row[0]."'");
       if (! $call_resa) fatal_error(0, get_vocab('invalid_entry_id'));
       for ($j = 0; ($row2 = grr_sql_row($call_resa, $j)); $j++) {
           $overload_desc = $row2[1];
@@ -74,7 +73,7 @@ function grrDelOverloadFromEntries($id_field)
               $debut_new_chaine = substr($overload_desc,0,$begin_pos);
               $fin_new_chaine = substr($overload_desc,$endpos);
               $new_chaine = $debut_new_chaine.$fin_new_chaine;
-              grr_sql_command("update grr_repeat set overload_desc = '".$new_chaine."' where id = '".$row2[0]."'");
+              grr_sql_command("update ".$_COOKIE["table_prefix"]."_repeat set overload_desc = '".$new_chaine."' where id = '".$row2[0]."'");
           }
 
        }
@@ -107,7 +106,7 @@ echo "<h2>".get_vocab("admin_overload.php")."</h2>";
 if (isset($_POST["action"])) $action = $_POST["action"]; else $action = "default";
 
 // 1- On récupère la liste des domaines accessibles à l'utilisateur dans un tableau.
-$res = grr_sql_query("select id, area_name, access from grr_area order by order_display");
+$res = grr_sql_query("select id, area_name, access from ".$_COOKIE["table_prefix"]."_area order by order_display");
 if (! $res) fatal_error(0, grr_sql_error());
 
 $userdomain = array();
@@ -150,7 +149,7 @@ if ($action == "add")
   // On fait l'action si l'id/area a été validé.
   if ( $arearight == True)
     {
-      $sql = "insert into grr_overload (id_area, fieldname, fieldtype) values ($id_area, '".protect_data_sql($fieldname)."', '".protect_data_sql($fieldtype)."');";
+      $sql = "insert into ".$_COOKIE["table_prefix"]."_overload (id_area, fieldname, fieldtype) values ($id_area, '".protect_data_sql($fieldname)."', '".protect_data_sql($fieldtype)."');";
       if (grr_sql_command($sql) < 0) fatal_error(0, "$sql \n\n" . grr_sql_error());
     }
 }
@@ -165,7 +164,7 @@ if ($action == "delete" )
 
 
   // Gestion des droits : on vérifie si l'id à supprimer est dans l'area autorisée.
-  $sql = "select id_area from grr_overload where id=$id_overload;";
+  $sql = "select id_area from ".$_COOKIE["table_prefix"]."_overload where id=$id_overload;";
   $resquery = grr_sql_query($sql);
   if (! $resquery) fatal_error(0, grr_sql_error());
 
@@ -181,7 +180,7 @@ if ($action == "delete" )
     {
       // Suppression des données dans les réservations déjà effectuées
       grrDelOverloadFromEntries($id_overload);
-      $sql = "delete from grr_overload where id=$id_overload;";
+      $sql = "delete from ".$_COOKIE["table_prefix"]."_overload where id=$id_overload;";
       if (grr_sql_command($sql) < 0)
           fatal_error(0, "$sql \n\n" . grr_sql_error());
 
@@ -208,7 +207,7 @@ if ($action == "change")
   // FIXME : Gestion des droits.
 
   // Gestion des droits : on vérifie si l'id à modifier est dans l'area autorisée.
-  $sql = "select id_area from grr_overload where id=$id_overload;";
+  $sql = "select id_area from ".$_COOKIE["table_prefix"]."_overload where id=$id_overload;";
   $resquery = grr_sql_query($sql);
   if (! $resquery) fatal_error(0, grr_sql_error());
 
@@ -223,9 +222,9 @@ if ($action == "change")
 
   if ( $arearight == True )
     {
-      $sql = "update grr_overload set fieldname='".protect_data_sql($fieldname)."' where id=$id_overload;";
+      $sql = "update ".$_COOKIE["table_prefix"]."_overload set fieldname='".protect_data_sql($fieldname)."' where id=$id_overload;";
       if (grr_sql_command($sql) < 0) fatal_error(0, "$sql \n\n" . grr_sql_error());
-      $sql = "update grr_overload set fieldtype='".protect_data_sql($fieldtype)."' where id=$id_overload;";
+      $sql = "update ".$_COOKIE["table_prefix"]."_overload set fieldtype='".protect_data_sql($fieldtype)."' where id=$id_overload;";
       if (grr_sql_command($sql) < 0) fatal_error(0, "$sql \n\n" . grr_sql_error());
     }
 }
@@ -259,7 +258,7 @@ $breakkey = "";
 
 foreach( $userdomain as $key=>$value )
 {
-  $res = grr_sql_query("select id, fieldname, fieldtype from grr_overload where id_area=$key order by fieldname;");
+  $res = grr_sql_query("select id, fieldname, fieldtype from ".$_COOKIE["table_prefix"]."_overload where id_area=$key order by fieldname;");
   if (! $res) fatal_error(0, grr_sql_error());
 
   if (($key != $breakkey ) and (grr_sql_count($res) != 0)) $html .= "<tr><td colspan=5><hr></td></tr>";

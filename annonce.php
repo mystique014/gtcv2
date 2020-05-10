@@ -69,7 +69,7 @@ if (($valid == "yes") and ($envoi == "Enregistrer"))
 {
     $reg_login = isset($_POST["login"]) ? $_POST["login"] : NULL;
     $reg_dispos = isset($_POST["dispos"]) ? $_POST["dispos"] : NULL;
-$sql = "SELECT nom, prenom FROM grr_utilisateurs WHERE login='".$_SESSION['login']."'";
+$sql = "SELECT nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='".$_SESSION['login']."'";
 $res = grr_sql_query($sql);
 
     for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -78,13 +78,13 @@ $res = grr_sql_query($sql);
     $user_prenom = $row[1];
     }	
 	//vérification si un enregistrement existe
-	$sql = "SELECT dispos FROM grr_annonces WHERE login='$reg_login'";
+	$sql = "SELECT dispos FROM ".$_COOKIE["table_prefix"]."_annonces WHERE login='$reg_login'";
 	$res = grr_sql_query($sql);
 	
 	
 	if (grr_sql_count ($res)>0)
     {
-				$sql = "UPDATE grr_annonces SET nom ='". protect_data_sql($user_nom)."', prenom='". protect_data_sql($user_prenom)."', dispos='". protect_data_sql($reg_dispos)."' WHERE login='$reg_login'";
+				$sql = "UPDATE ".$_COOKIE["table_prefix"]."_annonces SET nom ='". protect_data_sql($user_nom)."', prenom='". protect_data_sql($user_prenom)."', dispos='". protect_data_sql($reg_dispos)."' WHERE login='$reg_login'";
                
                 if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab("update_pwd_failed") . grr_sql_error());
@@ -94,7 +94,7 @@ $res = grr_sql_query($sql);
                     $_SESSION['dispos'] = $reg_dispos;
                 }
     }else{
-				$sql = "INSERT INTO grr_annonces SET login='". protect_data_sql($reg_login)."',nom ='". protect_data_sql($user_nom)."', prenom='". protect_data_sql($user_prenom)."', dispos='". protect_data_sql($reg_dispos)."'";
+				$sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_annonces SET login='". protect_data_sql($reg_login)."',nom ='". protect_data_sql($user_nom)."', prenom='". protect_data_sql($user_prenom)."', dispos='". protect_data_sql($reg_dispos)."'";
                 if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab("update_pwd_failed") . grr_sql_error());
                 else
@@ -110,7 +110,7 @@ if (($valid == "yes") and ($envoi == "Effacer"))
 	$reg_login = isset($_POST["login"]) ? $_POST["login"] : NULL;
     $reg_dispos = isset($_POST["dispos"]) ? $_POST["dispos"] : NULL;
 
-$sql = "SELECT nom, prenom FROM grr_utilisateurs WHERE login='".$_SESSION['login']."'";
+$sql = "SELECT nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='".$_SESSION['login']."'";
 $res = grr_sql_query($sql);
 
     for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -119,13 +119,13 @@ $res = grr_sql_query($sql);
     $user_prenom = $row[1];
     }	
 	//vérification si un enregistrement existe
-	$sql = "SELECT dispos FROM grr_annonces WHERE login='$reg_login'";
+	$sql = "SELECT dispos FROM ".$_COOKIE["table_prefix"]."_annonces WHERE login='$reg_login'";
 	$res = grr_sql_query($sql);
 	
 	
 	if (grr_sql_count ($res)>0)
     {
-				$sql = "DELETE FROM grr_annonces WHERE nom ='". protect_data_sql($user_nom)."' AND prenom ='". protect_data_sql($user_prenom)."'";
+				$sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_annonces WHERE nom ='". protect_data_sql($user_nom)."' AND prenom ='". protect_data_sql($user_prenom)."'";
                
                 if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab("update_pwd_failed") . grr_sql_error());
@@ -142,7 +142,7 @@ $res = grr_sql_query($sql);
 if (isset($_GET['action_del'])) {
     $temp = $_GET['user_del'];
     if ($temp != $_SESSION['login']) {
-        $sql = "DELETE FROM grr_annonces WHERE login='$temp'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_annonces WHERE login='$temp'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {
             $msg=get_vocab("del_user_succeed");
         }
@@ -154,7 +154,7 @@ print_header($day, $month, $year, isset($area) ? $area : "");
 <script type="text/javascript" src="functions.js" language="javascript"></script>
 <?php
 #On appelle les informations de l'utilisateur pour les afficher
-$sql = "SELECT nom, prenom FROM grr_utilisateurs WHERE login='".$_SESSION['login']."'";
+$sql = "SELECT nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='".$_SESSION['login']."'";
 $res = grr_sql_query($sql);
 
     for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -162,7 +162,7 @@ $res = grr_sql_query($sql);
     $user_nom = $row[0];
     $user_prenom = $row[1];
     }
-$sql = "SELECT dispos FROM grr_annonces WHERE login='".$_SESSION['login']."'";
+$sql = "SELECT dispos FROM ".$_COOKIE["table_prefix"]."_annonces WHERE login='".$_SESSION['login']."'";
 $res = grr_sql_query($sql);
 if ($res)
 {
@@ -197,7 +197,7 @@ echo "<br><div align=center><table border=1>";
 echo "<tr><td>".get_vocab("last_name")."&nbsp;&nbsp;&nbsp;".get_vocab("first_name")."&nbsp;&nbsp;&nbsp;</td><td>".get_vocab("dispos")."</td>";
 
 #On appelle les informations des utilisateurs pour  affichage
-$sql = "SELECT nom, prenom,dispos,login FROM grr_annonces ORDER BY nom";
+$sql = "SELECT nom, prenom,dispos,login FROM ".$_COOKIE["table_prefix"]."_annonces ORDER BY nom";
 $res = grr_sql_query($sql);
 
     for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)

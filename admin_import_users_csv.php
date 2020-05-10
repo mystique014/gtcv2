@@ -30,7 +30,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -111,7 +110,7 @@ if ($is_posted == '1') {
                         //login
                         if (preg_match ("/^[a-zA-Z0-9_.]{1,20}$/", $data[$c])) {
                             $data[$c] =    strtoupper($data[$c]);
-                            $test = grr_sql_count(grr_sql_query("SELECT login FROM grr_utilisateurs WHERE login='$data[$c]'"));
+                            $test = grr_sql_count(grr_sql_query("SELECT login FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$data[$c]'"));
                             if ($test!='0') {
                                 echo "<td><p><font color = red>$data[$c]</font></p></td>";
                                 echo "<INPUT TYPE=HIDDEN name='reg_stat[$row]' value=existant>";
@@ -136,7 +135,7 @@ if ($is_posted == '1') {
                         if (preg_match ("/^.{1,30}$/", $data[$c])) {
                             $test_nom = protect_data_sql($data[$c]);
                             $test_prenom = protect_data_sql($data[$c+1]);
-                            $test_nom_prenom = grr_sql_count(grr_sql_query("SELECT nom FROM grr_utilisateurs WHERE (nom='$test_nom' and prenom = '$test_prenom')"));
+                            $test_nom_prenom = grr_sql_count(grr_sql_query("SELECT nom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE (nom='$test_nom' and prenom = '$test_prenom')"));
                             if ($test_nom_prenom!='0') {
                                 $test_nom_prenom_existant = 'yes';
                                 echo "<td><p><font color = blue>$data[$c]</font></p></td>";
@@ -319,11 +318,11 @@ if ($is_posted == '1') {
         $reg_email[$row] = protect_data_sql(corriger_caracteres($reg_email[$row]));
 
 
-        $test_login = grr_sql_count(grr_sql_query("SELECT login FROM grr_utilisateurs WHERE login='$reg_login[$row]'"));
+        $test_login = grr_sql_count(grr_sql_query("SELECT login FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$reg_login[$row]'"));
         if ($test_login == 0) {
-            $regdata = grr_sql_query("INSERT INTO grr_utilisateurs SET nom='".$reg_nom[$row]."',prenom='".$reg_prenom[$row]."',login='".$reg_login[$row]."',email='".$reg_email[$row]."',password='".protect_data_sql($reg_mdp[$row])."',datenais='".$reg_date[$row]."',adresse='".$reg_adresse[$row]."',code='".$reg_code[$row]."',ville='".$reg_ville[$row]."',tel='".$reg_tel[$row]."',telport='".$reg_telport[$row]."',group_id='".$reg_groupe[$row]."',statut='utilisateur',etat='actif',source='local'");
+            $regdata = grr_sql_query("INSERT INTO ".$_COOKIE["table_prefix"]."_utilisateurs SET nom='".$reg_nom[$row]."',prenom='".$reg_prenom[$row]."',login='".$reg_login[$row]."',email='".$reg_email[$row]."',password='".protect_data_sql($reg_mdp[$row])."',datenais='".$reg_date[$row]."',adresse='".$reg_adresse[$row]."',code='".$reg_code[$row]."',ville='".$reg_ville[$row]."',tel='".$reg_tel[$row]."',telport='".$reg_telport[$row]."',group_id='".$reg_groupe[$row]."',statut='utilisateur',etat='actif',source='local'");
         } else {
-            $regdata = grr_sql_query("UPDATE grr_utilisateurs SET nom='".$reg_nom[$row]."',prenom='".$reg_prenom[$row]."',email='".$reg_email[$row]."',password='".protect_data_sql($reg_mdp[$row])."',datenais='".$reg_date[$row]."',adresse='".$reg_adresse[$row]."',code='".$reg_code[$row]."',ville='".$reg_ville[$row]."',tel='".$reg_tel[$row]."',telport='".$reg_telport[$row]."',group_id='".$reg_groupe[$row]."',statut='utilisateur',etat='actif',source='local' WHERE login='".$reg_login[$row]."'");
+            $regdata = grr_sql_query("UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET nom='".$reg_nom[$row]."',prenom='".$reg_prenom[$row]."',email='".$reg_email[$row]."',password='".protect_data_sql($reg_mdp[$row])."',datenais='".$reg_date[$row]."',adresse='".$reg_adresse[$row]."',code='".$reg_code[$row]."',ville='".$reg_ville[$row]."',tel='".$reg_tel[$row]."',telport='".$reg_telport[$row]."',group_id='".$reg_groupe[$row]."',statut='utilisateur',etat='actif',source='local' WHERE login='".$reg_login[$row]."'");
         }
         if (!$regdata) {
             echo "<p><font color=red>".$reg_login[$row].get_vocab("deux_points").get_vocab("message_records_error")."</font></p>";

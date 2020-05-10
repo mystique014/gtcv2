@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 $back = '';
@@ -60,7 +59,7 @@ if ($reg_admin_login) {
     if ($room !=-1) {
         // Ressource
         // On vérifie que la ressource $room existe
-        $test = grr_sql_query1("select id from grr_room where id='".$room."'");
+        $test = grr_sql_query1("select id from ".$_COOKIE["table_prefix"]."_room where id='".$room."'");
         if ($test == -1) {
             showAccessDenied($day, $month, $year, $area,$back);
             exit();
@@ -72,14 +71,14 @@ if ($reg_admin_login) {
             exit();
         }
 
-        $sql = "SELECT * FROM grr_j_mailuser_room WHERE (login = '$reg_admin_login' and id_room = '$room')";
+        $sql = "SELECT * FROM ".$_COOKIE["table_prefix"]."_j_mailuser_room WHERE (login = '$reg_admin_login' and id_room = '$room')";
         $res = grr_sql_query($sql);
         $test = grr_sql_count($res);
         if ($test != "0") {
             $msg = get_vocab("warning_exist");
         } else {
             if ($reg_admin_login != '') {
-                $sql = "INSERT INTO grr_j_mailuser_room SET login= '$reg_admin_login', id_room = '$room'";
+                $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_j_mailuser_room SET login= '$reg_admin_login', id_room = '$room'";
                 if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());} else {$msg=get_vocab("add_user_succeed");}
             }
         }
@@ -94,7 +93,7 @@ if ($action) {
             exit();
         }
 
-        $sql = "DELETE FROM grr_j_mailuser_room WHERE (login='".$_GET['login_admin']."' and id_room = '$room')";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_mailuser_room WHERE (login='".$_GET['login_admin']."' and id_room = '$room')";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {$msg=get_vocab("del_user_succeed");}
     }
 }
@@ -124,7 +123,7 @@ $this_room_name = "";
 echo "<td ><p><b>".get_vocab("areas")."</b></p>";
 $out_html = "<form name=\"area\"><select name=\"area\" onChange=\"area_go()\">";
 $out_html .= "<option value=\"admin_email_manager.php?area=-1\">".get_vocab('select');
-    $sql = "select id, area_name from grr_area order by area_name";
+    $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area order by area_name";
        $res = grr_sql_query($sql);
        if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
        {
@@ -153,9 +152,9 @@ $out_html .= "<option value=\"admin_email_manager.php?area=-1\">".get_vocab('sel
 echo $out_html;
 
 
-$this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
-$this_room_name = grr_sql_query1("select room_name from grr_room where id=$room");
-$this_room_name_des = grr_sql_query1("select description from grr_room where id=$room");
+$this_area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id=$area");
+$this_room_name = grr_sql_query1("select room_name from ".$_COOKIE["table_prefix"]."_room where id=$room");
+$this_room_name_des = grr_sql_query1("select description from ".$_COOKIE["table_prefix"]."_room where id=$room");
 echo "</td>\n";
 
 # Show all rooms in the current area
@@ -165,7 +164,7 @@ echo "<td><p><b>".get_vocab("rooms")."</b></p>";
 $out_html = "<form name=\"room\"><select name=\"room\" onChange=\"room_go()\">";
 $out_html .= "<option value=\"admin_email_manager.php?area=$area&amp;room=-1\">".get_vocab('select');
 
-    $sql = "select id, room_name, description from grr_room where area_id=$area order by room_name";
+    $sql = "select id, room_name, description from ".$_COOKIE["table_prefix"]."_room where area_id=$area order by room_name";
        $res = grr_sql_query($sql);
        if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
        {
@@ -208,7 +207,7 @@ if ($room=='-1') {
     exit;
 } else {
     echo "<table border=1 cellpadding=5><tr><td>";
-    $sql = "SELECT u.login, u.nom, u.prenom FROM grr_utilisateurs u, grr_j_mailuser_room j WHERE (j.id_room='$room' and u.login=j.login)  order by u.nom, u.prenom";
+    $sql = "SELECT u.login, u.nom, u.prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs u, ".$_COOKIE["table_prefix"]."_j_mailuser_room j WHERE (j.id_room='$room' and u.login=j.login)  order by u.nom, u.prenom";
     $res = grr_sql_query($sql);
     $nombre = grr_sql_count($res);
     if ($nombre!=0) echo "<h3>".get_vocab("mail_user_list")."</h3>";
@@ -230,7 +229,7 @@ if ($room=='-1') {
 <select size=1 name=reg_admin_login>
 <option value=''><p><?php echo get_vocab("nobody"); ?></p></option>;
 <?php
-$sql = "SELECT DISTINCT login, nom, prenom FROM grr_utilisateurs WHERE  (etat!='inactif' and email!='' and statut!='visiteur' ) order by nom, prenom";
+$sql = "SELECT DISTINCT login, nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE  (etat!='inactif' and email!='' and statut!='visiteur' ) order by nom, prenom";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
     if (authUserAccesArea($row[0],$area) == 1) {

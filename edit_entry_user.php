@@ -100,8 +100,8 @@ if(empty($area))  $area = get_default_area();
 get_planning_area_values($area);
 
 // Récupération d'info sur la rerssource
-$type_affichage_reser = grr_sql_query1("select type_affichage_reser from grr_room where id='".$room."'");
-$delais_option_reservation  = grr_sql_query1("select delais_option_reservation from grr_room where id='".$room."'");
+$type_affichage_reser = grr_sql_query1("select type_affichage_reser from ".$_COOKIE["table_prefix"]."_room where id='".$room."'");
+$delais_option_reservation  = grr_sql_query1("select delais_option_reservation from ".$_COOKIE["table_prefix"]."_room where id='".$room."'");
 
 //Vérification de la présence de réservations
 if (check_begin_end_bookings($day, $month, $year))
@@ -153,7 +153,7 @@ if(UserRoomMaxBooking(getUserName(), $room, 1) == 0)
 if (isset($id))
 {
     $sql = "select name, create_by, description, start_time, end_time,
-            type, room_id, entry_type, repeat_id, option_reservation from grr_entry where id=$id";
+            type, room_id, entry_type, repeat_id, option_reservation from ".$_COOKIE["table_prefix"]."_entry where id=$id";
     $res = grr_sql_query($sql);
     if (! $res) fatal_error(1, grr_sql_error());
     if (grr_sql_count($res) != 1) fatal_error(1, get_vocab('entryid') . $id . get_vocab('not_found'));
@@ -187,7 +187,7 @@ if (isset($id))
     // il s'agit d'une réservation à laquelle est associée une périodicité
     {
         $sql = "SELECT rep_type, start_time, end_date, rep_opt, rep_num_weeks
-                FROM grr_repeat WHERE id='".protect_data_sql($rep_id)."'";
+                FROM ".$_COOKIE["table_prefix"]."_repeat WHERE id='".protect_data_sql($rep_id)."'";
 
         $res = grr_sql_query($sql);
         if (! $res) fatal_error(1, grr_sql_error());
@@ -312,7 +312,7 @@ if(!getWritable($create_by, getUserName(),$id))
 
 // On cherche s'il y a d'autres domaines auxquels l'utilisateur a accès
 $nb_areas = 0;
-$sql = "select id, area_name from grr_area";
+$sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area";
 $res = grr_sql_query($sql);
 $allareas_id = array();
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -419,7 +419,7 @@ $G = genDateSelectorForm("", $start_day, $start_month, $start_year,"");
 $name = $_SESSION['nom']." ".$_SESSION['prenom'];
 
 //Determine l'ID de "area" de la "room"
-$sql = "select area_id from grr_room where id=$room_id";
+$sql = "select area_id from ".$_COOKIE["table_prefix"]."_room where id=$room_id";
 $res = grr_sql_query($sql);
 $row = grr_sql_row($res, 0);
 $area_id = $row[0];
@@ -473,7 +473,7 @@ foreach ($allareas_id as $idtmp) {
 echo "<TR><TD class=\"E\"><B>".get_vocab("adversaire")."</B></TD></TR>\n";
 echo "<TR><TD class=\"CL\"><SELECT name=\"description\" size=\"1\">\n";
 echo "<OPTION VALUE='0'>".get_vocab("choose")."\n";
-$sql = "SELECT login, nom, prenom, etat, statut, group_id FROM grr_utilisateurs 
+$sql = "SELECT login, nom, prenom, etat, statut, group_id FROM ".$_COOKIE["table_prefix"]."_utilisateurs 
 WHERE statut != 'administrateur' AND login != '".$create_by."' AND etat = 'actif'
 ORDER BY nom";
 $res = grr_sql_query($sql);
@@ -483,12 +483,12 @@ if ($res)
     {
       // La requête sql précédente laisse passer les cas où un type est non valide
       // dans le domaine concerné ET au moins dans un autre domaine, d'où le test suivant
-     // $test = grr_sql_query1("select id_type from grr_j_type_area where id_type = '".$row[2]."' and id_area='".$area_id."'");
+     // $test = grr_sql_query1("select id_type from ".$_COOKIE["table_prefix"]."_j_type_area where id_type = '".$row[2]."' and id_area='".$area_id."'");
      // if ($test == -1)
 	 //test si l'utilisateur possède le droit de réserver un créneau pour les championnats individuels, solo ou invite si oui on affiche dans la liste 'championnat individuel' ou/et 'solo' ou/et 'invite'
 		if ( $row[0] == 'championnat')
 		{
-			$user_champio = grr_sql_query1("select champio from grr_utilisateurs where login = '$create_by'");
+			$user_champio = grr_sql_query1("select champio from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '$create_by'");
 			if ($user_champio == 'actif')
 				{
 				echo "<OPTION VALUE=\"".$row[1]." ".$row[2]."\"";
@@ -498,7 +498,7 @@ if ($res)
 		} elseif ($row[0]  == 'solo')
 		{
 		// test si l'adversaire peut jouer en mode solo
-			$user_solo = grr_sql_query1("select solo from grr_utilisateurs where login = '$create_by'");
+			$user_solo = grr_sql_query1("select solo from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '$create_by'");
 			if ($user_solo == 'actif')
 				{
 				echo "<OPTION VALUE=\"".$row[1]." ".$row[2]."\"";
@@ -508,7 +508,7 @@ if ($res)
 		} elseif ( $row[0] == 'invite')
 		{
 		// test si l'adversaire peut jouer avec un invite	
-			$user_inviteactif = grr_sql_query1("select inviteactif from grr_utilisateurs where login = '$create_by'");
+			$user_inviteactif = grr_sql_query1("select inviteactif from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '$create_by'");
 			if ($user_inviteactif == 'actif')
 				{	
 				echo "<OPTION VALUE=\"".$row[1]." ".$row[2]."\"";
@@ -720,9 +720,9 @@ function changeRooms( formObj )
 <?php
     // get the area id for case statement
     if ($enable_periods == 'y')
-        $sql = "select id, area_name from grr_area where id='".$area."' order by area_name";
+        $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area where id='".$area."' order by area_name";
     else
-        $sql = "select id, area_name from grr_area where enable_periods != 'y' order by area_name";
+        $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area where enable_periods != 'y' order by area_name";
     $res = grr_sql_query($sql);
 
     if ($res)
@@ -732,15 +732,15 @@ function changeRooms( formObj )
       {
         print "      case \"".$row[0]."\":\n";
         // get rooms for this area
-        $sql2 = "select id, room_name from grr_room where area_id='".$row[0]."' order by room_name";
+        $sql2 = "select id, room_name from ".$_COOKIE["table_prefix"]."_room where area_id='".$row[0]."' order by room_name";
             $res2 = grr_sql_query($sql2);
 
         if ($res2) for ($j = 0; ($row2 = grr_sql_row($res2, $j)); $j++)
         print "        roomsObj.options[$j] = new Option(\"".str_replace('"','\\"',$row2[1])."\",".$row2[0] .")\n";
 
         print "        typeObj.options[0] = new Option(\"".get_vocab("choose")."\",0)\n";
-        $sql3 = "SELECT DISTINCT t.type_name, t.type_letter, t.id FROM grr_type_area t
-        LEFT JOIN grr_j_type_area j on j.id_type=t.id
+        $sql3 = "SELECT DISTINCT t.type_name, t.type_letter, t.id FROM ".$_COOKIE["table_prefix"]."_type_area t
+        LEFT JOIN ".$_COOKIE["table_prefix"]."_j_type_area j on j.id_type=t.id
         WHERE (j.id_area  IS NULL or j.id_area != '".$row[0]."')
         ORDER BY t.order_display";
         $res3 = grr_sql_query($sql3);
@@ -748,7 +748,7 @@ function changeRooms( formObj )
         if ($res3)
         for ($j = 0; ($row3 = grr_sql_row($res3, $j)); $j++)
         {
-          $test = grr_sql_query1("select id_type from grr_j_type_area where id_type = '".$row3[2]."' and id_area='".$row[0]."'");
+          $test = grr_sql_query1("select id_type from ".$_COOKIE["table_prefix"]."_j_type_area where id_type = '".$row3[2]."' and id_area='".$row[0]."'");
           if ($test == -1)
         print "        typeObj.options[".($j+1)."] = new Option(\"".str_replace('"','\\"',$row3[0])."\",\"".$row3[1] ."\")\n";
         }
@@ -785,9 +785,9 @@ this.document.writeln("<select name=\"areas\" onChange=\"changeRooms(this.form)\
 <?php
     // get list of areas
     if ($enable_periods == 'y')
-      $sql = "select id, area_name from grr_area where id='".$area."' order by area_name";
+      $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area where id='".$area."' order by area_name";
     else
-      $sql = "select id, area_name from grr_area where enable_periods != 'y' order by area_name";
+      $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area where enable_periods != 'y' order by area_name";
 
  $res = grr_sql_query($sql);
  if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -816,7 +816,7 @@ this.document.writeln("</td></tr>");
 
 echo "\n<!-- ************* Ressources edition ***************** -->\n";
 //Affichage  du domaine
-$sql = "select area_name from grr_area where id='".$area."'";
+$sql = "select area_name from ".$_COOKIE["table_prefix"]."_area where id='".$area."'";
 $result = grr_sql_query($sql);
 $line = mysqli_fetch_row ($result);
     $area_name = $line[0];
@@ -827,7 +827,7 @@ echo "<tr><td class=\"E\"><b>".get_vocab("court").get_vocab("deux_points")."</b>
 //echo "<TR><td class=\"CL\" valign=\"top\"><table border=0><tr><td><select name=\"rooms[]\" multiple>";
 
 //Sélection de la "room" dans l'"area"
-//$sql = "select id, room_name, description from grr_room where area_id=$area_id order by order_display,room_name";
+//$sql = "select id, room_name, description from ".$_COOKIE["table_prefix"]."_room where area_id=$area_id order by order_display,room_name";
 //$res = grr_sql_query($sql);
 //if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 //{
@@ -844,8 +844,8 @@ echo "<TR><TD class=\"CL\"><B>Court N $room</B></TD></TR>";
 //echo "<TR><TD class=\"E\"><B>".get_vocab("type").get_vocab("deux_points")."</B></TD></TR>\n";
 //echo "<TR><TD class=\"CL\"><SELECT name=\"type\" size=\"1\">\n";
 //echo "<OPTION VALUE='0'>".get_vocab("choose")."\n";
-//$sql = "SELECT DISTINCT t.type_name, t.type_letter, t.id FROM grr_type_area t
-//LEFT JOIN grr_j_type_area j on j.id_type=t.id
+//$sql = "SELECT DISTINCT t.type_name, t.type_letter, t.id FROM ".$_COOKIE["table_prefix"]."_type_area t
+//LEFT JOIN ".$_COOKIE["table_prefix"]."_j_type_area j on j.id_type=t.id
 //WHERE (j.id_area  IS NULL or j.id_area != '".$area_id."')
 //ORDER BY t.order_display";
 //$res = grr_sql_query($sql);
@@ -855,7 +855,7 @@ echo "<TR><TD class=\"CL\"><B>Court N $room</B></TD></TR>";
 //    {
       // La requête sql précédente laisse passer les cas où un type est non valide
       // dans le domaine concerné ET au moins dans un autre domaine, d'où le test suivant
-//      $test = grr_sql_query1("select id_type from grr_j_type_area where id_type = '".$row[2]."' and id_area='".$area_id."'");
+//      $test = grr_sql_query1("select id_type from ".$_COOKIE["table_prefix"]."_j_type_area where id_type = '".$row[2]."' and id_area='".$area_id."'");
 //      if ($test == -1)
 //    {
 //      echo "<OPTION VALUE=\"".$row[1]."\" ";
@@ -874,7 +874,7 @@ echo "<TR><TD class=\"CL\"><B>Court N $room</B></TD></TR>";
 echo "\n<!-- ************* Edition des champs additionnels***************** -->\n";
 
 // on récupère la liste des domaines et on génère tous les formulaires.
-$sql = "select id from grr_area;";
+$sql = "select id from ".$_COOKIE["table_prefix"]."_area;";
 $res = grr_sql_query($sql);
 
 

@@ -60,7 +60,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
             if ($_user_ext_authentifie == "lcs_non_eleve") $_statut = getSettingValue("lcs_statut_prof");
         }
         $sql = "select upper(login) login, password, prenom, nom, statut, now() start, default_area, default_room, default_style, default_list_type, default_language, source, group_id
-        from grr_utilisateurs
+        from ".$_COOKIE["table_prefix"]."_utilisateurs
         where login = '" . protect_data_sql($_login) . "' and
         password = '' and
         etat != 'inactif'";
@@ -72,7 +72,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
                 $email_user = $tab_login["email"];
                 $prenom_user = $tab_login["fullname"];
                 // On met à jour
-                $sql = "UPDATE grr_utilisateurs SET
+                $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET
                 nom='".protect_data_sql($nom_user)."',
                 prenom='".protect_data_sql($prenom_user)."',
                 email='".protect_data_sql($email_user)."'
@@ -88,7 +88,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
             $row = grr_sql_row($res_user,0);
         } else { // L'utilisateur n'est pas présent dans la base locale
             // On teste si un utilisateur porte déjà le même login
-            $test = grr_sql_query1("select login from grr_utilisateurs where login = '".protect_data_sql($_login)."'");
+            $test = grr_sql_query1("select login from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '".protect_data_sql($_login)."'");
             if ($test != '-1') {
                 // le login existe déjà : impossible d'importer le profil.
                 return "3";
@@ -105,7 +105,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
                 }
 
                 // On insère le nouvel utilisateur
-                $sql = "INSERT INTO grr_utilisateurs SET
+                $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_utilisateurs SET
                 nom='".protect_data_sql($nom_user)."',
                 prenom='".protect_data_sql($prenom_user)."',
                 login='".protect_data_sql($_login)."',
@@ -121,7 +121,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
                 }
                 // on récupère les données de l'utilisateur
                 $sql = "select upper(login) login, password, prenom, nom, statut, now() start, default_area, default_room, default_style, default_list_type, default_language, source
-                from grr_utilisateurs
+                from ".$_COOKIE["table_prefix"]."_utilisateurs
                 where login = '" . protect_data_sql($_login) . "' and
                 source = 'ext' and
                 etat != 'inactif'";
@@ -138,7 +138,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
         }
     } else {   // On traite le cas usuel (non CAS)
         $sql = "select upper(login) login, password, prenom, nom, statut, now() start, default_area, default_room, default_style, default_list_type, default_language, source, group_id
-        from grr_utilisateurs
+        from ".$_COOKIE["table_prefix"]."_utilisateurs
         where login = '" . protect_data_sql($_login) . "' and
         password = md5('" . $_password . "') and
         etat != 'inactif'";
@@ -169,7 +169,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
     if ($auth_ldap == 'yes') {
         // on regarde si un utilisateur ldap ayant le même login existe déjà
         $sql = "select upper(login) login, password, prenom, nom, statut, now() start, default_area, default_room, default_style, default_list_type, default_language, source
-        from grr_utilisateurs
+        from ".$_COOKIE["table_prefix"]."_utilisateurs
         where login = '" . protect_data_sql($_login) . "' and
         source = 'ext' and
         etat != 'inactif'";
@@ -211,14 +211,14 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
                 $l_nom = utf8_decode($l_nom);
             }
             // On teste si un utilisateur porte déjà le même login
-            $test = grr_sql_query1("select login from grr_utilisateurs where login = '".protect_data_sql($_login)."'");
+            $test = grr_sql_query1("select login from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '".protect_data_sql($_login)."'");
             if ($test != '-1') {
                 // authentification bonne mais le login existe déjà : impossible d'importer le profil.
                 return "3";
                 die();
             } else {
                 // On insère le nouvel utilisateur
-                $sql = "INSERT INTO grr_utilisateurs SET
+                $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_utilisateurs SET
                 nom='".protect_data_sql($l_nom)."',
                 prenom='',
                 login='".protect_data_sql($_login)."',
@@ -234,7 +234,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
                 }
 
                 $sql = "select upper(login) login, password, prenom, nom, statut, now() start, default_area, default_room, default_style, default_list_type, default_language, source
-                from grr_utilisateurs
+                from ".$_COOKIE["table_prefix"]."_utilisateurs
                 where login = '" . protect_data_sql($_login) . "' and
                 source = 'ext' and
                 etat != 'inactif'";
@@ -263,21 +263,21 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
 
     // Session starts now
     session_name(SESSION_NAME);
-    session_start();
+    @session_start();
 
     // Is this user already connected ?
-    $sql = "select SESSION_ID from grr_log where SESSION_ID = '" . session_id() . "' and LOGIN = '" . protect_data_sql($_login) . "' and now() between START and END";
+    $sql = "select SESSION_ID from ".$_COOKIE["table_prefix"]."_log where SESSION_ID = '" . session_id() . "' and LOGIN = '" . protect_data_sql($_login) . "' and now() between START and END";
     $res = grr_sql_query($sql);
     $num_row = grr_sql_count($res);
     if (($num_row > 0) and isset($_SESSION['start'])) {
-        $sql = "update grr_log set END = now() + interval " . getSettingValue("sessionMaxLength") . " minute where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
-    //  $sql = "update grr_log set END = now() + interval " . getSettingValue("sessionMaxLength") . " minute where SESSION_ID = '" . session_id() . "'";
+        $sql = "update ".$_COOKIE["table_prefix"]."_log set END = now() + interval " . getSettingValue("sessionMaxLength") . " minute where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
+    //  $sql = "update ".$_COOKIE["table_prefix"]."_log set END = now() + interval " . getSettingValue("sessionMaxLength") . " minute where SESSION_ID = '" . session_id() . "'";
 
         $res = grr_sql_query($sql);
         return "1";
     } else {
-		session_unset();
-	// session_destroy();
+        session_unset();
+//      session_destroy();
     }
 
     // reset $_SESSION
@@ -298,8 +298,8 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
 	$_SESSION['group_id'] = $row[12];
 
     // It's a new connection, insert into log
-    if (isset($_SERVER["HTTP_REFERER"])) $httpreferer = $_SERVER["HTTP_REFERER"]; else $httpreferer = '';
-    $sql = "insert into grr_log (LOGIN, START, SESSION_ID, REMOTE_ADDR, USER_AGENT, REFERER, AUTOCLOSE, END) values (
+     if (isset($_SERVER["HTTP_REFERER"])) $httpreferer = $_SERVER["HTTP_REFERER"]; else $httpreferer = '';
+    $sql = "insert into ".$_COOKIE["table_prefix"]."_log (LOGIN, START, SESSION_ID, REMOTE_ADDR, USER_AGENT, REFERER, AUTOCLOSE, END) values (
                 '" . $_SESSION['login'] . "',
                 '" . $_SESSION['start'] . "',
                 '" . session_id() . "',
@@ -311,7 +311,6 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
             )
         ;";
     $res = grr_sql_query($sql);
-	//error_log("Voici les valeurs passées : ".$sql."", 1,"steduchemin@gmail.com");
     return "1";
 }
 
@@ -320,7 +319,7 @@ function grr_opensession($_login, $_password, $_user_ext_authentifie = '', $tab_
  *
  * Check that all the expected data is present
  * Check login / password against database
- * Update the timeout in the grr_log table
+ * Update the timeout in the ".$_COOKIE["table_prefix"]."_log table
  *
  * Returns true if session resumes, false otherwise
  *
@@ -332,7 +331,7 @@ function grr_resumeSession()
     global $is_authentified_lcs;
     // Resuming session
     session_name(SESSION_NAME);
-    session_start();
+   @session_start();
     // un utilisateur LCS connecté via son espace LCS est déconnecté si la session LCS est fermée
     if ((getSettingValue('sso_statut') == 'lcs') and ($is_authentified_lcs == 'no') and ($_SESSION['source_login'] == "ext")) {
         return (false);
@@ -350,12 +349,12 @@ function grr_resumeSession()
     // To be removed
     // Validating session data
     $sql = "select password = '" . $_SESSION['password'] . "' PASSWORD, login = '" . $_SESSION['login'] . "' LOGIN, statut = '" . $_SESSION['statut'] . "' STATUT
-        from grr_utilisateurs where login = '" . $_SESSION['login'] . "'";
+        from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '" . protect_data_sql($_SESSION['login']) . "'";
 
     $res = grr_sql_query($sql);
     $row = grr_sql_row($res, 0);
     // Checking for a timeout
-    $sql2 = "select now() > END TIMEOUT from grr_log where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
+    $sql2 = "select now() > END TIMEOUT from ".$_COOKIE["table_prefix"]."_log where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
     if ($row[0] != "1" || $row[1] != "1" || $row[2] != "1") {
         return (false);
     } else if (grr_sql_query1($sql2)) { // Le temps d'inactivité est supérieur à la limite fixée.
@@ -363,7 +362,7 @@ function grr_resumeSession()
         if (getSettingValue('sso_statut') == 'lcs') {
             if ($is_authentified_lcs == 'yes') // l'utilisateur est authentifié par LCS, on renouvelle la session
                 {
-                $sql = "update grr_log set END = now() + interval " . $_SESSION['maxLength'] . " minute where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
+                $sql = "update ".$_COOKIE["table_prefix"]."_log set END = now() + interval " . $_SESSION['maxLength'] . " minute where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
                 $res = grr_sql_query($sql);
                 return (true);
             } else // L'utilisateur n'est plus authentifié
@@ -371,7 +370,7 @@ function grr_resumeSession()
          } else  // cas général
                return (false);
     } else {
-        $sql = "update grr_log set END = now() + interval " . $_SESSION['maxLength'] . " minute where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
+        $sql = "update ".$_COOKIE["table_prefix"]."_log set END = now() + interval " . $_SESSION['maxLength'] . " minute where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
         $res = grr_sql_query($sql);
         return (true);
     }
@@ -389,11 +388,11 @@ function grr_closeSession(&$_auto)
 {
     settype($_auto,"integer");
     session_name(SESSION_NAME);
-    session_start();
+    @session_start();
     // Sometimes 'start' may not exist, because the session was previously closed by another window
-    // It's not necessary to grr_log this, then
+    // It's not necessary to ".$_COOKIE["table_prefix"]."_log this, then
     if (isset($_SESSION['start'])) {
-            $sql = "update grr_log set AUTOCLOSE = '" . $_auto . "', END = now() where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
+            $sql = "update ".$_COOKIE["table_prefix"]."_log set AUTOCLOSE = '" . $_auto . "', END = now() where SESSION_ID = '" . session_id() . "' and START = '" . $_SESSION['start'] . "'";
         $res = grr_sql_query($sql);
     }
     session_unset();

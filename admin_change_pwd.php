@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 $back = '';
@@ -57,7 +56,7 @@ if ($valid == "yes") {
     if (($reg_password1 != $reg_password2) or (strlen($reg_password1) < $pass_leng)) {
         $msg = get_vocab("passwd_error");
     } else {
-        $sql = "UPDATE grr_utilisateurs SET password='" . protect_data_sql($reg_password_c)."' WHERE login='$user_login'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET password='" . protect_data_sql($reg_password_c)."' WHERE login='$user_login'";
         if (grr_sql_command($sql) < 0)
             {fatal_error(0, get_vocab('update_pwd_failed') . grr_sql_error());
         } else {
@@ -68,7 +67,7 @@ if ($valid == "yes") {
 
 // On appelle les informations de l'utilisateur
 if (isset($user_login) and ($user_login!='')) {
-    $sql = "SELECT nom,prenom, source FROM grr_utilisateurs WHERE login='$user_login'";
+    $sql = "SELECT nom,prenom, source FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$user_login'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)

@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/connect.inc.php";
 include "include/config.inc.php";
 include "include/misc.inc.php";
@@ -60,7 +59,7 @@ $titre_ldap = "Configuration de l'authentification LDAP";
 
 if (isset($_POST['reg_ldap_statut'])) {
     if ($_POST['ldap_statut'] == "no_ldap") {
-        $req = grr_sql_query("delete from grr_setting where NAME = 'ldap_statut'");
+        $req = grr_sql_query("delete from ".$_COOKIE["table_prefix"]."_setting where NAME = 'ldap_statut'");
         $grrSettings['ldap_statut'] = '';
     } else {
         if (!saveSetting("ldap_statut", $_POST['ldap_statut'])) {
@@ -76,7 +75,7 @@ if (!loadSettings())
 
 if (isset($_POST['submit'])) {
     if (isset($_POST['login']) && isset($_POST['password'])) {
-        $sql = "select upper(login) login, password, prenom, nom, statut from grr_utilisateurs where login = '" . $_POST['login'] . "' and password = md5('" . $_POST['password'] . "') and etat != 'inactif' and statut='administrateur' ";
+        $sql = "select upper(login) login, password, prenom, nom, statut from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '" . $_POST['login'] . "' and password = md5('" . $_POST['password'] . "') and etat != 'inactif' and statut='administrateur' ";
         $res_user = grr_sql_query($sql);
         $num_row = grr_sql_count($res_user);
         if ($num_row == 1) {

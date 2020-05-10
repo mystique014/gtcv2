@@ -48,12 +48,11 @@ function affichetableau($liste,$titre='')
     }
 }
 
-echo "<table border=0 cellspacing=4 cellpadding=4>";
+echo "<table border=\"0\" cellspacing=\"4\" cellpadding=\"4\">";
 // Affichage de la colonne de gauche
 
 ?>
-<tr><td width="20%" nowrap>
-
+<tr><td class="colgauche_admin">
 
 <?php
 if(isset($_SERVER['REQUEST_URI']))
@@ -66,8 +65,7 @@ else
 {
   $chaine = '';
 }
-
-
+echo "<div id=\"colgauche\">\n";
 $liste = array();
 if(authGetUserLevel(getUserName(),-1,'area') >= 5)
 $liste[] = 'admin_config.php';
@@ -78,15 +76,30 @@ $liste[] = 'admin_calend_ignore.php';
 affichetableau($liste,get_vocab("admin_menu_general"));
 
 $liste = array();
+if (getSettingValue("module_multisite") == "Oui") {
+	if(authGetUserLevel(getUserName(),-1,'area') >= 6)
+	$liste[] = 'admin_site.php';
+}
+if (getSettingValue("module_multisite") == "Oui")
+  if(authGetUserLevel(getUserName(),-1,'area') >= 5)
+  $liste[] = 'admin_site.php';
 if(authGetUserLevel(getUserName(),-1,'area') >= 4)
 $liste[] = 'admin_room.php';
 if(authGetUserLevel(getUserName(),-1,'area') >= 4)
 $liste[] = 'admin_overload.php';
-affichetableau($liste,get_vocab("admin_menu_arearoom"));
+if (getSettingValue("module_multisite") == "Oui")
+    affichetableau($liste,get_vocab("admin_menu_site_area_room"));
+else
+    affichetableau($liste,get_vocab("admin_menu_arearoom"));
 
 $liste = array();
 if(authGetUserLevel(getUserName(),-1,'area') >= 5)
 $liste[] = 'admin_user.php';
+if (getSettingValue("module_multisite") == "Oui")
+  if(authGetUserLevel(getUserName(),-1,'area') >= 5)
+  $liste[] = 'admin_admin_site.php';
+
+
 if(authGetUserLevel(getUserName(),-1,'area') >= 5)
 $liste[] = 'admin_abt.php';
 if(authGetUserLevel(getUserName(),-1,'area') >= 5)
@@ -134,6 +147,7 @@ affichetableau($liste,get_vocab("admin_menu_auth"));
 */
 
 // début affichage de la colonne de gauche
+      echo "</div>\n";
 ?>
 <td>
 

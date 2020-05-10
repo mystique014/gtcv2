@@ -27,7 +27,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -110,7 +109,7 @@ if ($is_posted == '1') {
                         if (preg_match ("/^.{1,30}$/", $data[$c])) {
                             $test_nom = protect_data_sql($data[$c]);
                             $test_prenom = protect_data_sql($data[$c+1]);
-                            $test_nom_prenom = grr_sql_count(grr_sql_query("SELECT nom FROM grr_utilisateurs WHERE (nom='$test_nom' and prenom = '$test_prenom')"));
+                            $test_nom_prenom = grr_sql_count(grr_sql_query("SELECT nom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE (nom='$test_nom' and prenom = '$test_prenom')"));
                             if ($test_nom_prenom!='0') {
                                 $test_nom_prenom_existant = 'yes';
                                 echo "<td><p><font color = blue>$data[$c]</font></p></td>";
@@ -222,9 +221,9 @@ if ($is_posted == '1') {
         $reg_prenom[$row] = protect_data_sql(corriger_caracteres($reg_prenom[$row]));
 		$reg_licence[$row] = $reg_chiffre[$row].$reg_lettre[$row];
 
-        $test_login = grr_sql_count(grr_sql_query("SELECT login FROM grr_utilisateurs WHERE nom='$reg_nom[$row]' AND prenom='$reg_prenom[$row]'"));
+        $test_login = grr_sql_count(grr_sql_query("SELECT login FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE nom='$reg_nom[$row]' AND prenom='$reg_prenom[$row]'"));
         if ($test_login != 0) {
-            $regdata = grr_sql_query("UPDATE grr_utilisateurs SET nom='".$reg_nom[$row]."',prenom='".$reg_prenom[$row]."',licence='".$reg_licence[$row]."',classement='".$reg_classement[$row]."' WHERE nom='".$reg_nom[$row]."' AND prenom='".$reg_prenom[$row]."'");
+            $regdata = grr_sql_query("UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET nom='".$reg_nom[$row]."',prenom='".$reg_prenom[$row]."',licence='".$reg_licence[$row]."',classement='".$reg_classement[$row]."' WHERE nom='".$reg_nom[$row]."' AND prenom='".$reg_prenom[$row]."'");
         }   
         
     }

@@ -68,7 +68,7 @@ if (authGetUserLevel(getUserName(),$area_id,"area") < 4)
 
 echo begin_page(getSettingValue("company").get_vocab("deux_points").get_vocab("mrbs"));
 
-$res = grr_sql_query("SELECT * FROM grr_area WHERE id='".$area_id."'");
+$res = grr_sql_query("SELECT * FROM ".$_COOKIE["table_prefix"]."_area WHERE id='".$area_id."'");
 if (! $res) fatal_error(0, get_vocab('error_room') . $id_room . get_vocab('not_found'));
 
 $row = grr_sql_row_keyed($res, 0);
@@ -84,8 +84,8 @@ echo "</H3>";
     echo "<h2>".get_vocab('utilisateurs ayant privileges sur domaine')."</h2>";
     $a_privileges = 'n';
     // on teste si des utilateurs administre le domaine
-    $req_admin = "select u.login, u.nom, u.prenom  from grr_utilisateurs u
-    left join grr_j_useradmin_area j on u.login=j.login
+    $req_admin = "select u.login, u.nom, u.prenom  from ".$_COOKIE["table_prefix"]."_utilisateurs u
+    left join ".$_COOKIE["table_prefix"]."_j_useradmin_area j on u.login=j.login
     where j.id_area = '".$area_id."' order by u.nom, u.prenom";
     $res_admin = grr_sql_query($req_admin);
     $is_admin = '';
@@ -102,8 +102,8 @@ echo "</H3>";
 
     // Si le domaine est restreint, on teste si des utilateurs y ont accès
     if ($area_access == 'r') {
-        $req_restreint = "select u.login, u.nom, u.prenom  from grr_utilisateurs u
-        left join grr_j_user_area j on u.login=j.login
+        $req_restreint = "select u.login, u.nom, u.prenom  from ".$_COOKIE["table_prefix"]."_utilisateurs u
+        left join ".$_COOKIE["table_prefix"]."_j_user_area j on u.login=j.login
         where j.id_area = '".$area_id."' order by u.nom, u.prenom";
         $res_restreint = grr_sql_query($req_restreint);
         $is_restreint = '';

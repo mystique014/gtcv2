@@ -3,12 +3,16 @@
 #                            help_de.php                                #
 #                                                                       #
 #                     Aide en allemand sur GRR                          #
-#                Dernière modification : 27/07/2005                     #
+#                Dernière modification : 05/03/2017                     #
 #                                                                       #
 #########################################################################
 /*
  * Copyright 2003-2005 Laurent Delineau - Antony AUDOUARD
  * D'après http://mrbs.sourceforge.net/
+ 
+ * 
+ * Ce fichier n'est plus utilisé dans le site GTC
+ * Il peut servir à recopier un exemple de contenu avec des balises html dans la page d'édition du fichier "help.fr"
  *
  * This file is part of GRR.
  *

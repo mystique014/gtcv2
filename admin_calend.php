@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 include "include/misc.inc.php";
 include "include/mrbs_sql.inc.php";
@@ -113,7 +112,7 @@ function cal($month, $year)
                 $s .= $d;
                 $temp = mktime(0,0,0,$month,$d,$year);
                 // On teste si le jour est férié :
-                $test = grr_sql_query1("select DAY from grr_calendar where DAY = '".$temp."'");
+                $test = grr_sql_query1("select DAY from ".$_COOKIE["table_prefix"]."_calendar where DAY = '".$temp."'");
                 if ($test == '-1')
                     $s .= "<br><INPUT TYPE=\"checkbox\" NAME=\"$temp\" VALUE=\"$nameday\" >";
                 else
@@ -164,7 +163,7 @@ if (isset($_POST['record']) and  ($_POST['record'] == 'yes')) {
     $result = 0;
     $end_bookings = getSettingValue("end_bookings");
     // On reconstitue le tableau des ressources
-    $sql = "select id from grr_room";
+    $sql = "select id from ".$_COOKIE["table_prefix"]."_room";
     $res = grr_sql_query($sql);
     if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
     {
@@ -173,7 +172,7 @@ if (isset($_POST['record']) and  ($_POST['record'] == 'yes')) {
             // La ressource est selectionnée
 //            $rooms[] = $id;
             // On récupère les données du domaine
-            $area_id = grr_sql_query1("SELECT area_id FROM grr_room WHERE id = '".$row[0]."'");
+            $area_id = grr_sql_query1("SELECT area_id FROM ".$_COOKIE["table_prefix"]."_room WHERE id = '".$row[0]."'");
             get_planning_area_values($area_id);
             $n = getSettingValue("begin_bookings");
             $month = strftime("%m", getSettingValue("begin_bookings"));
@@ -409,7 +408,7 @@ if ($etape==3) {
     echo "<select name=\"rooms[]\" multiple>";
     foreach ( $areas as $area_id ) {
         # then select the rooms in that area
-        $sql = "select id, room_name from grr_room where area_id=$area_id order by order_display,room_name";
+        $sql = "select id, room_name from ".$_COOKIE["table_prefix"]."_room where area_id=$area_id order by order_display,room_name";
         $res = grr_sql_query($sql);
         if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
         {
@@ -423,8 +422,8 @@ if ($etape==3) {
       echo "<TR><TD CLASS=CR><B>".get_vocab("type").get_vocab("deux_points")."</B></TD>\n";
       echo "<TD CLASS=CL><SELECT NAME=\"type\">\n";
       echo "<OPTION VALUE='0'>".get_vocab("choose")."\n";
-      $sql = "SELECT t.type_name, t.type_letter FROM grr_type_area t
-      LEFT JOIN grr_j_type_area j on j.id_type=t.id
+      $sql = "SELECT t.type_name, t.type_letter FROM ".$_COOKIE["table_prefix"]."_type_area t
+      LEFT JOIN ".$_COOKIE["table_prefix"]."_j_type_area j on j.id_type=t.id
       WHERE (j.id_area  IS NULL or (";
       $ind = 0;
       foreach ( $areas as $area_id ) {
@@ -466,7 +465,7 @@ if ($etape==3) {
     echo "<table border=\"1\"><tr><td>\n";
     echo "<p><b>".get_vocab("choix_domaines")."</b></p>";
     echo "<select name=\"areas[]\" multiple>\n";
-    $sql = "select id, area_name from grr_area order by order_display, area_name";
+    $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area order by order_display, area_name";
     $res = grr_sql_query($sql);
     if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
     {

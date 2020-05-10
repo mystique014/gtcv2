@@ -81,3 +81,16 @@ TD.calendarHeader2 {border:0px; font-size: 10pt}
 .formo {width: 100%; background-color: #FFF0E0; background-position: center bottom; float: none; color: #000000}
 .fondo {background-color: #FFF0E0; background-position: center bottom; float: none; color: #000000}
 .fondl {background-color: #CCCCCC; background-position: center bottom; float: none; color: #000000}
+
+table.calendar{text-align:center;width:99%;padding:1px;margin:auto;background-color:#fff}
+.calendar caption{background-color:#17346C}
+.dayBouton{width:80px}
+.dayBoutonJourApres{width:125px}
+a.calendar{display:block;color:#FFF;height:100%;width:100%;vertical-align:middle;text-align:center}
+.calendarcol1{padding:0;font-weight:700;background-color:#fff;text-align:center;height:30px;width:40px;line-height:30px}
+.lienSemaine a{height:100%;width:100%;display:block;vertical-align:middle;text-align:center;color:#000}
+.titre{color:#fff;text-align:center}
+.cellcalendar{background:#17346C;vertical-align:middle;text-align:center;height:30px;width:40px;line-height:30px}
+.cellcalendar a:hover{background-color:#fff}
+a.lienPlanning:link,a.lienPlanning:visited{color:#fff;display:block}
+a.lienPlanning:hover{display:block ;color:#17346C;}

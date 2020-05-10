@@ -100,7 +100,7 @@ if (!empty($search_str))
 print_header($day, $month, $year, $area, $type_session);
 
 // Si la table j_user_area est vide, il faut modifier la requête
-$test_grr_j_user_area = grr_sql_count(grr_sql_query("SELECT * from grr_j_user_area"));
+$test_grr_j_user_area = grr_sql_count(grr_sql_query("SELECT * from ".$_COOKIE["table_prefix"]."_j_user_area"));
 
 // Si format imprimable ($_GET['pview'] = 1), on n'affiche pas cette partie
 if ($_GET['pview'] != 1) {
@@ -151,14 +151,14 @@ $sql_pred .= " AND E.end_time > $now";
 $total = isset($_GET["total"]) ? $_GET["total"] : NULL;
 
 if(!isset($total)) {
-    $sql2 = "SELECT distinct E.id FROM grr_entry E, grr_room R";
+    $sql2 = "SELECT distinct E.id FROM ".$_COOKIE["table_prefix"]."_entry E, ".$_COOKIE["table_prefix"]."_room R";
     // Si l'utilisateur n'est pas administrateur, seuls les domaines auxquels il a accès sont pris en compte
     // On adapte la requête (voir $sql_pred plus haut)
     if(authGetUserLevel(getUserName(),-1) < 5)
     if ($test_grr_j_user_area == 0)
-        $sql2 .= ", grr_area a ";
+        $sql2 .= ", ".$_COOKIE["table_prefix"]."_area a ";
     else
-        $sql2 .= ", grr_j_user_area j, grr_area a ";
+        $sql2 .= ", ".$_COOKIE["table_prefix"]."_j_user_area j, ".$_COOKIE["table_prefix"]."_area a ";
 
     $sql2 .= " WHERE $sql_pred AND E.room_id = R.id";
     $result2 = grr_sql_query($sql2);
@@ -187,15 +187,15 @@ elseif($search_pos >= $total)
 
 # Now we set up the "real" query using LIMIT to just get the stuff we want.
 $sql = "SELECT distinct E.id, E.create_by, E.name, E.description, E.start_time, R.area_id, R.room_name
-        FROM grr_entry E, grr_room R ";
+        FROM ".$_COOKIE["table_prefix"]."_entry E, ".$_COOKIE["table_prefix"]."_room R ";
 
 // Si l'utilisateur n'est pas administrateur, seuls les domaines auxquels il a accès sont pris en compte
 // On adapte la requête (voir $sql_pred plus haut)
     if(authGetUserLevel(getUserName(),-1) < 5)
         if ($test_grr_j_user_area == 0)
-            $sql .= ", grr_area a ";
+            $sql .= ", ".$_COOKIE["table_prefix"]."_area a ";
         else
-            $sql .= ", grr_j_user_area j, grr_area a ";
+            $sql .= ", ".$_COOKIE["table_prefix"]."_j_user_area j, ".$_COOKIE["table_prefix"]."_area a ";
 
         $sql .=" WHERE $sql_pred
         AND E.room_id = R.id

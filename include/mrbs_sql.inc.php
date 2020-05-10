@@ -45,7 +45,7 @@ function mrbsCheckFree($room_id, $starttime, $endtime, $ignore, $repignore)
 {
     global $vocab;
     # Select any meetings which overlap ($starttime,$endtime) for this room:
-    $sql = "SELECT id, name, start_time FROM grr_entry WHERE
+    $sql = "SELECT id, name, start_time FROM ".$_COOKIE["table_prefix"]."_entry WHERE
         start_time < '".$endtime."' AND end_time > '".$starttime."'
         AND room_id = '".$room_id."'";
 
@@ -74,11 +74,11 @@ function mrbsCheckFree($room_id, $starttime, $endtime, $ignore, $repignore)
         $param_ym = "area=$area&amp;year=$starts[year]&amp;month=$starts[mon]";
         $param_ymd = $param_ym . "&amp;day=$starts[mday]";
 
-        $err .= "<LI><A HREF=\"view_entry.php?id=$row[0]\">$row[1]</A>"
+        $err .= "<li><a href=\"view_entry.php?id=$row[0]\">$row[1]</a>"
         . " ( " . utf8_strftime('%A %d %B %Y %T', $row[2]) . ") "
-        . "(<A HREF=\"day.php?$param_ymd\">".get_vocab("viewday")."</a>"
-        . " | <A HREF=\"week.php?room=$room_id&amp;$param_ymd\">".get_vocab("viewweek")."</a>"
-        . " | <A HREF=\"month.php?room=$room_id&amp;$param_ym\">".get_vocab("viewmonth")."</a>)\n";
+        . "(<a href=\"day.php?$param_ymd\">".get_vocab("viewday")."</a>"
+        . " | <a href=\"week.php?room=$room_id&amp;$param_ymd\">".get_vocab("viewweek")."</a>"
+        . " | <a href=\"month.php?room=$room_id&amp;$param_ym\">".get_vocab("viewmonth")."</a>)\n";
     }
     return $err;
 }
@@ -103,7 +103,7 @@ function grrDelEntryInConflict($room_id, $starttime, $endtime, $ignore, $repigno
     global $vocab, $dformat;
 
     # Select any meetings which overlap ($starttime,$endtime) for this room:
-    $sql = "SELECT id FROM grr_entry WHERE
+    $sql = "SELECT id FROM ".$_COOKIE["table_prefix"]."_entry WHERE
         start_time < '".$endtime."' AND end_time > '".$starttime."'
         AND room_id = '".$room_id."'";
     if ($ignore > 0)
@@ -146,11 +146,11 @@ function grrDelEntryInConflict($room_id, $starttime, $endtime, $ignore, $repigno
  */
 function mrbsDelEntry($user, $id, $series, $all)
 {
-    $repeat_id = grr_sql_query1("SELECT repeat_id FROM grr_entry WHERE id='".$id."'");
+    $repeat_id = grr_sql_query1("SELECT repeat_id FROM ".$_COOKIE["table_prefix"]."_entry WHERE id='".$id."'");
     if ($repeat_id < 0)
         return 0;
 
-    $sql = "SELECT create_by, id, entry_type FROM grr_entry WHERE ";
+    $sql = "SELECT create_by, id, entry_type FROM ".$_COOKIE["table_prefix"]."_entry WHERE ";
 
     if($series)
         $sql .= "repeat_id='".protect_data_sql($repeat_id)."'";
@@ -169,13 +169,13 @@ function mrbsDelEntry($user, $id, $series, $all)
         if($series && $row[2] == 2 && !$all)
             continue;
 
-        if (grr_sql_command("DELETE FROM grr_entry WHERE id=" . $row[1]) > 0)
+        if (grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_entry WHERE id=" . $row[1]) > 0)
             $removed++;
     }
 
     if ($repeat_id > 0 &&
-            grr_sql_query1("SELECT count(*) FROM grr_entry WHERE repeat_id='".protect_data_sql($repeat_id)."'") == 0)
-        grr_sql_command("DELETE FROM grr_repeat WHERE id='".$repeat_id."'");
+            grr_sql_query1("SELECT count(*) FROM ".$_COOKIE["table_prefix"]."_entry WHERE repeat_id='".protect_data_sql($repeat_id)."'") == 0)
+        grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_repeat WHERE id='".$repeat_id."'");
 
     return $removed > 0;
 }
@@ -188,7 +188,7 @@ function mrbsDelEntry($user, $id, $series, $all)
 function mrbsGetAreaIdFromRoomId($room_id)
 {
   // Avec la room_id on récupère l'area_id
-  $sqlstring = "select area_id from grr_room where id=$room_id";
+  $sqlstring = "select area_id from ".$_COOKIE["table_prefix"]."_room where id=$room_id";
   $result = grr_sql_query($sqlstring);
 
   if (! $result) fatal_error(1, grr_sql_error());
@@ -215,7 +215,7 @@ function mrbsOverloadGetFieldslist($id_area,$room_id=0)
     {
       // il faut rechercher le id_area en fonction du room_id
 
-      $sqlstring = "select area_id from grr_room where id='".$room_id."'";
+      $sqlstring = "select area_id from ".$_COOKIE["table_prefix"]."_room where id='".$room_id."'";
       $result = grr_sql_query($sqlstring);
 
       if (! $result) fatal_error(1, grr_sql_error());
@@ -228,7 +228,7 @@ function mrbsOverloadGetFieldslist($id_area,$room_id=0)
 
     }
 
-  $sqlstring = "select fieldname,fieldtype, id from grr_overload where id_area='".$id_area."'";
+  $sqlstring = "select fieldname,fieldtype, id from ".$_COOKIE["table_prefix"]."_overload where id_area='".$id_area."'";
   $result = grr_sql_query($sqlstring);
   $fieldslist = array();
   if (! $result) fatal_error(1, grr_sql_error());
@@ -255,11 +255,11 @@ function mrbsEntryGetOverloadDesc($id_entry)
   $room_id = 0;
   $overload_array = array();
   $overload_desc = "";
-  // On récupère les données overload desc dans grr_entry.
+  // On récupère les données overload desc dans ".$_COOKIE["table_prefix"]."_entry.
   if ($id_entry != NULL)
     {
       $overload_array = array();
-      $sqlstring = "select overload_desc,room_id from grr_entry where id=".$id_entry.";";
+      $sqlstring = "select overload_desc,room_id from ".$_COOKIE["table_prefix"]."_entry where id=".$id_entry.";";
       $result = grr_sql_query($sqlstring);
 
       if (! $result) fatal_error(1, grr_sql_error());
@@ -340,10 +340,7 @@ function mrbsCreateSingleEntry($starttime, $endtime, $entry_type, $repeat_id, $r
     }
 
 
-  $sql = "INSERT INTO grr_entry (  start_time,   end_time,   entry_type,    repeat_id,   room_id,
-                                      create_by,    name, type, description, statut_entry, option_reservation,overload_desc)
-                            VALUES ($starttime, $endtime, '".protect_data_sql($entry_type)."', $repeat_id, $room_id,
-                                    '".protect_data_sql($owner)."', '".protect_data_sql($name)."', '".protect_data_sql($type)."', '".protect_data_sql($description)."', '-', '".$option_reservation."','".protect_data_sql($overload_data_string)."')";
+   $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_entry ( start_time, end_time, entry_type, repeat_id, room_id, create_by, name, type, description, statut_entry, option_reservation,overload_desc) VALUES ($starttime, $endtime, '".protect_data_sql($entry_type)."', $repeat_id, $room_id, '".protect_data_sql($owner)."', '".protect_data_sql($name)."', '".protect_data_sql($type)."', '".protect_data_sql($description)."', '-', '".$option_reservation."','".protect_data_sql($overload_data_string)."')";
 
     if (grr_sql_command($sql) < 0) return 0;
 
@@ -387,7 +384,7 @@ function mrbsCreateRepeatEntry($starttime, $endtime, $rep_type, $rep_enddate, $r
       $overload_data_string .= $begin_string.base64_encode($overload_data[$id_field]).$end_string;
       }
     }
-  $sql = "INSERT INTO grr_repeat (
+  $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_repeat (
   start_time, end_time, rep_type, end_date, rep_opt, room_id, create_by, type, name, description, rep_num_weeks, overload_desc)
   VALUES ($starttime, $endtime,  $rep_type, $rep_enddate, '$rep_opt', $room_id,   '".protect_data_sql($owner)."', '".protect_data_sql($type)."', '".protect_data_sql($name)."', '".protect_data_sql($description)."', '$rep_num_weeks','".protect_data_sql($overload_data_string)."')";
 
@@ -397,7 +394,7 @@ function mrbsCreateRepeatEntry($starttime, $endtime, $rep_type, $rep_enddate, $r
       return 0;
 
     }
-  return grr_sql_insert_id("grr_repeat", "id");
+  return grr_sql_insert_id("".$_COOKIE["table_prefix"]."_repeat", "id");
 }
 
 
@@ -569,12 +566,13 @@ function mrbsGetEntryInfo($id)
 {
     $sql = "SELECT start_time, end_time, entry_type, repeat_id, room_id,
                    timestamp, create_by, name, type, description
-                FROM grr_entry WHERE (ID = '".$id."')";
-
+           FROM ".$_COOKIE["table_prefix"]."_entry
+           WHERE (id = '".$id."')";
     $res = grr_sql_query($sql);
-    if (! $res) return;
+   if (! $res)
+     return;
 
-    $ret = "";
+   $ret = "";
     if(grr_sql_count($res) > 0)
     {
         $row = grr_sql_row($res, 0);
@@ -589,7 +587,6 @@ function mrbsGetEntryInfo($id)
         $ret["name"]        = $row[7];
         $ret["type"]        = $row[8];
         $ret["description"] = $row[9];
-
     }
     grr_sql_free($res);
 
@@ -598,9 +595,18 @@ function mrbsGetEntryInfo($id)
 
 function mrbsGetRoomArea($id)
 {
-    $id = grr_sql_query1("SELECT area_id FROM grr_room WHERE (id = '".$id."')");
+    $id = grr_sql_query1("SELECT area_id FROM ".$_COOKIE["table_prefix"]."_room WHERE (id = '".$id."')");
     if ($id <= 0) return 0;
     return $id;
+}
+function mrbsGetAreaSite($id)
+{
+    if (getSettingValue("module_multisite") == "Oui") {
+      $id = grr_sql_query1("SELECT id_site FROM ".$_COOKIE["table_prefix"]."_j_site_area WHERE (id_area = '".$id."')");
+      return $id;
+    } else {
+      return -1;
+    }
 }
 
 ?>

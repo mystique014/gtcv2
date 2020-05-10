@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -58,15 +57,15 @@ include "admin_col_gauche.php";
 //
 if ((isset($_GET['action_del'])) and ($_GET['js_confirmed'] ==1) and ($_GET['action_del']='yes')) {
     // faire le test si il existe une réservation en cours avec ce type de réservation
-    $group_id = grr_sql_query1("select group_letter from grr_group where id = '".$_GET['group_del']."'");
-    $test1 = grr_sql_query1("select count(id) from grr_group_calendar where group_id= '".$group_id."'");
-    $test2 = grr_sql_query1("select count(id) from grr_group_repeat where group_id= '".$group_id."'");
+    $group_id = grr_sql_query1("select group_letter from ".$_COOKIE["table_prefix"]."_group where id = '".$_GET['group_del']."'");
+    $test1 = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_group_calendar where group_id= '".$group_id."'");
+    $test2 = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_group_repeat where group_id= '".$group_id."'");
     if (($test1 != 0) or ($test2 != 0)) {
         $msg =  "Suppression impossible : des zones ont été enregistrées avec ce groupe.";
     } else {
-        $sql = "DELETE FROM grr_group WHERE id='".$_GET['group_del']."'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_group WHERE id='".$_GET['group_del']."'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}
-        $sql = "DELETE FROM grr_j_group_area WHERE id_group='".$_GET['group_del']."'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_group_area WHERE id_group='".$_GET['group_del']."'";
     }
 }
 
@@ -87,7 +86,7 @@ echo "<BR>\n";
 echo "<BR>\n";
 echo "| <a href=\"admin_group_modify.php?id=0\">".get_vocab("display_add_group")."</a> |\n";
 
-$sql = "SELECT id, group_name, order_display, couleur, group_letter FROM grr_group
+$sql = "SELECT id, group_name, order_display, couleur, group_letter FROM ".$_COOKIE["table_prefix"]."_group
 ORDER BY order_display,group_letter";
 $res = grr_sql_query($sql);
 $nb_lignes = grr_sql_count($res);
@@ -141,12 +140,12 @@ echo "</table>";
 
 // Test de cohérence des groupes
 
-    $res = grr_sql_query("select distinct group_id from grr_group_calendar order by group_id");
+    $res = grr_sql_query("select distinct group_id from ".$_COOKIE["table_prefix"]."_group_calendar order by group_id");
     if ($res) {
         $liste = "";
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
         {
-            $test = grr_sql_query1("select group_letter from grr_group where group_letter='".$row[0]."'");
+            $test = grr_sql_query1("select group_letter from ".$_COOKIE["table_prefix"]."_group where group_letter='".$row[0]."'");
             if ($test == -1) $liste .= $row[0]." ";
         }
         if ($liste != "") {

@@ -50,11 +50,11 @@ include "admin_col_gauche.php";
 		<td align="center" ><br><p style="font-size:20pt"><?php echo get_vocab("edit_logo"); ?> </p></td>
 	</tr>
 	<tr>
-		<td align="center"><img src="img_grr/logo.gif" alt="GTC !"  border="0" /></td>
+		<td align="center"><img src="img_grr/<?php echo $_COOKIE["table_prefix"]; ?>.jpg" alt="GTC !"  border="0" /></td>
 	</tr>
 	<tr>
 		<td align="center">
-			Attention au format du logo !!!<br>Type<b> .gif  </b>taille 80 x 80 px
+			Attention au format du logo !!!<br>Type<b> .jpg  </b>taille 80 x 80 px
 			<FORM METHOD="POST"
 			ENCTYPE="multipart/form-data">
 			<INPUT TYPE=HIDDEN NAME=MAX_FILE_SIZE
@@ -72,11 +72,11 @@ $MFS=300024;
 $rep="img_grr/";
 if(isset($_FILES['userfile'])) {
 	if($_FILES['userfile']['size']>0) {
-		$savefile= $rep."logo.gif";
+		$savefile= $rep.$_COOKIE["table_prefix"].".jpg";
 		$temp = $_FILES['userfile']['tmp_name'];
 			if (move_uploaded_file($temp, $savefile)) { ?>
 			<b>Votre fichier a bien  	&eacute;t&eacute; enregistr&eacute; !</b>
-			<BR>Nom : <?echo "logo.gif";?>
+			<BR>Nom : <?echo $_COOKIE["table_prefix"].".jpg";?>
 			<BR>Taille : <?echo $_FILES['userfile']['size'];?>
 			<BR>Type : <?echo $_FILES['userfile']['type'];?>
 		<?} else { ?>

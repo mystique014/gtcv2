@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 $back = '';
@@ -65,11 +64,11 @@ if (isset($_GET['change_type'])) {
     if ($id_type>0)
     {
         // Test sur $type_letter
-        $test = grr_sql_query1("select count(id) from grr_type_area where type_letter='".$type_letter."' and id!='".$id_type."'");
+        $test = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_type_area where type_letter='".$type_letter."' and id!='".$id_type."'");
         if ($test > 0) {
             $msg = "Enregistrement impossible : Un type portant la même lettre existe déjà.";
         } else {
-            $sql = "UPDATE grr_type_area SET
+            $sql = "UPDATE ".$_COOKIE["table_prefix"]."_type_area SET
             type_name='".protect_data_sql($type_name)."',
             order_display =";
             if (is_numeric($order_display))
@@ -90,11 +89,11 @@ if (isset($_GET['change_type'])) {
     else
     {
         // Test sur $type_letter
-        $test = grr_sql_query1("select count(id) from grr_type_area where type_letter='".$type_letter."'");
+        $test = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_type_area where type_letter='".$type_letter."'");
         if ($test > 0) {
             $msg = "Enregistrement impossible : Un type portant la même lettre existe déjà.";
         } else {
-            $sql = "INSERT INTO grr_type_area SET
+            $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_type_area SET
             type_name='".protect_data_sql($type_name)."',
             order_display =";
             if (is_numeric($order_display))
@@ -137,7 +136,7 @@ if (isset($_GET['change_type'])) {
     <?php
 
     if ((isset($id_type)) and ($id_type>0)) {
-        $res = grr_sql_query("SELECT * FROM grr_type_area WHERE id=$id_type");
+        $res = grr_sql_query("SELECT * FROM ".$_COOKIE["table_prefix"]."_type_area WHERE id=$id_type");
         if (! $res) fatal_error(0, get_vocab('message_records_error'));
         $row = grr_sql_row_keyed($res, 0);
         grr_sql_free($res);

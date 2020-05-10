@@ -23,15 +23,31 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+/*$_COOKIE["table_prefix"] =$_GET['table_prefix'];
+//test du $_COOKIE["table_prefix"]
+if (isset($_COOKIE["table_prefix"])){
 
+} else {
+header ('location : site.php');
+}*/
+//test du $_COOKIE["table_prefix"]
+if (isset($_POST['table_prefix'])){
+$_COOKIE["table_prefix"] =	$_POST['table_prefix'];
+setcookie("table_prefix", $_COOKIE["table_prefix"]); 
+} else if (isset ($_COOKIE["table_prefix"])){
+setcookie("table_prefix", $_COOKIE["table_prefix"]);
+}else{
+header ('location : site.php');
+}
 require_once("include/config.inc.php");
+if (file_exists("include/connect.inc.php"))
+   include "include/connect.inc.php";
 require_once("include/misc.inc.php");
 require_once("include/functions.inc.php");
-
+require_once("include/settings.inc.php");
 // Paramètres langage
 include "include/language.inc.php";
 // Dans le cas d'une base mysql, on teste la bonne installation de la base et on propose une installation automatisée.
-
 
 if ($dbsys == "mysql")
 {
@@ -41,22 +57,23 @@ if ($dbsys == "mysql")
   if (@file_exists("include/connect.inc.php"))
     {
       require_once("include/connect.inc.php");
-	  $con = @mysqli_connect("$dbHost", "$dbUser", "$dbPass");
+	  $con = mysqli_connect("$dbHost", "$dbUser", "$dbPass");
 		if ($con)
 		{
       
 			if (mysqli_select_db($con,"$dbDb"))
 			{
+				 
 			// Premier test
 				$j = '0';
 				while ($j < count($liste_tables))
 				{
-					$test = mysqli_query($con, "SELECT count(*) FROM ".$liste_tables[$j]);
+					$test = mysqli_query($con, "SELECT count(*) FROM ".$_COOKIE["table_prefix"].$liste_tables[$j]);
 					if (!$test)
 						$flag = 'yes';
 					$j++;
 				}
-				if ($flag == 'yes')
+				if ($flag == 'no')
 				{
 					$msg = "<p>La connection au serveur $dbsys est établie mais certaines tables sont absentes de la base $dbDb.</p>";
 					$correct_install = 'no';

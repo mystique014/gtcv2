@@ -144,7 +144,7 @@ unset ($_SESSION['displ_msg']);
 if (empty($area))
     $area = get_default_area();
 if (empty($room))
-    $room = grr_sql_query1("select min(id) from grr_room where area_id=$area");
+    $room = grr_sql_query1("select min(id) from ".$_COOKIE["table_prefix"]."_room where area_id=$area");
 
 // Récupération des données concernant l'affichage du planning du domaine
 get_planning_area_values($area);
@@ -156,8 +156,7 @@ get_planning_area_values($area);
 	echo'<div class="row">'.PHP_EOL;
 	echo'<div class="col-md-12">'.PHP_EOL;
 	echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
-	minicals($year, $month, $day, $area, -1, 'day');
-	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
+    minicals($year, $month, $day, $area, $room, 'week_all');
 	echo'</div>'.PHP_EOL;
 	echo'</div>'.PHP_EOL;
 	}
@@ -169,9 +168,9 @@ $mm = date("m",$v);
 $dd = date("d",$v);
 if ($cal == 1)
 {
-echo "</td><td align='center'><a href=\"week_all.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a></td></tr>\n";
+echo "</td><td align='right'><a href=\"week_all.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=0\">Cacher le calendrier</a></td></tr>\n";
 } else {
-echo "</td><td align='center'><a href=\"week_all.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr>\n";
+echo "</td><td align='right'><a href=\"week_all.php?year=$yy&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr>\n";
 }
 echo'</div>'.PHP_EOL;
 echo'</div>'.PHP_EOL;
@@ -267,9 +266,9 @@ if ($_GET['pview'] != 1) {
     echo'</div>'.PHP_EOL;
 }
 
-$this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
-$this_room_name = grr_sql_query1("select room_name from grr_room where id=$room");
-$this_room_name_des = grr_sql_query1("select description from grr_room where id=$room");
+$this_area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id=$area");
+$this_room_name = grr_sql_query1("select room_name from ".$_COOKIE["table_prefix"]."_room where id=$room");
+$this_room_name_des = grr_sql_query1("select description from ".$_COOKIE["table_prefix"]."_room where id=$room");
 
 # Don't continue if this area has no rooms:
 if ($room <= 0)
@@ -337,15 +336,15 @@ $all_day = str_replace(" ", "&nbsp;", get_vocab("all_day"));
 # row[7] = status of the booking
 # row[8] = Full description
 
-$sql = "SELECT start_time, end_time, grr_entry.id, name, create_by, room_name,type, statut_entry, grr_entry.description, grr_entry.option_reservation, grr_room.delais_option_reservation
-   FROM grr_entry, grr_room, grr_area
+$sql = "SELECT start_time, end_time, ".$_COOKIE["table_prefix"]."_entry.id, name, create_by, room_name,type, statut_entry, ".$_COOKIE["table_prefix"]."_entry.description, ".$_COOKIE["table_prefix"]."_entry.option_reservation, ".$_COOKIE["table_prefix"]."_room.delais_option_reservation
+   FROM ".$_COOKIE["table_prefix"]."_entry, ".$_COOKIE["table_prefix"]."_room, ".$_COOKIE["table_prefix"]."_area
    where
-   grr_entry.room_id=grr_room.id and
-   grr_area.id = grr_room.area_id and
-   grr_area.id = '".$area."' and
+   ".$_COOKIE["table_prefix"]."_entry.room_id=".$_COOKIE["table_prefix"]."_room.id and
+   ".$_COOKIE["table_prefix"]."_area.id = ".$_COOKIE["table_prefix"]."_room.area_id and
+   ".$_COOKIE["table_prefix"]."_area.id = '".$area."' and
    start_time <= $date_end AND
    end_time > $date_start
-   ORDER by start_time, end_time, grr_entry.id";
+   ORDER by start_time, end_time, ".$_COOKIE["table_prefix"]."_entry.id";
 
 # Build an array of information about each day in the month.
 # The information is stored as:
@@ -356,7 +355,7 @@ $res = grr_sql_query($sql);
 if (! $res) echo grr_sql_error();
 else for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
-    $sql_creator = "SELECT prenom, nom FROM grr_utilisateurs WHERE login = '$row[4]'";
+    $sql_creator = "SELECT prenom, nom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '$row[4]'";
     $res_creator = grr_sql_query($sql_creator);
     if ($res_creator) $row_user = grr_sql_row($res_creator, 0);
 
@@ -512,7 +511,7 @@ echo "\n<table class='table text-center' border=1 width=\"100%\">\n<tr>";
 # pull the data from the db and store it. Convienently we can print the room
 # headings and capacities at the same time
 
-$sql = "select room_name, capacity, id, description, statut_room from grr_room where area_id='".$area."' order by order_display, room_name";
+$sql = "select room_name, capacity, id, description, statut_room from ".$_COOKIE["table_prefix"]."_room where area_id='".$area."' order by order_display, room_name";
 $res = grr_sql_query($sql);
 
 # It might be that there are no rooms defined for this area.
@@ -663,7 +662,7 @@ echo "</table>\n";
 	echo'</div>'.PHP_EOL;
     echo'</div>'.PHP_EOL;
 
-show_colour_key($area);
+//show_colour_key($area);
 
 include "include/trailer.inc.php";
 ?>

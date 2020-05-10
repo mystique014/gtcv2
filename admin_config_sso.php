@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 include "include/misc.inc.php";
 
@@ -43,7 +42,7 @@ if(authGetUserLevel(getUserName(),-1) < 5)
 
 if (isset($_POST['valid'])) {
     if ($_POST['sso_statut'] == "no_sso") {
-        $req = grr_sql_query("delete from grr_setting where NAME = 'sso_statut'");
+        $req = grr_sql_query("delete from ".$_COOKIE["table_prefix"]."_setting where NAME = 'sso_statut'");
         $grrSettings['sso_statut'] = '';
     } else {
         if (!saveSetting("sso_statut", $_POST['sso_statut'])) {

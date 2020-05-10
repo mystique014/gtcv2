@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -71,7 +70,7 @@ if ($valid == "yes") {
         //
         // lecture du solde du compte débité
         //
-         $sql = "SELECT id, solde FROM grr_compte_tresorerie WHERE id='$reg_id_debit'";
+         $sql = "SELECT id, solde FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie WHERE id='$reg_id_debit'";
 			$res = grr_sql_query($sql);
 			if ($res) {
 				for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -82,7 +81,7 @@ if ($valid == "yes") {
 		//
         // lecture du solde du compte crédité
         //
-         $sql = "SELECT id, solde FROM grr_compte_tresorerie WHERE id='$reg_id_credit'";
+         $sql = "SELECT id, solde FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie WHERE id='$reg_id_credit'";
 			$res = grr_sql_query($sql);
 			if ($res) {
 				for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -97,13 +96,13 @@ if ($valid == "yes") {
 		
 		if ($solde_debit > $reg_montant) {
 			$new_solde = $solde_debit - $reg_montant;	
-            $sql = "UPDATE grr_compte_tresorerie SET solde='".protect_data_sql($new_solde)."'
+            $sql = "UPDATE ".$_COOKIE["table_prefix"]."_compte_tresorerie SET solde='".protect_data_sql($new_solde)."'
             WHERE id='".protect_data_sql($reg_id_debit)."'";
             if (grr_sql_command($sql) < 0)
                 {fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
             } else {
 				$new_solde1 = $solde_credit + $reg_montant;	
-				$sql = "UPDATE grr_compte_tresorerie SET solde='".protect_data_sql($new_solde1)."'
+				$sql = "UPDATE ".$_COOKIE["table_prefix"]."_compte_tresorerie SET solde='".protect_data_sql($new_solde1)."'
 				WHERE id='".protect_data_sql($reg_id_credit)."'";
 				if (grr_sql_command($sql) < 0)
 					{fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
@@ -150,7 +149,7 @@ if ($msg)   {
 <?php
 if (isset($_SESSION['login'])){$user_login = $_SESSION['login'];};
 	//recherche du nom prénom de l'utilisateur conserné
-	$sql = "SELECT nom, prenom FROM grr_utilisateurs WHERE login='$user_login'";
+	$sql = "SELECT nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$user_login'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -164,7 +163,7 @@ echo "<table border=\"0\" cellpadding=\"5\"><tr>";
 //---------Nom du compte à débiter
 echo "<td>".get_vocab("nom_compte_debit")." ".get_vocab("deux_points")."</td>";
 echo "<td><select name=\"reg_id_debit\">";
-$sql = "SELECT id, name FROM grr_compte_tresorerie ORDER BY name";
+$sql = "SELECT id, name FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie ORDER BY name";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
@@ -178,7 +177,7 @@ echo "\"></td>\n";
 //---------Nom du compte à créditer
 echo "<td>".get_vocab("nom_compte_credit")." ".get_vocab("deux_points")."</td>";
 echo "<td><select name=\"reg_id_credit\">";
-$sql = "SELECT id, name FROM grr_compte_tresorerie ORDER BY name";
+$sql = "SELECT id, name FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie ORDER BY name";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
@@ -212,7 +211,7 @@ echo "</tr>";
 
 
 // On appelle les informations de l'utilisateur pour les afficher :
-    $sql = "SELECT id, name, courant, solde FROM grr_compte_tresorerie ORDER BY id";
+    $sql = "SELECT id, name, courant, solde FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie ORDER BY id";
     $res = grr_sql_query($sql);
     if ($res) {
 	

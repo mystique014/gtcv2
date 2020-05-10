@@ -27,7 +27,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -53,7 +52,7 @@ $action = isset($_GET["action"]) ? $_GET["action"] : NULL;
 $msg='';
 
 // Si la table j_user_area est vide, il faut modifier la requête
-$test_grr_j_user_area = grr_sql_count(grr_sql_query("SELECT * from grr_j_user_area"));
+$test_grr_j_user_area = grr_sql_count(grr_sql_query("SELECT * from ".$_COOKIE["table_prefix"]."_j_user_area"));
 
 if ($reg_user_login) {
     // On commence par vérifier que le professeur n'est pas déjà présent dans cette liste.
@@ -64,14 +63,14 @@ if ($reg_user_login) {
             exit();
         }
 
-        $sql = "SELECT * FROM grr_j_user_area WHERE (login = '$reg_user_login' and id_area = '$area')";
+        $sql = "SELECT * FROM ".$_COOKIE["table_prefix"]."_j_user_area WHERE (login = '$reg_user_login' and id_area = '$area')";
         $res = grr_sql_query($sql);
         $test = grr_sql_count($res);
         if ($test != "0") {
             $msg = get_vocab("warning_exist");
         } else {
             if ($reg_user_login != '') {
-                $sql = "INSERT INTO grr_j_user_area SET login= '$reg_user_login', id_area = '$area'";
+                $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_j_user_area SET login= '$reg_user_login', id_area = '$area'";
                 if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {$msg=get_vocab("add_user_succeed");}
             }
         }
@@ -85,7 +84,7 @@ if ($action=='del_user') {
         exit();
     }
     unset($login_user); $login_user = $_GET["login_user"];
-    $sql = "DELETE FROM grr_j_user_area WHERE (login='$login_user' and id_area = '$area')";
+    $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_area WHERE (login='$login_user' and id_area = '$area')";
     if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());} else {$msg=get_vocab("del_user_succeed");}
 }
 if (empty($area)) $area = -1;
@@ -109,7 +108,7 @@ $existe_domaine = 'no';
 echo "<td ><p><b>".get_vocab('areas')."</b></p>";
 $out_html = "<form name=\"area\"><select name=\"area\" onChange=\"area_go()\">";
 $out_html .= "<option value=\"admin_access_area.php?area=-1\">".get_vocab('select');
-    $sql = "select id, area_name from grr_area where access='r' order by area_name";
+    $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area where access='r' order by area_name";
     $res = grr_sql_query($sql);
     $nb = grr_sql_count($res);
     if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -140,14 +139,14 @@ $out_html .= "<option value=\"admin_access_area.php?area=-1\">".get_vocab('selec
 
 if ($existe_domaine == 'yes') echo $out_html;
 
-$this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
+$this_area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id=$area");
 echo "</td>\n";
 echo "</tr></table>\n";
 
 # Show area :
 if ($area != -1) {
     echo "<table border=1 cellpadding=5><tr><td>";
-    $sql = "SELECT u.login, u.nom, u.prenom FROM grr_utilisateurs u, grr_j_user_area j WHERE (j.id_area='$area' and u.login=j.login)  order by u.nom, u.prenom";
+    $sql = "SELECT u.login, u.nom, u.prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs u, ".$_COOKIE["table_prefix"]."_j_user_area j WHERE (j.id_area='$area' and u.login=j.login)  order by u.nom, u.prenom";
     $res = grr_sql_query($sql);
     $nombre = grr_sql_count($res);
     if ($nombre!=0) echo "<h3>".get_vocab("user_area_list")."</h3>";
@@ -168,7 +167,7 @@ if ($area != -1) {
     <select size=1 name=reg_user_login>
     <option value=''><p><?php echo get_vocab("nobody"); ?></p></option>;
     <?php
-    $sql = "SELECT login, nom, prenom FROM grr_utilisateurs WHERE (etat!='inactif' and (statut='utilisateur' or statut='visiteur')) order by nom, prenom";
+    $sql = "SELECT login, nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE (etat!='inactif' and (statut='utilisateur' or statut='visiteur')) order by nom, prenom";
     $res = grr_sql_query($sql);
     if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
         echo "<option value=$row[0]><p>$row[1]  $row[2] </p></option>";

@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -57,7 +56,7 @@ include "admin_col_gauche.php";
 // Suppression d'un type de réservation
 //
 if ((isset($_GET['action_del'])) and ($_GET['js_confirmed'] ==1) and ($_GET['action_del']='yes')) {
-        $sql = "DELETE FROM grr_abt WHERE id='".$_GET['abt_del']."'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."__abt WHERE id='".$_GET['abt_del']."'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}
 }
 
@@ -78,7 +77,7 @@ echo "<BR>\n";
 echo "<BR>\n";
 echo "| <a href=\"admin_abt_modify.php?id=0\">".get_vocab("display_add_abt")."</a> |\n";
 
-$sql = "SELECT id, abt_name, order_display FROM grr_abt ORDER BY order_display";
+$sql = "SELECT id, abt_name, order_display FROM ".$_COOKIE["table_prefix"]."_abt ORDER BY order_display";
 $res = grr_sql_query($sql);
 $nb_lignes = grr_sql_count($res);
 if ($nb_lignes == 0) {

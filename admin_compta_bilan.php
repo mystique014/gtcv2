@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -133,7 +132,7 @@ if ($cloture == "yes") {
     $reg_solde = isset($_GET["solde"]) ? $_GET["solde"] : NULL;
 	
 	// Mise à jour du solde compte courant par le solde de l'exercice
-	$sql = "UPDATE grr_compte_tresorerie SET solde='".protect_data_sql($reg_solde)."'
+	$sql = "UPDATE ".$_COOKIE["table_prefix"]."_compte_tresorerie SET solde='".protect_data_sql($reg_solde)."'
 			WHERE courant ='1'";
             if (grr_sql_command($sql) < 0)
                 {fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
@@ -155,7 +154,7 @@ if ($action_purge =="yes")  {
 	$year = getSettingvalue("default_year");
 	$year_purge = $year - 5;
 	//echo $year_purge;
-		$sql = "DELETE FROM grr_compta WHERE default_year <= $year_purge";
+		$sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_compta WHERE default_year <= $year_purge";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {
            $msg=get_vocab("purge_ef");
         }   
@@ -196,7 +195,7 @@ if ($msg)   {
 echo "<table><td><p><b>Bilan comptable pour l'ann&eacute;e :</b></p></td><td>";
 $out_html = "<form name=\"year\"><select name=\"year\" onChange=\"year_go()\">";
 $out_html .= "<option value=\"admin_compta_bilan.php?year=-1&amp;user_login=$user_login\">".get_vocab('select');
-$sql = "SELECT DISTINCT default_year FROM grr_compta ORDER BY default_year";
+$sql = "SELECT DISTINCT default_year FROM ".$_COOKIE["table_prefix"]."_compta ORDER BY default_year";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
@@ -230,7 +229,7 @@ echo "<td align='center'><b>".get_vocab("bilanop")."</b></td>";
 echo "</tr>";
 
 //On recherche le nombre de categorie présente dans la comptabilité
-	$sql = "SELECT DISTINCT categorie FROM grr_compta WHERE default_year='$year' ORDER BY categorie";
+	$sql = "SELECT DISTINCT categorie FROM ".$_COOKIE["table_prefix"]."_compta WHERE default_year='$year' ORDER BY categorie";
 	$res = grr_sql_query($sql);
 	$total ='';
 	$totaldate ='';
@@ -238,14 +237,14 @@ echo "</tr>";
 		 {
 		 $categorie = $row[0];
 		 //bilan total
-		 $sql = "SELECT SUM(montant) AS total FROM grr_compta WHERE default_year='$year' AND categorie='$categorie'";
+		 $sql = "SELECT SUM(montant) AS total FROM ".$_COOKIE["table_prefix"]."_compta WHERE default_year='$year' AND categorie='$categorie'";
 		 $res1 = grr_sql_query($sql);
 		 for ($j = 0; ($row1 = grr_sql_row($res1, $j)); $j++)
 		 {
 		 $montant = $row1[0];
 		 }
 		 //bilan à ce jour
-		 $sql = "SELECT SUM(montant) AS total FROM grr_compta WHERE default_year='$year' AND categorie='$categorie' AND date <= current_date";
+		 $sql = "SELECT SUM(montant) AS total FROM ".$_COOKIE["table_prefix"]."_compta WHERE default_year='$year' AND categorie='$categorie' AND date <= current_date";
 		 $res1 = grr_sql_query($sql);
 		 for ($j = 0; ($row1 = grr_sql_row($res1, $j)); $j++)
 		 {
@@ -253,7 +252,7 @@ echo "</tr>";
 		 }
 		//construction des cellules du tableau
 		//affichage du nom de la catégorie
-		$sql = "SELECT name FROM grr_categorie_compta WHERE id='$categorie'";
+		$sql = "SELECT name FROM ".$_COOKIE["table_prefix"]."_categorie_compta WHERE id='$categorie'";
 		$result = grr_sql_query($sql);
 		 for ($k = 0; ($row = grr_sql_row($result, $k)); $k++)
         {
@@ -288,7 +287,7 @@ echo "<td align='center'><b>".get_vocab("montant")."</b></td>";
 echo "</tr>";
 
 //On recherche le solde du compte de trésorerie présent dans la comptabilité
-	$sql = "SELECT name, solde FROM grr_compte_tresorerie WHERE courant='1'";
+	$sql = "SELECT name, solde FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie WHERE courant='1'";
 	$res = grr_sql_query($sql);
 	for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 		 {
@@ -298,7 +297,7 @@ echo "</tr>";
 		 $totaldate += $solde;
 		 }
 //On recherche le solde du compte livret présent dans la comptabilité
-	$sql = "SELECT name, solde FROM grr_compte_tresorerie WHERE courant='0'";
+	$sql = "SELECT name, solde FROM ".$_COOKIE["table_prefix"]."_compte_tresorerie WHERE courant='0'";
 	$res = grr_sql_query($sql);
 	for ($j = 0 ; ($row = grr_sql_row($res, $j)); $j++)
 		 {

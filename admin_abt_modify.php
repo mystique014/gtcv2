@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 $back = '';
@@ -62,11 +61,11 @@ if (isset($_GET['change_abt'])) {
     if ($id_abt>0)
     {
         // Test sur $abt_name
-        $test = grr_sql_query1("select count(id) from grr_abt where abt_name='".$abt_name."' and id!='".$id_abt."'");
+        $test = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_abt where abt_name='".$abt_name."' and id!='".$id_abt."'");
         if ($test > 0) {
             $msg = "Enregistrement impossible : Un abonnement portant le même nom existe déjà.";
         } else {
-            $sql = "UPDATE grr_abt SET
+            $sql = "UPDATE ".$_COOKIE["table_prefix"]."_abt SET
             abt_name='".protect_data_sql($abt_name)."',
             order_display =";
             if (is_numeric($order_display))
@@ -85,11 +84,11 @@ if (isset($_GET['change_abt'])) {
     else
     {
         // Test sur $abt_name
-        $test = grr_sql_query1("select count(id) from grr_abt where abt_name='".$abt_name."'");
+        $test = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_abt where abt_name='".$abt_name."'");
         if ($test > 0) {
             $msg = "Enregistrement impossible : Un abonnement portant le même nom existe déjà.";
         } else {
-            $sql = "INSERT INTO grr_abt SET
+            $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_abt SET
             abt_name='".protect_data_sql($abt_name)."',
             order_display =";
             if (is_numeric($order_display))
@@ -130,7 +129,7 @@ if (isset($_GET['change_abt'])) {
     <?php
 
    if ((isset($id_abt)) and ($id_abt>0)) {
-        $res = grr_sql_query("SELECT * FROM grr_abt WHERE id=$id_abt");
+        $res = grr_sql_query("SELECT * FROM ".$_COOKIE["table_prefix"]."_abt WHERE id=$id_abt");
         if (! $res) fatal_error(0, get_vocab('message_records_error'));
         $row = grr_sql_row_keyed($res, 0);
         grr_sql_free($res);

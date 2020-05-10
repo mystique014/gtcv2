@@ -29,7 +29,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 include "include/misc.inc.php";
 
@@ -199,14 +198,46 @@ if (isset($_GET['maxallressources'])) {
     }
 }
 
+// Met à jour dans la BD du champ qui détermine si la fonctionnalité "multisite" est activée ou non
+if (isset($_GET['module_multisite'])) {
+    if (!saveSetting("module_multisite", $_GET['module_multisite'])) {
+        echo "Erreur lors de l'enregistrement de module_multisite ! <br />";
+    } else {
+        if ($_GET['module_multisite'] == 'Oui') {
+            // On crée un site par défaut s'il n'en existe pas
+            $id_site = grr_sql_query1("select min(id) from ".$_COOKIE["table_prefix"]."_site");
+            if ($id_site == -1) {
+              $sql="INSERT INTO ".$_COOKIE["table_prefix"]."_site
+       		    SET sitecode='1', sitename='site par défaut'";
+              if (grr_sql_command($sql) < 0)
+                fatal_error(0,'<p>'.grr_sql_error().'</p>');
+              $id_site = mysqli_insert_id();
+            }
+            // On affecte tous les domaines à un site.
+            $sql = "select id from ".$_COOKIE["table_prefix"]."_area";
+            $res = grr_sql_query($sql);
+            if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
+            {
+              // l'area est-elle déjà affectée à un site ?
+              $test_site = grr_sql_query1("select count(id_area) from ".$_COOKIE["table_prefix"]."_j_site_area where id_area='".$row[0]."'");
+              if ($test_site==0) {
+                  $sql="INSERT INTO ".$_COOKIE["table_prefix"]."_j_site_area SET id_site='".$id_site."', id_area='".$row[0]."'";
+                  if (grr_sql_command($sql) < 0)
+                    fatal_error(0,'<p>'.grr_sql_error().'</p>');
+              }
+            }
+        }
+    }
+}
+
 $demande_confirmation = 'no';
 global $con;
 if (isset($_GET['begin_day']) and isset($_GET['begin_month']) and isset($_GET['begin_year'])) {
     while (!checkdate($_GET['begin_month'],$_GET['begin_day'],$_GET['begin_year']))
         $_GET['begin_day']--;
     $begin_bookings = mktime(0,0,0,$_GET['begin_month'],$_GET['begin_day'],$_GET['begin_year']);
-    $test_del1 = mysqli_num_rows(mysqli_query($con,"select * from grr_entry WHERE (end_time < '$begin_bookings' )"));
-    $test_del2 = mysqli_num_rows(mysqli_query($con,"select * from grr_repeat WHERE (end_date < '$begin_bookings')"));
+    $test_del1 = mysqli_num_rows(mysqli_query($con,"select * from ".$_COOKIE["table_prefix"]."_entry WHERE (end_time < '$begin_bookings' )"));
+    $test_del2 = mysqli_num_rows(mysqli_query($con,"select * from ".$_COOKIE["table_prefix"]."_repeat WHERE (end_date < '$begin_bookings')"));
     if (($test_del1!=0) or ($test_del2!=0)) {
         $demande_confirmation = 'yes';
     } else {
@@ -222,8 +253,8 @@ if (isset($_GET['end_day']) and isset($_GET['end_month']) and isset($_GET['end_y
     if ($end_bookings < $begin_bookings) $end_bookings = $begin_bookings;
 
 
-    $test_del1 = mysqli_num_rows(mysqli_query($con,"select * from grr_entry WHERE (start_time > '$end_bookings' )"));
-    $test_del2 = mysqli_num_rows(mysqli_query($con,"select * from grr_repeat WHERE (start_time > '$end_bookings')"));
+    $test_del1 = mysqli_num_rows(mysqli_query($con,"select * from ".$_COOKIE["table_prefix"]."_entry WHERE (start_time > '$end_bookings' )"));
+    $test_del2 = mysqli_num_rows(mysqli_query($con,"select * from ".$_COOKIE["table_prefix"]."_repeat WHERE (start_time > '$end_bookings')"));
     if (($test_del1!=0) or ($test_del2!=0)) {
         $demande_confirmation = 'yes';
     } else {
@@ -303,8 +334,9 @@ echo "<p>".get_vocab("Url_de_deconnexion_explain")."</p>\n";
 echo "<p><i>".get_vocab("Url_de_deconnexion_explain2")."</i></p>";
 echo "<br>".get_vocab("Url_de_deconnexion").get_vocab("deux_points")."\n";
 $value_url=getSettingValue("url_disconnect");
-echo "<INPUT TYPE=\"text\" name=\"url_disconnect\" size=40 value =\"$value_url\"/>\n<br><br>";
-echo "<center><INPUT type=\"submit\" name=\"Valider\" value=\"Valider\" />\n</center>\n";
+echo $value_url;
+//echo "<INPUT TYPE=\"text\" name=\"url_disconnect\" size=40 value =\"$value_url\"/>\n<br><br>";
+//echo "<center><INPUT type=\"submit\" name=\"Valider\" value=\"Valider\" />\n</center>\n";
 echo "<hr>";
 //
 // Config générale
@@ -324,10 +356,12 @@ echo "<h3>".get_vocab("miscellaneous")."</h3>";
 <tr><td><?php echo get_vocab("company"); ?></td>
 <td><input type="text" name="company" size="40" value="<?php echo(getSettingValue("company")); ?>"></td>
 </tr>
-<tr>
-<td><?php echo get_vocab("grr_url"); ?></td>
-<td><input type="text" name="grr_url" size="40" value="<?php echo(getSettingValue("grr_url")); ?>"></td>
-</tr>
+<?php
+//<tr>
+//<td><?php echo get_vocab("grr_url"); ?><?php //</td>
+//<td><input type="text" name="grr_url" size="40" value="<?php echo(getSettingValue("grr_url")); ?><?php //"></td>
+//</tr>
+?>
 
 <tr>
 <td><?php echo get_vocab("webmaster_name"); ?></td>
@@ -358,6 +392,31 @@ echo "<h3>".get_vocab("title_invite")."</h3>";
 </tr>
 </table>
 <?php echo get_vocab("explain_compteur_invite");
+?>
+<?php 
+/*
+//
+// Module multisite
+//********************
+//
+echo "<h3>".get_vocab("Activer_module_multisite")."</h3>\n";
+?>
+<table border='0'>
+<tr><td><?php echo get_vocab("Activer_module_multisite").get_vocab("deux_points"); ?></td><td>
+<select name='module_multisite'>
+<?php 
+if (getSettingValue("module_multisite") == "Oui") {
+    echo "<option value=\"Oui\" selected=\"selected\">".get_vocab('YES')."</option>\n";
+    echo "<option value=\"Non\">".get_vocab('NO')."</option>\n";
+} else {
+    echo "<option value=\"Oui\">".get_vocab('YES')."</option>\n";
+    echo "<option value=\"Non\" selected=\"selected\">".get_vocab('NO')."</option>\n";
+}
+echo "</select>\n</td>\n</tr>\n</table>\n";
+*/
+?>
+
+<?php
 //
 // Année sportive
 //********************
@@ -390,7 +449,7 @@ echo "<h3>".get_vocab("title_session_max_length")."</h3>";
 // Autorisation de réserver deux heures consécutives  pour un abonné sur un même court
 //********************************************************************
 //
-echo "<hr><h3><a name=bookingdouble>".get_vocab("title_bookingdouble")."</a></h3>";
+echo "<hr><h3>".get_vocab("title_bookingdouble")."</h3>";
 ?>
 <table border='0'>
 <tr><td><?php echo get_vocab("bookingdouble"); ?></td><td>
@@ -403,7 +462,7 @@ echo "<hr><h3><a name=bookingdouble>".get_vocab("title_bookingdouble")."</a></h3
 // Nombre de réservations actives par utilisateur sur l'ensemble des installations !
 //********************************************************************
 //
-echo "<hr><h3><a name=maxallres>".get_vocab("title_booking_max_all_ressources")."</a></h3>";
+echo "<hr><h3>".get_vocab("title_booking_max_all_ressources")."</h3>";
 ?>
 <table border='0'>
 <tr><td><?php echo get_vocab("max_all_ressources"); ?></td><td>
@@ -512,14 +571,14 @@ function ModifierListe(code_item) {
    echo "  }\n";
 
    // Cas où un domaine a été précisé
-   $sql = "SELECT id FROM grr_area ORDER BY  order_display, area_name";
+   $sql = "SELECT id FROM ".$_COOKIE["table_prefix"]."_area ORDER BY  order_display, area_name";
    $resultat = grr_sql_query($sql);
    $max_lignes = 0;
    $option_max = '';
 
    for ($enr = 0; ($row = grr_sql_row($resultat, $enr)); $enr++) {
      $sql  = "SELECT id, room_name ";
-     $sql .= "FROM grr_room ";
+     $sql .= "FROM ".$_COOKIE["table_prefix"]."_room ";
      $sql .= "WHERE area_id='".$row[0]."'";
      $sql .= "ORDER BY room_name";
      $resultat2 = grr_sql_query($sql);
@@ -562,7 +621,7 @@ function ModifierListe(code_item) {
 // Liste domaines
 // ----------------------------------------------------------------------------
 
-$sql = "SELECT id, area_name, access FROM grr_area ORDER BY  order_display, area_name";
+$sql = "SELECT id, area_name, access FROM ".$_COOKIE["table_prefix"]."_area ORDER BY  order_display, area_name";
 $resultat = grr_sql_query($sql);
 
 //echo "<FORM METHOD=POST NAME='nom_formulaire'>";

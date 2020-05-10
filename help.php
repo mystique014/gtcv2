@@ -75,8 +75,6 @@ if (isset($_POST['aide'])) {
     }
 }
 
-//echo "<br><H3>Rappel :</H3><menu>Il est interdit de r&eacute;server deux heures cons&eacute;cutives avec la m&ecirc;me personne !</menu>";
-//echo "<H3>" . get_vocab('help') . "</H3>\n";
 echo "<menu>".get_vocab('please_contact') . '<a href="mailto:' . getSettingValue("webmaster_email")
     . '">' . getSettingValue("webmaster_name")
     . "</a> " . get_vocab('for_any_questions') ."</menu>". "\n";
@@ -110,11 +108,5 @@ if(authGetUserLevel(getUserName(),-1,'area') > 4){
 
 
 
-//echo "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
-//echo "<H3>" . get_vocab('about_mrbs') . "</H3>\n";
-//echo "<P><a href=\"".$grr_devel_url."\">".get_vocab("mrbs")."</a> - ".get_vocab("grr_version").affiche_version()."\n";
-//echo "<BR>" . get_vocab('database') . grr_sql_version() . "\n";
-//echo "<BR>" . get_vocab('system') . php_uname() . "\n";
-//echo "<BR>PHP : " . phpversion() . "\n";
 include "include/trailer.inc.php";
 ?>

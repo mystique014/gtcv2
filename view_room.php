@@ -73,7 +73,7 @@ $print = "all";
 
 echo begin_page(getSettingValue("company").get_vocab("deux_points").get_vocab("mrbs"));
 
-$res = grr_sql_query("SELECT * FROM grr_room WHERE id=$id_room");
+$res = grr_sql_query("SELECT * FROM ".$_COOKIE["table_prefix"]."_room WHERE id=$id_room");
 if (! $res) fatal_error(0, get_vocab('error_room') . $id_room . get_vocab('not_found'));
 
 $row = grr_sql_row_keyed($res, 0);
@@ -83,8 +83,8 @@ grr_sql_free($res);
 <h3 ALIGN=CENTER><?php echo get_vocab("room").get_vocab("deux_points")."&nbsp;".htmlspecialchars($row["room_name"]);
 
 $id_area = mrbsGetRoomArea($id_room);
-$area_name = grr_sql_query1("select area_name from grr_area where id='".$id_area."'");
-$area_access = grr_sql_query1("select access from grr_area where id='".$id_area."'");
+$area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id='".$id_area."'");
+$area_access = grr_sql_query1("select access from ".$_COOKIE["table_prefix"]."_area where id='".$id_area."'");
 echo "<br>(".$area_name;
 if ($area_access == 'r') echo " - ".get_vocab("access");
 echo ")";

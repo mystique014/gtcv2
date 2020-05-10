@@ -27,7 +27,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 include "include/admin.inc.php";
 include "include/misc.inc.php";
 include "include/mrbs_sql.inc.php";
@@ -114,7 +113,7 @@ function cal($month, $year)
             {
                 $temp = mktime(0,0,0,$month,$d,$year);
                 $s .= $d;
-                $day = grr_sql_query1("SELECT day FROM grr_calendar WHERE day='$temp'");
+                $day = grr_sql_query1("SELECT day FROM ".$_COOKIE["table_prefix"]."_calendar WHERE day='$temp'");
                 $s .= "<br><INPUT TYPE=\"checkbox\" NAME=\"$temp\" VALUE=\"$nameday\" ";
                 if (!($day < 0)) $s .= "checked ";
                 $s .= ">";
@@ -153,7 +152,7 @@ echo "<h2>".get_vocab('calendrier_des_jours_hors_reservation')."</h2>";
 
 if (isset($_POST['record']) and  ($_POST['record'] == 'yes')) {
     // On vide la table grr_calendar
-    $sql = "truncate table grr_calendar";
+    $sql = "truncate table ".$_COOKIE["table_prefix"]."_calendar";
     if (grr_sql_command($sql) < 0) fatal_error(1, "<p>" . grr_sql_error());
     $result = 0;
     $end_bookings = getSettingValue("end_bookings");
@@ -171,12 +170,12 @@ if (isset($_POST['record']) and  ($_POST['record'] == 'yes')) {
                  $starttime = mktime($morningstarts, 0, 0, $month, $day  , $year);
                  $endtime   = mktime($eveningends, 0, $resolution, $month, $day, $year);
                  // On efface toutes les résa en conflit
-                 $sql = "select id from grr_room";
+                 $sql = "select id from ".$_COOKIE["table_prefix"]."_room";
                  $res = grr_sql_query($sql);
                  if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
                      $result += grrDelEntryInConflict($row[0], $starttime, $endtime, 0, 0, 1);
                  // On enregistre la valeur dans grr_calendar
-                 $sql = "INSERT INTO grr_calendar set DAY='".$n."'";
+                 $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_calendar set DAY='".$n."'";
                  if (grr_sql_command($sql) < 0) fatal_error(1, "<p>" . grr_sql_error());
              }
              $day++;

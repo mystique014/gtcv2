@@ -49,7 +49,7 @@ if ((!grr_resumeSession())and ($authentification_obli==1))
 if (empty($area))
     $area = get_default_area();
 if (empty($room))
-    $room = grr_sql_query1("select min(id) from grr_room where area_id=$area");
+    $room = grr_sql_query1("select min(id) from ".$_COOKIE["table_prefix"]."_room where area_id=$area");
     #Si il n'y a pas de room, $room va être a -1
 
 // Récupération des données concernant l'affichage du planning du domaine
@@ -124,10 +124,9 @@ print_header($day, $month, $year, $area, $type_session);
 	{
 	echo'<div class="row">'.PHP_EOL;
 	echo'<div class="col-md-12 center">'.PHP_EOL;
-    echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
-	minicals($year, $month, $day, $area, -1, 'day');
+	echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
+    minicals($year, $month, $day, $area, $room, 'month');
 	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
-
 	echo'</div>'.PHP_EOL;
 	echo'</div>'.PHP_EOL;
 	}
@@ -212,9 +211,9 @@ if ($_GET['pview'] != 1) {
 	echo'</div>'.PHP_EOL;
 	
 }
-$this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
-$this_room_name = grr_sql_query1("select room_name from grr_room where id=$room");
-$this_room_name_des = grr_sql_query1("select description from grr_room where id=$room");
+$this_area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id=$area");
+$this_room_name = grr_sql_query1("select room_name from ".$_COOKIE["table_prefix"]."_room where id=$room");
+$this_room_name_des = grr_sql_query1("select description from ".$_COOKIE["table_prefix"]."_room where id=$room");
 
     #O,n arrête si il n'y a pas de room dans cet area
 if ($room <= 0)
@@ -266,7 +265,7 @@ $all_day = str_replace(" ", "&nbsp;", get_vocab("all_day"));
     # row[4] = Auteur de la réservation
     # row[5] = Description complète
 $sql = "SELECT start_time, end_time, id, name, create_by, description, type
-   FROM grr_entry
+   FROM ".$_COOKIE["table_prefix"]."_entry
    WHERE room_id=$room
    AND start_time <= $month_end AND end_time > $month_start
    ORDER by 1";
@@ -279,7 +278,7 @@ if (! $res)
     echo grr_sql_error();
 else for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
-    $sql_creator = "SELECT prenom, nom FROM grr_utilisateurs WHERE login = '$row[4]'";
+    $sql_creator = "SELECT prenom, nom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '$row[4]'";
     $res_creator = grr_sql_query($sql_creator);
     if ($res_creator)
         $row_user = grr_sql_row($res_creator, 0);

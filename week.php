@@ -51,7 +51,7 @@ if ((!grr_resumeSession())and ($authentification_obli==1)) {
     die();
 };
 if (empty($room))
-    $room = grr_sql_query1("select min(id) from grr_room where area_id=$area");
+    $room = grr_sql_query1("select min(id) from ".$_COOKIE["table_prefix"]."_room where area_id=$area");
 $area =  mrbsGetRoomArea($room);
 
 
@@ -164,8 +164,9 @@ print_header($day, $month, $year, $area, $type_session);
 	if ($cal == 1)
 	{
 	echo'<div class="row">'.PHP_EOL;
-	echo'<div class="col-md-12">'.PHP_EOL;	echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
-	minicals($year, $month, $day, $area, -1, 'day');
+	echo'<div class="col-md-12">'.PHP_EOL;
+	echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
+    minicals($year, $month, $day, $area, $room, 'week');
 	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
 	echo'</div>'.PHP_EOL;
 	echo'</div>'.PHP_EOL;
@@ -188,7 +189,7 @@ echo'</div>'.PHP_EOL;
 if($enable_periods=='y') {
     $resolution = 60;
     $morningstarts = 12;
-    $morningstarts_minutes = grr_sql_query1("select minute_morningstarts_area from grr_area where id=$area");
+    $morningstarts_minutes = grr_sql_query1("select minute_morningstarts_area from ".$_COOKIE["table_prefix"]."_area where id=$area");
     $eveningends = 12;
     $eveningends_minutes = count($periods_name)-1;
 }
@@ -211,7 +212,7 @@ unset ($_SESSION['displ_msg']);
 // Si c'est un admin qui est connecté, on affiche le nombre de personnes actuellement connectées.
 if(authGetUserLevel(getUserName(),-1) >= 5)
 {
-    $sql = "select LOGIN from grr_log where END > now()";
+    $sql = "select LOGIN from ".$_COOKIE["table_prefix"]."_log where END > now()";
     $res = grr_sql_query($sql);
     $nb_connect = grr_sql_count($res);
     if ($nb_connect == 1) {
@@ -231,8 +232,8 @@ if(authGetUserLevel(getUserName(),-1) >= 5)
 }
 
 # Define the start of day and end of day (default is 7-7)
-    $morningstarts_minutes = grr_sql_query1("select minute_morningstarts_area from grr_area where id=$area");
-	$eveningends_minutes = grr_sql_query1("select eveningends_minutes_area from grr_area where id=$area");
+    $morningstarts_minutes = grr_sql_query1("select minute_morningstarts_area from ".$_COOKIE["table_prefix"]."_area where id=$area");
+	$eveningends_minutes = grr_sql_query1("select eveningends_minutes_area from ".$_COOKIE["table_prefix"]."_area where id=$area");
 
 	$am7=mktime($morningstarts,$morningstarts_minutes,0,$month_week,$day_week,$year_week);
 	$pm7=mktime($eveningends,$eveningends_minutes,0,$month,$day_week,$year_week);
@@ -294,12 +295,12 @@ if ($_GET['pview'] != 1) {
 	
 }
 
-$this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
-$this_room_name = grr_sql_query1("select room_name from grr_room where id=$room");
-$this_room_name_des = grr_sql_query1("select description from grr_room where id=$room");
-$this_statut_room = grr_sql_query1("select statut_room from grr_room where id=$room");
-$this_show_fic_room = grr_sql_query1("select show_fic_room from grr_room where id=$room");
-$this_delais_option_reservation = grr_sql_query1("select delais_option_reservation from grr_room where id=$room");
+$this_area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id=$area");
+$this_room_name = grr_sql_query1("select room_name from ".$_COOKIE["table_prefix"]."_room where id=$room");
+$this_room_name_des = grr_sql_query1("select description from ".$_COOKIE["table_prefix"]."_room where id=$room");
+$this_statut_room = grr_sql_query1("select statut_room from ".$_COOKIE["table_prefix"]."_room where id=$room");
+$this_show_fic_room = grr_sql_query1("select show_fic_room from ".$_COOKIE["table_prefix"]."_room where id=$room");
+$this_delais_option_reservation = grr_sql_query1("select delais_option_reservation from ".$_COOKIE["table_prefix"]."_room where id=$room");
 
 
 # Don't continue if this area has no rooms:
@@ -372,7 +373,7 @@ if ($_GET['pview'] != 1) {
 # The range predicate (starts <= week_end && ends > week_start) is
 # equivalent but more efficient than the original 3-BETWEEN clauses.
 $sql = "SELECT start_time, end_time, type, name, id, create_by, statut_entry, description, option_reservation
-   FROM grr_entry
+   FROM ".$_COOKIE["table_prefix"]."_entry
    WHERE room_id=$room
    AND start_time < ".($week_end+$resolution)." AND end_time > $week_start ORDER BY start_time";
 
@@ -395,7 +396,7 @@ $res = grr_sql_query($sql);
 if (! $res) echo grr_sql_error();
 else for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
-    $sql_creator = "SELECT prenom, nom FROM grr_utilisateurs WHERE login = '$row[5]'";
+    $sql_creator = "SELECT prenom, nom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '$row[5]'";
     $res_creator = grr_sql_query($sql_creator);
     if ($res_creator) $row_user = grr_sql_row($res_creator, 0);
 
@@ -751,7 +752,7 @@ echo "<th>&nbsp;</th>\n</tr>\n";
 
 echo "</table>";
 
-show_colour_key($area);
+//show_colour_key($area);
 
 include "include/trailer.inc.php";
 ?>

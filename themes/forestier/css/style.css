@@ -1,32 +1,32 @@
-p,BODY {color:#508050; font-size: 11pt; font-family:arial,sans-serif;
+p,body {color:#508050; font-size: 10pt; font-family:arial,sans-serif;
 background-color:#E0F8E0}
 
 input,textarea,submit {color:black; font-size: 10pt; font-family:arial,sans-serif}
-FORM {margin-bottom : 5pt;margin-top : 5pt    }
+form {margin-bottom : 5pt;margin-top : 5pt    }
 
 .small {font-size:8pt}
 
-A:link {color:#986800; font-weight: bold; text-decoration: none}
-A:visited {color:#986800; font-weight: bold; text-decoration: none}
-A:hover {color:red; text-decoration:underline}
+a:link {color:#986800; font-weight: bold; text-decoration: none}
+a:visited {color:#986800; font-weight: bold; text-decoration: none}
+a:hover {color:red; text-decoration:underline}
 
 .onmouseover{
     color:#986800; font-weight: bold; text-decoration: none
 }
 
-H1 {color:#508050; font-family:verdana,sans-serif; font-size:16pt}
-H2 {color:#508050; font-family:verdana,sans-serif; font-size:14pt}
-H3 {color:#508050; font-family:verdana,sans-serif; font-size:12pt}
+h1 {color:#508050; font-family:verdana,sans-serif; font-size:16pt}
+h2 {color:#508050; font-family:verdana,sans-serif; font-size:14pt}
+h3 {color:#508050; font-family:verdana,sans-serif; font-size:12pt}
 
-TD {font-size:10pt; font-family:arial,sans-serif; border-width:1;
+td {font-size:10pt; font-family:arial,sans-serif; border-width:1px; vertical-align:top}
 vertical-align:top}
 
-TD.CR { vertical-align: middle; text-align: right}
-TD.CL { vertical-align: middle; text-align: left}
-TD.BR { vertical-align: baseline; text-align: right}
-TD.BL { vertical-align: baseline; text-align: left}
-TD.TR { vertical-align: top; text-align: right}
-TD.TL { vertical-align: top; text-align: left}
+td.CR { vertical-align: middle; text-align: right}
+td.CL { vertical-align: middle; text-align: left}
+td.BR { vertical-align: baseline; text-align: right}
+td.BL { vertical-align: baseline; text-align: left}
+td.TR { vertical-align: top; text-align: right}
+td.TL { vertical-align: top; text-align: left}
 
 TD.A {background-color:#FFCCFF}
 TD.B {background-color:#99CCCC}
@@ -67,29 +67,30 @@ font-size: 10pt;
 }
 
 .bground {background-color:#B8E4B8}
-TD.border_banner {background-color:#508050}
-TD.banner {vertical-align:middle; background-color:#B8E4B8}
-TH {
+td.border_banner {background-color:#508050}
+td.banner {vertical-align:middle; background-color:#B8E4B8}
+th {
 color:#B8E4B8;
 font-size:10pt;
 font-family:verdana,sans-serif;
 background-color:#508050;
-border-width:1;
+border-width:1px;
 border-color:black;
-vertical-align:top
+vertical-align:top;
+text-align:center
 }
 TD.cell_hours {background-color:#B8E4B8; text-align:center}
 TD.cell_month {font-size: 8pt; background-color:#FFFFFF}
-TD.cell_month_o {background-color:#cccccc;}
+td.cell_month_o {background-color:#cccccc;}
 TD.empty_cell {background-color:#FFFFFF;}
 .monthday {font-size: 12pt}
 
 .cal_current_day{color:red}
 
 .week {background-color:#FFB200}
-TD.calendar {border:0px; font-size: 7pt}
-TD.calendarcol1 {border:0px; font-size: 8pt}
-TD.calendarHeader {border:0px; font-size: 10pt}
+td.calendar {border:0px; font-size: 8pt}
+td.calendarcol1 {border:0px; font-size: 8pt}
+td.calendarHeader {border:0px; font-size: 10pt}
 
 
 .center {
@@ -105,8 +106,40 @@ text-align:center;
 
 
 
-TD.calendar2 {border:0px; font-size: 8pt}
-TD.calendarHeader2 {border:0px; font-size: 10pt}
+td.calendar2 {text-align:center; border:2px; font-size: 8pt}
+td.calendarHeader2 {text-align:center; border:0px; font-size: 10pt; width: 200px;}
 .formo {width: 100%; background-color: #FFF0E0; background-position: center bottom; float: none; color: #000000}
-.fondo {background-color: #FFF0E0; background-position: center bottom; float: none; color: #000000}
+.fondo {background-color: #FFF0E0; background-position: center bottom; float: none; color: #FF8585}
 .fondl {background-color: #CCCCCC; background-position: center bottom; float: none; color: #000000}
+/* La colonne de gauche de l'administration
+------------------------------------------*/
+#colgauche fieldset{
+    border: 1px solid #000000;
+    margin:10px;
+    padding:10px;
+}
+#colgauche  fieldset legend{
+    color:#000000;
+    margin-bottom:5px;
+}
+#colgauche  fieldset ul{
+    margin: 0;
+    padding-bottom:0;
+    padding-top:0;
+    padding-left:10px;
+}
+#colgauche  fieldset ul li{
+    list-style-type:disc;
+}
+td.colgauche_admin {
+    width: 25%;
+}
+
+#toppanel{position:relative;top:0;width:100%;z-index:999;text-align:center;border-bottom:1px solid #05BA41}
+#panel{width:100%;height:150px;overflow:hidden;position:relative;z-index:3}
+#panel a{text-decoration:none}
+.pad-15,.pad-15 tboby{padding-left:15px !important}
+#fixe{position:fixed;right:5%;bottom:5%}
+.small a{color:#000 !important}
+.col a{color:#000 !important}
+.col span a{color:#000 !important}

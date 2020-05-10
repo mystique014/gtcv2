@@ -3,13 +3,15 @@
 #                            help_fr.php                                #
 #                                                                       #
 #                     Aide en français sur GRR                          #
-#                Dernière modification : 31/08/2006                     #
+#                Dernière modification : 05/03/2017                     #
 #                                                                       #
 #########################################################################
 /*
  * Copyright 2003-2005 Laurent Delineau
  * D'après http://mrbs.sourceforge.net/
- *
+ * 
+ * Ce fichier n'est plus utilisé dans le site GTC
+ * Il peut servir à recopier un exemple de contenu avec des balises html dans la page d'édition du fichier "help.fr"
  * This file is part of GRR.
  *
  * GRR is free software; you can redistribute it and/or modify
@@ -151,7 +153,7 @@ Toute personne &eacute;trang&egrave;re au T.C. surprise &agrave; jouer sur les i
 Visualiser les statistiques de r&eacute;servation, comparer les abonnements sur plusieurs ann&eacute;es.
 Envoyer des emails avec pi&egrave;ces jointes par un simple clic aux adh&eacute;rents.
 <br><br><b> G&eacute;rer la comptabilit&eacute; du club:</b> 
-<br>Gestion par année sportive des abonn&eacute;s etdes frais de fonctionnement du club (salaires, charges etc...)
+<br>Gestion par ann&eacute;e sportive des abonn&eacute;s etdes frais de fonctionnement du club (salaires, charges etc...)
 <br>Edition de bilan comptable
 <br>Gestion de la tresorerie
 <br><br><b> G&eacute;rer l'aspect du site :</b> 

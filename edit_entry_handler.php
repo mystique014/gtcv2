@@ -393,7 +393,7 @@ if ($rep_type != 0)
 $repeat_id = 0;
 if (isset($id) and ($id!=0)) {
     $ignore_id = $id;
-    $repeat_id = grr_sql_query1("SELECT repeat_id FROM grr_entry WHERE id=$id");
+    $repeat_id = grr_sql_query1("SELECT repeat_id FROM ".$_COOKIE["table_prefix"]."_entry WHERE id=$id");
     if ($repeat_id < 0) $repeat_id = 0;
 } else     $ignore_id = 0;
 
@@ -436,7 +436,7 @@ foreach ( $_GET['rooms'] as $room_id ) {
         if (!(verif_date_option_reservation($option_reservation, $starttime))) $error_date_option_reservation = 'yes';
     }
 	
-    $statut_room = grr_sql_query1("select statut_room from grr_room where id = '$room_id'");
+    $statut_room = grr_sql_query1("select statut_room from ".$_COOKIE["table_prefix"]."_room where id = '$room_id'");
     // on vérifie qu\'un utilisateur non autorisé ne tente pas de réserver une ressource non disponible
     if (($statut_room == "0") and authGetUserLevel(getUserName(),$room_id) < 3)
         $error_booking_room_out = 'yes';
@@ -601,26 +601,26 @@ $exp = count($tableau);
 if ($exp == 2){
 $nomadv = $tableau[0];
 $prenomadv = $tableau[1];
-$sql = "select nom, prenom, email from grr_utilisateurs where nom ='".$nomadv."' and prenom = '".$prenomadv."'order by nom";
+$sql = "select nom, prenom, email from ".$_COOKIE["table_prefix"]."_utilisateurs where nom ='".$nomadv."' and prenom = '".$prenomadv."'order by nom";
     $adv = grr_sql_query($sql);
 	
 for ($i = 0; ($row = grr_sql_row($adv, $i)); $i++)
        $destinataire = $row[2];
     
  //Recherche nom prénom et mail du joueur qui réserve
- $query = "SELECT nom, prenom FROM grr_utilisateurs WHERE login='$create_by'";
+ $query = "SELECT nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$create_by'";
 	$result = grr_sql_query ($query) or die ("Erreur pendant la requête");
 	$line = mysqli_fetch_array ($result);
   list($nomres, $prenomres)=$line;    
   
-$sqlres = "select nom, prenom, email from grr_utilisateurs where nom ='".$nomres."' and prenom = '".$prenomres."'order by nom";
+$sqlres = "select nom, prenom, email from ".$_COOKIE["table_prefix"]."_utilisateurs where nom ='".$nomres."' and prenom = '".$prenomres."'order by nom";
     $res = grr_sql_query($sqlres);
 	
 for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
        $reserve = $row[2];
 	   
 //Recherche description de la room 
-$sqlroom = "select room_name from grr_room where id='$room_back'";
+$sqlroom = "select room_name from ".$_COOKIE["table_prefix"]."_room where id='$room_back'";
     $room = grr_sql_query($sqlroom);
 	
 for ($i = 0; ($row = grr_sql_row($room, $i)); $i++)

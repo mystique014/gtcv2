@@ -88,9 +88,9 @@ $version_old = isset($_POST["version_old"]) ? $_POST["version_old"] : '';
 if (isset($_POST['submit'])) {
     if (isset($_POST['login']) && isset($_POST['password'])) {
         // Test pour tenir compte du changement de nom de la table grr_utilisateurs lors du passage à la version 1.8
-        $num_version = grr_sql_query1("select NAME from grr_setting WHERE NAME='version'");
+        $num_version = grr_sql_query1("select NAME from ".$_COOKIE["table_prefix"]."_setting WHERE NAME='version'");
         if ($num_version != -1)
-            $sql = "select upper(login) login, password, prenom, nom, statut from grr_utilisateurs where login = '" . $_POST['login'] . "' and password = md5('" . $_POST['password'] . "') and etat != 'inactif' and statut='administrateur' ";
+            $sql = "select upper(login) login, password, prenom, nom, statut from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '" . $_POST['login'] . "' and password = md5('" . $_POST['password'] . "') and etat != 'inactif' and statut='administrateur' ";
         else
             $sql = "select upper(login) login, password, prenom, nom, statut from utilisateurs where login = '" . $_POST['login'] . "' and password = md5('" . $_POST['password'] . "') and etat != 'inactif' and statut='administrateur' ";
         $res_user = grr_sql_query($sql);
@@ -299,20 +299,20 @@ if (isset($_POST['maj'])) {
         $result_inter .= traite_requete("ALTER TABLE utilisateurs CHANGE email email VARCHAR( 100 ) NOT NULL;");
         $result_inter .= traite_requete("ALTER TABLE utilisateurs CHANGE statut statut VARCHAR( 30 ) NOT NULL;");
         $result_inter .= traite_requete("ALTER TABLE utilisateurs ADD PRIMARY KEY ( login );");
-        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS grr_j_useradmin_area (login varchar(20) NOT NULL default '', id_area int(11) NOT NULL default '0', PRIMARY KEY  (login,id_area) );");
-        $result_inter .= traite_requete("ALTER TABLE j_mailuser_room RENAME grr_j_mailuser_room;");
-        $result_inter .= traite_requete("ALTER TABLE j_user_area RENAME grr_j_user_area;");
-        $result_inter .= traite_requete("ALTER TABLE j_user_room RENAME grr_j_user_room;");
-        $result_inter .= traite_requete("ALTER TABLE log RENAME grr_log;");
-        $result_inter .= traite_requete("ALTER TABLE mrbs_area RENAME grr_area;");
-        $result_inter .= traite_requete("ALTER TABLE mrbs_entry RENAME grr_entry;");
-        $result_inter .= traite_requete("ALTER TABLE mrbs_repeat RENAME grr_repeat;");
-        $result_inter .= traite_requete("ALTER TABLE mrbs_room RENAME grr_room;");
-        $result_inter .= traite_requete("ALTER TABLE setting RENAME grr_setting;");
-        $result_inter .= traite_requete("ALTER TABLE utilisateurs RENAME grr_utilisateurs;");
-        $result_inter .= traite_requete("ALTER TABLE grr_area ADD ip_adr VARCHAR(15) NOT NULL;");
-        $result_inter .= traite_requete("ALTER TABLE grr_area CHANGE area_name area_name VARCHAR( 30 ) NOT NULL;");
-        $result_inter .= traite_requete("ALTER TABLE grr_room CHANGE description description VARCHAR( 60 ) NOT NULL;");
+        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS ".$_COOKIE["table_prefix"]."_j_useradmin_area (login varchar(20) NOT NULL default '', id_area int(11) NOT NULL default '0', PRIMARY KEY  (login,id_area) );");
+        $result_inter .= traite_requete("ALTER TABLE j_mailuser_room RENAME ".$_COOKIE["table_prefix"]."_j_mailuser_room;");
+        $result_inter .= traite_requete("ALTER TABLE j_user_area RENAME ".$_COOKIE["table_prefix"]."_j_user_area;");
+        $result_inter .= traite_requete("ALTER TABLE j_user_room RENAME ".$_COOKIE["table_prefix"]."_j_user_room;");
+        $result_inter .= traite_requete("ALTER TABLE log RENAME ".$_COOKIE["table_prefix"]."_log;");
+        $result_inter .= traite_requete("ALTER TABLE mrbs_area RENAME ".$_COOKIE["table_prefix"]."_area;");
+        $result_inter .= traite_requete("ALTER TABLE mrbs_entry RENAME ".$_COOKIE["table_prefix"]."_entry;");
+        $result_inter .= traite_requete("ALTER TABLE mrbs_repeat RENAME ".$_COOKIE["table_prefix"]."_repeat;");
+        $result_inter .= traite_requete("ALTER TABLE mrbs_room RENAME ".$_COOKIE["table_prefix"]."_room;");
+        $result_inter .= traite_requete("ALTER TABLE setting RENAME ".$_COOKIE["table_prefix"]."_setting;");
+        $result_inter .= traite_requete("ALTER TABLE utilisateurs RENAME ".$_COOKIE["table_prefix"]."_utilisateurs;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_area ADD ip_adr VARCHAR(15) NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_area CHANGE area_name area_name VARCHAR( 30 ) NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_room CHANGE description description VARCHAR( 60 ) NOT NULL;");
         if ($result_inter == '') {
             $result .= "<font color=\"green\">Ok !</font><br>";
         } else {
@@ -324,18 +324,18 @@ if (isset($_POST['maj'])) {
     if ($version_old < "1.9.0.9") {
         $result .= "<b>Mise à jour jusqu'à la version 1.9 :</b><br>";
         // GRR1.9
-        $result_inter .= traite_requete("ALTER TABLE grr_area ADD morningstarts_area SMALLINT NOT NULL ,ADD eveningends_area SMALLINT NOT NULL , ADD resolution_area SMALLINT NOT NULL ,ADD eveningends_minutes_area SMALLINT NOT NULL ,ADD weekstarts_area SMALLINT NOT NULL ,ADD twentyfourhour_format_area SMALLINT NOT NULL ;");
-        $result_inter .= traite_requete("ALTER TABLE grr_area ADD calendar_default_values VARCHAR( 1 ) DEFAULT 'y' NOT NULL ;");
-        $result_inter .= traite_requete("ALTER TABLE grr_room ADD delais_max_resa_room SMALLINT DEFAULT '-1' NOT NULL ;");
-        $result_inter .= traite_requete("ALTER TABLE grr_room ADD delais_min_resa_room SMALLINT DEFAULT '0' NOT NULL ;");
-        $result_inter .= traite_requete("ALTER TABLE grr_room ADD order_display SMALLINT DEFAULT '0' NOT NULL ;");
-        $result_inter .= traite_requete("ALTER TABLE grr_room ADD allow_action_in_past VARCHAR( 1 ) DEFAULT 'n' NOT NULL ;");
-        $result_inter .= traite_requete("ALTER TABLE grr_j_mailuser_room CHANGE login login VARCHAR( 40 ) NOT NULL;");
-        $result_inter .= traite_requete("ALTER TABLE grr_j_user_area CHANGE login login VARCHAR( 40 ) NOT NULL;");
-        $result_inter .= traite_requete("ALTER TABLE grr_j_user_room CHANGE login login VARCHAR( 40 ) NOT NULL;");
-        $result_inter .= traite_requete("ALTER TABLE grr_j_useradmin_area CHANGE login login VARCHAR( 40 ) NOT NULL;");
-        $result_inter .= traite_requete("ALTER TABLE grr_log CHANGE LOGIN LOGIN VARCHAR( 40 ) NOT NULL;");
-        $result_inter .= traite_requete("ALTER TABLE grr_utilisateurs CHANGE login login VARCHAR( 40 ) NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_area ADD morningstarts_area SMALLINT NOT NULL ,ADD eveningends_area SMALLINT NOT NULL , ADD resolution_area SMALLINT NOT NULL ,ADD eveningends_minutes_area SMALLINT NOT NULL ,ADD weekstarts_area SMALLINT NOT NULL ,ADD twentyfourhour_format_area SMALLINT NOT NULL ;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_area ADD calendar_default_values VARCHAR( 1 ) DEFAULT 'y' NOT NULL ;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_room ADD delais_max_resa_room SMALLINT DEFAULT '-1' NOT NULL ;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_room ADD delais_min_resa_room SMALLINT DEFAULT '0' NOT NULL ;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_room ADD order_display SMALLINT DEFAULT '0' NOT NULL ;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_room ADD allow_action_in_past VARCHAR( 1 ) DEFAULT 'n' NOT NULL ;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_j_mailuser_room CHANGE login login VARCHAR( 40 ) NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_j_user_area CHANGE login login VARCHAR( 40 ) NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_j_user_room CHANGE login login VARCHAR( 40 ) NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_j_useradmin_area CHANGE login login VARCHAR( 40 ) NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_log CHANGE LOGIN LOGIN VARCHAR( 40 ) NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_utilisateurs CHANGE login login VARCHAR( 40 ) NOT NULL;");
         if ($result_inter == '') {
             $result .= "<font color=\"green\">Ok !</font><br>";
         } else {
@@ -347,7 +347,7 @@ if (isset($_POST['maj'])) {
     if ($version_old < "1.9.1.9") {
         $result .= "<b>Mise à jour jusqu'à la version 1.9.1 :</b><br>";
         // GRR1.9.1
-        $result_inter .= traite_requete("ALTER TABLE grr_log CHANGE USER_AGENT USER_AGENT VARCHAR( 100 ) NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_log CHANGE USER_AGENT USER_AGENT VARCHAR( 100 ) NOT NULL;");
         if ($result_inter == '') {
             $result .= "<font color=\"green\">Ok !</font><br>";
         } else {
@@ -358,15 +358,15 @@ if (isset($_POST['maj'])) {
     if ($version_old < "1.9.2.9") {
         $result .= "<b>Mise à jour jusqu'à la version 1.9.2 :</b><br>";
         // GRR1.9.2
-        $result_inter .= traite_requete("ALTER TABLE grr_area ADD enable_periods VARCHAR( 1 ) DEFAULT 'n' NOT NULL ;");
-        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS grr_area_periodes (id_area INT NOT NULL , num_periode SMALLINT NOT NULL , nom_periode VARCHAR( 100 ) NOT NULL );");
-        $result_inter .= traite_requete("ALTER TABLE grr_room ADD delais_option_reservation SMALLINT DEFAULT '0' NOT NULL;");
-        $result_inter .= traite_requete("ALTER TABLE grr_entry ADD option_reservation INT DEFAULT '0' NOT NULL;");
-        $result_inter .= traite_requete("ALTER TABLE grr_room ADD dont_allow_modify VARCHAR( 1 ) DEFAULT 'n' NOT NULL ;");
-        $result_inter .= traite_requete("ALTER TABLE grr_room ADD type_affichage_reser SMALLINT DEFAULT '0' NOT NULL;");
-        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS grr_type_area (id int(11) NOT NULL auto_increment, type_name varchar(30) NOT NULL default '',order_display smallint(6) NOT NULL default '0',couleur smallint(6) NOT NULL default '0',type_letter char(2) NOT NULL default '',  PRIMARY KEY  (id));");
-        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS grr_j_type_area (id_type int(11) NOT NULL default '0', id_area int(11) NOT NULL default '0');");
-        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS grr_calendar (DAY int(11) NOT NULL default '0');");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_area ADD enable_periods VARCHAR( 1 ) DEFAULT 'n' NOT NULL ;");
+        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS ".$_COOKIE["table_prefix"]."_area_periodes (id_area INT NOT NULL , num_periode SMALLINT NOT NULL , nom_periode VARCHAR( 100 ) NOT NULL );");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_room ADD delais_option_reservation SMALLINT DEFAULT '0' NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_entry ADD option_reservation INT DEFAULT '0' NOT NULL;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_room ADD dont_allow_modify VARCHAR( 1 ) DEFAULT 'n' NOT NULL ;");
+        $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_room ADD type_affichage_reser SMALLINT DEFAULT '0' NOT NULL;");
+        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS ".$_COOKIE["table_prefix"]."_type_area (id int(11) NOT NULL auto_increment, type_name varchar(30) NOT NULL default '',order_display smallint(6) NOT NULL default '0',couleur smallint(6) NOT NULL default '0',type_letter char(2) NOT NULL default '',  PRIMARY KEY  (id));");
+        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS ".$_COOKIE["table_prefix"]."_j_type_area (id_type int(11) NOT NULL default '0', id_area int(11) NOT NULL default '0');");
+        $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS ".$_COOKIE["table_prefix"]."_calendar (DAY int(11) NOT NULL default '0');");
         if ($result_inter == '') {
             $result .= "<font color=\"green\">Ok !</font><br>";
         } else {
@@ -379,37 +379,37 @@ if (isset($_POST['maj'])) {
     if ($version_old < "1.9.3.9") {
       $result .= "<b>Mise à jour jusqu'à la version 1.9.3 :</b><br>";
       // GRR1.9.3
-      $result_inter .= traite_requete("ALTER TABLE grr_entry ADD overload_desc text;");
-      $result_inter .= traite_requete("ALTER TABLE grr_repeat ADD overload_desc text;");
-      $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS grr_overload (id int(11) NOT NULL auto_increment, id_area INT NOT NULL, fieldname VARCHAR(25) NOT NULL default '', fieldtype VARCHAR(25) NOT NULL default '', PRIMARY KEY  (id));");
-      $result_inter .= traite_requete("ALTER TABLE grr_area ADD display_days VARCHAR( 7 ) DEFAULT 'yyyyyyy' NOT NULL;");
-      $result_inter .= traite_requete("UPDATE grr_utilisateurs SET default_style='';");
+      $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_entry ADD overload_desc text;");
+      $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_repeat ADD overload_desc text;");
+      $result_inter .= traite_requete("CREATE TABLE IF NOT EXISTS ".$_COOKIE["table_prefix"]."_overload (id int(11) NOT NULL auto_increment, id_area INT NOT NULL, fieldname VARCHAR(25) NOT NULL default '', fieldtype VARCHAR(25) NOT NULL default '', PRIMARY KEY  (id));");
+      $result_inter .= traite_requete("ALTER TABLE ".$_COOKIE["table_prefix"]."_area ADD display_days VARCHAR( 7 ) DEFAULT 'yyyyyyy' NOT NULL;");
+      $result_inter .= traite_requete("UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET default_style='';");
 
       // Suppression du paramètre url_disconnect_lemon
       $req = grr_sql_query1("SELECT VALUE FROM setting WHERE NAME='url_disconnect_lemon'");
       if (($req != -1) and (($req != ""))) {
-          $result_inter .= traite_requete("INSERT INTO grr_setting VALUES ('url_disconnect', '".$req."');");
-          $del = traite_requete("DELETE from grr_setting where NAME='url_disconnect_lemon'");
+          $result_inter .= traite_requete("INSERT INTO ".$_COOKIE["table_prefix"]."_setting VALUES ('url_disconnect', '".$req."');");
+          $del = traite_requete("DELETE from ".$_COOKIE["table_prefix"]."_setting where NAME='url_disconnect_lemon'");
       }
       // Mise à jour de cas_statut
       $req = grr_sql_query1("SELECT VALUE FROM setting WHERE NAME='cas_statut'");
       if ($req == "visiteur") {
-          $result_inter .= traite_requete("INSERT INTO grr_setting VALUES ('sso_statut', 'cas_visiteur');");
-          $del = traite_requete("DELETE from grr_setting where NAME='cas_statut'");
+          $result_inter .= traite_requete("INSERT INTO ".$_COOKIE["table_prefix"]."_setting VALUES ('sso_statut', 'cas_visiteur');");
+          $del = traite_requete("DELETE from ".$_COOKIE["table_prefix"]."_setting where NAME='cas_statut'");
       }
       if ($req == "utilisateur") {
-          $result_inter .= traite_requete("INSERT INTO grr_setting VALUES ('sso_statut', 'cas_utilisateur');");
-          $del = traite_requete("DELETE from grr_setting where NAME='cas_statut'");
+          $result_inter .= traite_requete("INSERT INTO ".$_COOKIE["table_prefix"]."_setting VALUES ('sso_statut', 'cas_utilisateur');");
+          $del = traite_requete("DELETE from ".$_COOKIE["table_prefix"]."_setting where NAME='cas_statut'");
       }
       // Mise à jour de lemon_statut
       $req = grr_sql_query1("SELECT VALUE FROM setting WHERE NAME='lemon_statut'");
       if ($req == "visiteur") {
-          $result_inter .= traite_requete("INSERT INTO grr_setting VALUES ('sso_statut', 'lemon_visiteur');");
-          $del = traite_requete("DELETE from grr_setting where NAME='lemon_statut'");
+          $result_inter .= traite_requete("INSERT INTO ".$_COOKIE["table_prefix"]."_setting VALUES ('sso_statut', 'lemon_visiteur');");
+          $del = traite_requete("DELETE from ".$_COOKIE["table_prefix"]."_setting where NAME='lemon_statut'");
       }
       if ($req == "utilisateur") {
-          $result_inter .= traite_requete("INSERT INTO grr_setting VALUES ('sso_statut', 'lemon_utilisateur');");
-          $del = traite_requete("DELETE from grr_setting where NAME='lemon_statut'");
+          $result_inter .= traite_requete("INSERT INTO ".$_COOKIE["table_prefix"]."_setting VALUES ('sso_statut', 'lemon_utilisateur');");
+          $del = traite_requete("DELETE from ".$_COOKIE["table_prefix"]."_setting where NAME='lemon_statut'");
       }
 
 
@@ -428,16 +428,16 @@ if (isset($_POST['maj'])) {
 
 
     // Mise à jour du numéro de version
-    $req = grr_sql_query1("SELECT VALUE FROM grr_setting WHERE NAME='version'");
+    $req = grr_sql_query1("SELECT VALUE FROM ".$_COOKIE["table_prefix"]."_setting WHERE NAME='version'");
     if ($req == -1) {
-        $result_inter .= traite_requete("INSERT INTO grr_setting VALUES ('version', '".$version_grr."');");
+        $result_inter .= traite_requete("INSERT INTO ".$_COOKIE["table_prefix"]."_setting VALUES ('version', '".$version_grr."');");
     } else {
-        $result_inter .= traite_requete("UPDATE grr_setting SET VALUE='".$version_grr."' WHERE NAME='version';");
+        $result_inter .= traite_requete("UPDATE ".$_COOKIE["table_prefix"]."_setting SET VALUE='".$version_grr."' WHERE NAME='version';");
     }
 
     // Mise à jour du numéro de RC
-    $req = grr_sql_command("DELETE FROM grr_setting WHERE NAME='versionRC'");
-    $result_inter .= traite_requete("INSERT INTO grr_setting VALUES ('versionRC', '".$version_grr_RC."');");
+    $req = grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_setting WHERE NAME='versionRC'");
+    $result_inter .= traite_requete("INSERT INTO ".$_COOKIE["table_prefix"]."_setting VALUES ('versionRC', '".$version_grr_RC."');");
 
 
     //Re-Chargement des valeurs de la table settingS
@@ -508,12 +508,12 @@ if (isset($result)) {
 
 // Test de cohérence des types de réservation
 if ($version_grr > "1.9.1") {
-    $res = grr_sql_query("select distinct type from grr_entry order by type");
+    $res = grr_sql_query("select distinct type from ".$_COOKIE["table_prefix"]."_entry order by type");
     if ($res) {
         $liste = "";
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
         {
-            $test = grr_sql_query1("select type_letter from grr_type_area where type_letter='".$row[0]."'");
+            $test = grr_sql_query1("select type_letter from ".$_COOKIE["table_prefix"]."_type_area where type_letter='".$row[0]."'");
             if ($test == -1) $liste .= $row[0]." ";
         }
         if ($liste != "") {

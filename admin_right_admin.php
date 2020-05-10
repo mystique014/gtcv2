@@ -28,7 +28,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -53,9 +52,9 @@ $action = isset($_GET["action"]) ? $_GET["action"] : NULL;
 $msg='';
 
 if ($reg_admin_login) {
-    $res = grr_sql_query1("select login from grr_j_useradmin_area where (login = '$reg_admin_login' and id_area = '$area')");
+    $res = grr_sql_query1("select login from ".$_COOKIE["table_prefix"]."_j_useradmin_area where (login = '$reg_admin_login' and id_area = '$area')");
     if ($res == -1) {
-        $sql = "insert into grr_j_useradmin_area (login, id_area) values ('$reg_admin_login',$area)";
+        $sql = "insert into ".$_COOKIE["table_prefix"]."_j_useradmin_area (login, id_area) values ('$reg_admin_login',$area)";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {$msg=get_vocab("add_user_succeed");}
     }
 }
@@ -63,7 +62,7 @@ if ($reg_admin_login) {
 if ($action) {
     if ($action == "del_admin") {
         unset($login_admin); $login_admin = $_GET["login_admin"];
-        $sql = "DELETE FROM grr_j_useradmin_area WHERE (login='$login_admin' and id_area = '$area')";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_useradmin_area WHERE (login='$login_admin' and id_area = '$area')";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());} else {$msg=get_vocab("del_user_succeed");}
     }
 }
@@ -89,7 +88,7 @@ $this_area_name = "";
 echo "<td ><p><b>".get_vocab("areas")."</b></p>";
 $out_html = "<form name=\"area\"><select name=\"area\" onChange=\"area_go()\">";
 $out_html .= "<option value=\"admin_right_admin.php?area=-1\">".get_vocab('select');
-$sql = "select id, area_name from grr_area order by order_display";
+$sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area order by order_display";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
@@ -113,7 +112,7 @@ if (destination) location.href = destination;
 </noscript>
 </form>";
 echo $out_html;
-$this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
+$this_area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id=$area");
 echo "</td>\n";
 echo "</tr></table>\n";
 
@@ -133,12 +132,12 @@ echo "<b>".$this_area_name."</b>";
 </td><td>
 <?php
 $exist_admin='no';
-$sql = "select login, nom, prenom from grr_utilisateurs where statut='utilisateur'";
+$sql = "select login, nom, prenom from ".$_COOKIE["table_prefix"]."_utilisateurs where statut='utilisateur'";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
     $is_admin='yes';
-    $sql3 = "SELECT login FROM grr_j_useradmin_area WHERE (id_area='".$area."' and login='".$row[0]."')";
+    $sql3 = "SELECT login FROM ".$_COOKIE["table_prefix"]."_j_useradmin_area WHERE (id_area='".$area."' and login='".$row[0]."')";
     $res3 = grr_sql_query($sql3);
     $nombre = grr_sql_count($res3);
     if ($nombre==0) $is_admin='no';
@@ -162,7 +161,7 @@ if ($exist_admin=='no') {
 <select size=1 name=reg_admin_login>
 <option value=''><p><?php echo get_vocab("nobody"); ?></p></option>;
 <?php
-$sql = "SELECT login, nom, prenom FROM grr_utilisateurs WHERE  (etat!='inactif' and statut='utilisateur') order by nom, prenom";
+$sql = "SELECT login, nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE  (etat!='inactif' and statut='utilisateur') order by nom, prenom";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
     if (authUserAccesArea($row[0],$area) == 1) {

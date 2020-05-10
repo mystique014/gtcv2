@@ -29,7 +29,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 include "include/admin.inc.php";
 
 
@@ -150,7 +149,7 @@ if ($valid == "yes") {
         if ($action_modify =='yes') {
 		$temp = $_GET['user_modify'];
 		if ($retry != 'yes') {
-            $sql = "UPDATE grr_compta SET login='".protect_data_sql($reg_login)."',
+            $sql = "UPDATE ".$_COOKIE["table_prefix"]."_compta SET login='".protect_data_sql($reg_login)."',
             statut='utilisateur',
 			date='".protect_data_sql($reg_date)."',
             description='".protect_data_sql($reg_description)."',
@@ -171,7 +170,7 @@ if ($valid == "yes") {
 		//actions si une nouvelle fiche comptable est créée
 		//
         } else if ($action_modify !='yes')  {
-          $sql = "INSERT INTO grr_compta SET
+          $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_compta SET
                     login='".protect_data_sql($reg_login)."',
 					statut='utilisateur',
                     date='".protect_data_sql($reg_date)."',
@@ -205,7 +204,7 @@ if ($valid == "yes") {
 
 // On appelle les informations de la fiche à modifier pour les afficher :
 if ($action_modify =='yes' or $action_copy =='yes') {
-    $sql = "SELECT date, description, categorie, montant, mode, default_year FROM grr_compta WHERE id='$user_modify'";
+    $sql = "SELECT date, description, categorie, montant, mode, default_year FROM ".$_COOKIE["table_prefix"]."_compta WHERE id='$user_modify'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -243,7 +242,7 @@ if ($msg)   {
 //
 if ((isset($_GET['action_del']) and ($_GET['js_confirmed'] ==1))) {
 		$temp = $_GET['user_del'];
-        $sql = "DELETE FROM grr_compta WHERE id='$temp'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_compta WHERE id='$temp'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {
            $msg=get_vocab("del_fiche");
         }
@@ -266,7 +265,7 @@ if (isset($user_login) and ($user_login!='')) {
 <span class="norme">
 <?php
 	//recherche du nom prénom de l'utilisateur conserné
-	$sql = "SELECT nom, prenom FROM grr_utilisateurs WHERE login='$user_login'";
+	$sql = "SELECT nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$user_login'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -287,7 +286,7 @@ echo "\"></td>\n";
 //-----------------------//liste des catégories
 echo "<td>".get_vocab("nom_categorie")." ".get_vocab("deux_points")."</td>";
 echo "<td><select name=\"reg_categorie\">";
-$sql = "SELECT id, name FROM grr_categorie_compta ORDER BY name";
+$sql = "SELECT id, name FROM ".$_COOKIE["table_prefix"]."_categorie_compta ORDER BY name";
 $res = grr_sql_query($sql);
 
 
@@ -602,7 +601,7 @@ function ds_onclick(d, m, y) {
 echo "<table><td><p><b>Liste des fiches pour l'ann&eacute;e :</b></p></td><td>";
 $out_html = "<form name=\"year\"><select name=\"year\" onChange=\"year_go()\">";
 $out_html .= "<option value=\"admin_user_compta.php?year=-1&amp;user_login=$user_login\">".get_vocab('select');
-$sql = "SELECT DISTINCT default_year FROM grr_compta WHERE login='$user_login' ORDER BY default_year";
+$sql = "SELECT DISTINCT default_year FROM ".$_COOKIE["table_prefix"]."_compta WHERE login='$user_login' ORDER BY default_year";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
@@ -641,7 +640,7 @@ echo "</tr>";
 
 
 // On appelle les informations de l'utilisateur pour les afficher :
-    $sql = "SELECT id, date, mode, description, categorie, montant, default_year, rap FROM grr_compta WHERE login='$user_login' AND default_year='$year' ORDER BY date DESC";
+    $sql = "SELECT id, date, mode, description, categorie, montant, default_year, rap FROM ".$_COOKIE["table_prefix"]."_compta WHERE login='$user_login' AND default_year='$year' ORDER BY date DESC";
     $res = grr_sql_query($sql);
     if ($res) {
 		$total ='';
@@ -663,7 +662,7 @@ echo "</tr>";
 		$col[$i][2] = $user_mode;
 		$col[$i][3] = $user_description;
 		//affichage du nom de la catégorie
-		$sql = "SELECT name FROM grr_categorie_compta WHERE id='$user_categorie'";
+		$sql = "SELECT name FROM ".$_COOKIE["table_prefix"]."_categorie_compta WHERE id='$user_categorie'";
 		$result = grr_sql_query($sql);
 		 for ($j = 0; ($row = grr_sql_row($result, $j)); $j++)
         {

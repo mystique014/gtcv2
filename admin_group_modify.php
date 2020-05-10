@@ -65,13 +65,13 @@ if (isset($_GET['change_group'])) {
     if ($id_group>0)
     {
         // Test sur $group_letter
-        $test = grr_sql_query1("select count(id) from grr_group where group_letter='".$group_letter."' and id!='".$id_group."'");
+        $test = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_group where group_letter='".$group_letter."' and id!='".$id_group."'");
         // Test sur nom du groupe
-		$test2 = grr_sql_query1("select count(id) from grr_group where group_name='".$group_name."' and id!='".$id_group."'");
+		$test2 = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_group where group_name='".$group_name."' and id!='".$id_group."'");
 		if ($test > 0 OR $test2>0) {
             $msg = "Enregistrement impossible : Un groupe portant la meme lettre existe deja ou le meme nom.";
         } else {
-            $sql = "UPDATE grr_group SET
+            $sql = "UPDATE ".$_COOKIE["table_prefix"]."_group SET
             group_name='".protect_data_sql($group_name)."',
             order_display =";
             if (is_numeric($order_display))
@@ -92,13 +92,13 @@ if (isset($_GET['change_group'])) {
     else
     {
         // Test sur $group_letter
-        $test = grr_sql_query1("select count(id) from grr_group where group_letter='".$group_letter."'");
+        $test = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_group where group_letter='".$group_letter."'");
         // Test sur nom du groupe
-		$test2 = grr_sql_query1("select count(id) from grr_group where group_name='".$group_name."'");
+		$test2 = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_group where group_name='".$group_name."'");
 		if ($test > 0 OR $test2>0) {
             $msg = "Enregistrement impossible : Un groupe portant la même lettre existe déjà ou le même nom.";
         } else {
-            $sql = "INSERT INTO grr_group SET
+            $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_group SET
             group_name='".protect_data_sql($group_name)."',
             order_display =";
             if (is_numeric($order_display))
@@ -141,7 +141,7 @@ if (isset($_GET['change_group'])) {
     <?php
 
     if ((isset($id_group)) and ($id_group>0)) {
-        $res = grr_sql_query("SELECT * FROM grr_group WHERE id=$id_group");
+        $res = grr_sql_query("SELECT * FROM ".$_COOKIE["table_prefix"]."_group WHERE id=$id_group");
         if (! $res) fatal_error(0, get_vocab('message_records_error'));
         $row = grr_sql_row_keyed($res, 0);
         grr_sql_free($res);

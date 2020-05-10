@@ -122,7 +122,8 @@ $cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
 
 
 		
-			
+	
+		
 	
 	if ($cal == 1)
 	{
@@ -134,7 +135,6 @@ $cal = isset($_GET["cal"]) ? $_GET["cal"] : NULL;
 	echo'</div>'.PHP_EOL;
 	echo'</div>'.PHP_EOL;
 	}
-	
 	
 if((authGetUserLevel(getUserName(),-1) < 1) and ($authentification_obli==1))
 {
@@ -160,7 +160,7 @@ if ((!isset($verif_reservation_auto)) or ($verif_reservation_auto == 0))
 
 
 //Création d'une row pour le lien montrer/cacher le header
-echo'<div class="container-fluid">'.PHP_EOL;
+//echo'<div class="container-fluid">'.PHP_EOL;
 echo'<div class="row">'.PHP_EOL;
 echo'<div class="col-md-12 center">'.PHP_EOL;
 $v= mktime(0,0,0,$month,$day,$year);
@@ -175,7 +175,6 @@ $dd = date("d",$v);
 	{
 	echo "<table width=\"100%\" border=0><tr><td align='center'><a href=\"day.php?year=$yea&amp;month=$mm&amp;day=$dd&amp;area=$area&amp;room=$room&amp;cal=1\">Afficher le calendrier</a></td></tr></table>\n";
 	}
-	
 echo'</div>'.PHP_EOL;
 echo'</div>'.PHP_EOL;
 ?>
@@ -188,7 +187,7 @@ if ($_GET['pview'] != 1) {
 // Si c'est un admin qui est connecté, on affiche le nombre de personnes actuellement connectées.
 if(authGetUserLevel(getUserName(),-1) >= 5)
 {
-    $sql = "select LOGIN from grr_log where END > now()";
+    $sql = "select LOGIN from ".$_COOKIE["table_prefix"]."_log where END > now()";
     $res = grr_sql_query($sql);
     $nb_connect = grr_sql_count($res);
     if ($nb_connect == 1) {
@@ -214,20 +213,24 @@ unset ($_SESSION['displ_msg']);
 
 #Show all avaliable areas
 # need to show either a select box or a normal html list,
-
+echo'<div class="row">'.PHP_EOL;
+echo'<div class="col-md-12">'.PHP_EOL;
 if ($area_list_format != "list") {
-   	echo make_area_select_html('day.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
-	} else {
-   	echo make_area_list_html('day.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
-	}
-
-
-if (isset($_SESSION['default_list_type']) or ($authentification_obli==1)) {
- 	$area_list_format = $_SESSION['default_list_type'];
+    echo make_area_select_html('day.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
 } else {
-	$area_list_format = getSettingValue("area_list_format");
+    echo make_area_list_html('day.php', $area, $year, $month, $day, $session_login); # from functions.inc.php
 }
 
+
+echo "<table class='table' width=\"100%\" cellspacing=0 border=0><tr>\n";
+
+if (isset($_SESSION['default_list_type']) or ($authentification_obli==1)) {
+    $area_list_format = $_SESSION['default_list_type'];
+} else {
+    $area_list_format = getSettingValue("area_list_format");
+}
+echo'</div>'.PHP_EOL;
+echo'</div>'.PHP_EOL;
 
 
 
@@ -247,13 +250,13 @@ $tm = date("m",$i);
 $td = date("d",$i);
 
 # Define the start and end of the day.
- $morningstarts_minutes = grr_sql_query1("select minute_morningstarts_area from grr_area where id=$area");
+ $morningstarts_minutes = grr_sql_query1("select minute_morningstarts_area from ".$_COOKIE["table_prefix"]."_area where id=$area");
 $am7=mktime($morningstarts,$morningstarts_minutes,0,$month,$day,$year);
 $pm7=mktime($eveningends,$eveningends_minutes,0,$month,$day,$year);
 
 #Show current date
-$this_area_name = grr_sql_query1("select area_name from grr_area where id='".protect_data_sql($area)."'");
-echo "<td><h4 align=center>" .$this_area_name." - ". ucfirst(utf8_strftime($dformat, $am7)) . " <br> ".get_vocab("all_areas")."</h4></td></tr></table>\n";
+$this_area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id='".protect_data_sql($area)."'");
+echo "<td VALIGN=MIDDLE><h4 align=center>" .$this_area_name." - ". ucfirst(utf8_strftime($dformat, $am7)) . " <br> ".get_vocab("all_areas")."</h4></td></tr></table>\n";
 
 
 
@@ -270,9 +273,9 @@ if ($_GET['pview'] != 1) {
 #Note: The predicate clause 'start_time <= ...' is an equivalent but simpler
 #form of the original which had 3 BETWEEN parts. It selects all entries which
 #occur on or cross the current day.
-$sql = "SELECT grr_room.id, start_time, end_time, name, grr_entry.id, type, create_by, statut_entry, grr_entry.description, grr_entry.option_reservation
-   FROM grr_entry, grr_room
-   WHERE grr_entry.room_id = grr_room.id
+$sql = "SELECT ".$_COOKIE["table_prefix"]."_room.id, start_time, end_time, name, ".$_COOKIE["table_prefix"]."_entry.id, type, create_by, statut_entry, ".$_COOKIE["table_prefix"]."_entry.description, ".$_COOKIE["table_prefix"]."_entry.option_reservation
+   FROM ".$_COOKIE["table_prefix"]."_entry, ".$_COOKIE["table_prefix"]."_room
+   WHERE ".$_COOKIE["table_prefix"]."_entry.room_id = ".$_COOKIE["table_prefix"]."_room.id
    AND area_id = '".protect_data_sql($area)."'
    AND start_time < ".($pm7+$resolution)." AND end_time > $am7 ORDER BY start_time";
 
@@ -330,7 +333,7 @@ for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
 
     # Show the name of the booker in the first segment that the booking
     # happens in, or at the start of the day if it started before today.
-    $sql_creator = "SELECT prenom, nom FROM grr_utilisateurs WHERE login = '".$row[6]."'";
+    $sql_creator = "SELECT prenom, nom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".$row[6]."'";
     $res_creator = grr_sql_query($sql_creator);
     if ($res_creator) {
     $row_user = grr_sql_row($res_creator, 0);
@@ -362,7 +365,7 @@ for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
 # pull the data from the db and store it. Convienently we can print the room
 # headings and capacities at the same time
 
-$sql = "select room_name, capacity, id, description, statut_room, show_fic_room, delais_option_reservation from grr_room where area_id='".protect_data_sql($area)."' order by order_display, room_name";
+$sql = "select room_name, capacity, id, description, statut_room, show_fic_room, delais_option_reservation from ".$_COOKIE["table_prefix"]."_room where area_id='".protect_data_sql($area)."' order by order_display, room_name";
 $res = grr_sql_query($sql);
 
 # It might be that there are no rooms defined for this area.
@@ -377,8 +380,7 @@ if (grr_sql_count($res) == 0)
 else
 {
 	#This is where we start displaying stuff
-    echo "<table class='table text-center' cellspacing=0 border=1
-	width=\"100%\">";
+    echo "<table class='table text-center' cellspacing=0 border=1 width=\"100%\">";
 
     // Première ligne du tableau
     echo "<tr>\n<th width=\"1%\">&nbsp;</th>";
@@ -572,7 +574,10 @@ else
     echo "<th>&nbsp;</th></tr>\n";
 
     echo "</table>";
+	// Si format imprimable ($_GET['pview'] = 1), on n'affiche pas cette partie
+	if ($_GET['pview'] != 1) { 
     show_colour_key($area);
+	}
 }
 include "include/trailer.inc.php";
 ?>

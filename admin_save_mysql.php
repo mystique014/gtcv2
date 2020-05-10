@@ -107,7 +107,7 @@ if (isset($_SERVER['SERVER_NAME']))
 	$fd .= "# Serveur : ".$_SERVER['SERVER_NAME']."\n";
 $fd .= "# Version PHP : " . php_version()."\n";
 $fd .= "# Version mySQL : " . mysql_version()."\n";
-$fd .= "# Version GRR : " . affiche_version()."\n";
+$fd .= "# Version GTC : " . affiche_version()."\n";
 if (isset($_SERVER['REMOTE_ADDR']))
 	$fd .= "# IP Client : ".$_SERVER['REMOTE_ADDR']."\n";
 $fd .= "# Fichier SQL compatible PHPMyadmin\n#\n";
@@ -115,7 +115,7 @@ $fd .= "# ******* debut du fichier ********\n";
 $j = '0';
 while ($j < count($liste_tables))
 {
-	$temp = $liste_tables[$j];
+	$temp = $_COOKIE["table_prefix"].$liste_tables[$j];
 	if ($structure)
 	{
 		$fd .= "#\n# Structure de la table $temp\n#\n";

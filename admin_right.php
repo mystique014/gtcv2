@@ -59,7 +59,7 @@ if ($reg_admin_login) {
     if ($room !=-1) {
         // Ressource
         // On vérifie que la ressource $room existe
-        $test = grr_sql_query1("select id from grr_room where id='".$room."'");
+        $test = grr_sql_query1("select id from ".$_COOKIE["table_prefix"]."_room where id='".$room."'");
         if ($test == -1) {
             showAccessDenied($day, $month, $year, $area,$back);
             exit();
@@ -71,21 +71,21 @@ if ($reg_admin_login) {
             exit();
         }
 
-        $sql = "SELECT * FROM grr_j_user_room WHERE (login = '$reg_admin_login' and id_room = '$room')";
+        $sql = "SELECT * FROM ".$_COOKIE["table_prefix"]."_j_user_room WHERE (login = '$reg_admin_login' and id_room = '$room')";
         $res = grr_sql_query($sql);
         $test = grr_sql_count($res);
         if ($test != "0") {
             $msg = get_vocab("warning_exist");
         } else {
             if ($reg_admin_login != '') {
-                $sql = "INSERT INTO grr_j_user_room SET login= '$reg_admin_login', id_room = '$room'";
+                $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_j_user_room SET login= '$reg_admin_login', id_room = '$room'";
                 if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {$msg=get_vocab("add_user_succeed");}
             }
         }
     } else {
         // Domaine
         // On vérifie que le domaine $area existe
-        $test = grr_sql_query1("select id from grr_area where id='".$area."'");
+        $test = grr_sql_query1("select id from ".$_COOKIE["table_prefix"]."_area where id='".$area."'");
         if ($test == -1) {
             showAccessDenied($day, $month, $year, $area,$back);
             exit();
@@ -97,15 +97,15 @@ if ($reg_admin_login) {
             exit();
         }
 
-        $sql = "select id from grr_room where area_id=$area";
+        $sql = "select id from ".$_COOKIE["table_prefix"]."_room where area_id=$area";
         $res = grr_sql_query($sql);
         if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
         {
-            $sql2 = "select login from grr_j_user_room where (login = '$reg_admin_login' and id_room = '$row[0]')";
+            $sql2 = "select login from ".$_COOKIE["table_prefix"]."_j_user_room where (login = '$reg_admin_login' and id_room = '$row[0]')";
             $res2 = grr_sql_query($sql2);
             $nb = grr_sql_count($res2);
             if ($nb==0) {
-                $sql3 = "insert into grr_j_user_room (login, id_room) values ('$reg_admin_login',$row[0])";
+                $sql3 = "insert into ".$_COOKIE["table_prefix"]."_j_user_room (login, id_room) values ('$reg_admin_login',$row[0])";
                 if (grr_sql_command($sql3) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {$msg=get_vocab("add_user_succeed");}
             }
         }
@@ -121,7 +121,7 @@ if ($action) {
         }
 
         unset($login_admin); $login_admin = $_GET["login_admin"];
-        $sql = "DELETE FROM grr_j_user_room WHERE (login='$login_admin' and id_room = '$room')";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_room WHERE (login='$login_admin' and id_room = '$room')";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());} else {$msg=get_vocab("del_user_succeed");}
     }
     if ($action == "del_admin_all") {
@@ -131,11 +131,11 @@ if ($action) {
             exit();
         }
 
-        $sql = "select id from grr_room where area_id=$area order by room_name";
+        $sql = "select id from ".$_COOKIE["table_prefix"]."_room where area_id=$area order by room_name";
         $res = grr_sql_query($sql);
         if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
         {
-            $sql2 = "DELETE FROM grr_j_user_room WHERE (login='".$_GET['login_admin']."' and id_room = '$row[0]')";
+            $sql2 = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_room WHERE (login='".$_GET['login_admin']."' and id_room = '$row[0]')";
             if (grr_sql_command($sql2) < 0) {fatal_error(1, "<p>" . grr_sql_error());} else {$msg=get_vocab("del_user_succeed");}
         }
     }
@@ -147,7 +147,7 @@ if ((empty($area)) and (isset($row[0]))) {
     else {
     # Retourne le domaine par défaut; Utilisé si aucun domaine n'a été défini.
 // On cherche le premier domaine à accès non restreint
-    $area = grr_sql_query1("SELECT a.id FROM grr_area a, grr_j_useradmin_area j
+    $area = grr_sql_query1("SELECT a.id FROM ".$_COOKIE["table_prefix"]."_area a, ".$_COOKIE["table_prefix"]."_j_useradmin_area j
     WHERE a.id=j.id_area and j.login='".getUserName()."'
     ORDER BY a.access, a.order_display, a.area_name
     LIMIT 1");
@@ -176,7 +176,7 @@ $this_room_name = "";
 echo "<td ><p><b>".get_vocab("areas")."</b></p>";
 $out_html = "<form name=\"area\"><select name=\"area\" onChange=\"area_go()\">";
 $out_html .= "<option value=\"admin_right.php?area=-1\">".get_vocab('select');
-    $sql = "select id, area_name from grr_area order by order_display";
+    $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area order by order_display";
     $res = grr_sql_query($sql);
     if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
     {
@@ -205,9 +205,9 @@ $out_html .= "<option value=\"admin_right.php?area=-1\">".get_vocab('select');
 echo $out_html;
 
 
-$this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
-$this_room_name = grr_sql_query1("select room_name from grr_room where id=$room");
-$this_room_name_des = grr_sql_query1("select description from grr_room where id=$room");
+$this_area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id=$area");
+$this_room_name = grr_sql_query1("select room_name from ".$_COOKIE["table_prefix"]."_room where id=$room");
+$this_room_name_des = grr_sql_query1("select description from ".$_COOKIE["table_prefix"]."_room where id=$room");
 echo "</td>\n";
 
 # Show all rooms in the current area
@@ -217,7 +217,7 @@ echo "<td><p><b>".get_vocab('rooms')."</b></p>";
 $out_html = "<form name=\"room\"><select name=\"room\" onChange=\"room_go()\">";
 $out_html .= "<option value=\"admin_right.php?area=$area&amp;room=-1\">".get_vocab('select_all');
 
-    $sql = "select id, room_name, description from grr_room where area_id=$area order by order_display,room_name";
+    $sql = "select id, room_name, description from ".$_COOKIE["table_prefix"]."_room where area_id=$area order by order_display,room_name";
     $res = grr_sql_query($sql);
     if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
     {
@@ -262,7 +262,7 @@ if ($room!='-1') {
 } else {
     $is_admin='yes';
     echo "<h3>".get_vocab("administration2")."</h3>";
-    $sql = "select id, room_name, description from grr_room where area_id=$area order by order_display,room_name";
+    $sql = "select id, room_name, description from ".$_COOKIE["table_prefix"]."_room where area_id=$area order by order_display,room_name";
     $res = grr_sql_query($sql);
     if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
     {
@@ -274,7 +274,7 @@ if ($room!='-1') {
 </td><td>
 <?php
 if ($room != -1) {
-    $sql = "SELECT u.login, u.nom, u.prenom FROM grr_utilisateurs u, grr_j_user_room j WHERE (j.id_room='$room' and u.login=j.login)  order by u.nom, u.prenom";
+    $sql = "SELECT u.login, u.nom, u.prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs u, ".$_COOKIE["table_prefix"]."_j_user_room j WHERE (j.id_room='$room' and u.login=j.login)  order by u.nom, u.prenom";
     $res = grr_sql_query($sql);
     $nombre = grr_sql_count($res);
     if ($nombre!=0) echo "<h3>".get_vocab("user_list")."</h3>";
@@ -291,19 +291,19 @@ if ($room != -1) {
     }
 } else {
     $exist_admin='no';
-    $sql = "select login, nom, prenom from grr_utilisateurs where statut='utilisateur'";
+    $sql = "select login, nom, prenom from ".$_COOKIE["table_prefix"]."_utilisateurs where statut='utilisateur'";
     $res = grr_sql_query($sql);
     if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
     {
         $is_admin='yes';
-        $sql2 = "select id, room_name, description from grr_room where area_id=$area order by order_display,room_name";
+        $sql2 = "select id, room_name, description from ".$_COOKIE["table_prefix"]."_room where area_id=$area order by order_display,room_name";
         $res2 = grr_sql_query($sql2);
         if ($res2) {
             $test = grr_sql_count($res2);
             if ($test != 0) {
                 for ($j = 0; ($row2 = grr_sql_row($res2, $j)); $j++)
                 {
-                $sql3 = "SELECT login FROM grr_j_user_room WHERE (id_room='".$row2[0]."' and login='".$row[0]."')";
+                $sql3 = "SELECT login FROM ".$_COOKIE["table_prefix"]."_j_user_room WHERE (id_room='".$row2[0]."' and login='".$row[0]."')";
                 $res3 = grr_sql_query($sql3);
                 $nombre = grr_sql_count($res3);
                 if ($nombre==0) $is_admin='no';
@@ -332,7 +332,7 @@ if ($room != -1) {
 <select size=1 name=reg_admin_login>
 <option value=''><p><?php echo get_vocab("nobody"); ?></p></option>;
 <?php
-$sql = "SELECT login, nom, prenom FROM grr_utilisateurs WHERE  (etat!='inactif' and statut='utilisateur') order by nom, prenom";
+$sql = "SELECT login, nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE  (etat!='inactif' and statut='utilisateur') order by nom, prenom";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
     if (authUserAccesArea($row[0],$area) <= 2) {

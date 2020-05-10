@@ -28,7 +28,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -70,10 +69,10 @@ if($type == "room")
         # They have confirmed it already, so go blast!
         grr_sql_begin();
         # First take out all appointments for this room
-        grr_sql_command("delete from grr_entry where room_id=$room");
+        grr_sql_command("delete from ".$_COOKIE["table_prefix"]."_entry where room_id=$room");
 
         # Now take out the room itself
-        grr_sql_command("delete from grr_room where id=$room");
+        grr_sql_command("delete from ".$_COOKIE["table_prefix"]."_room where id=$room");
         grr_sql_commit();
 
         # Go back to the admin page
@@ -88,7 +87,7 @@ if($type == "room")
         # We tell them how bad what theyre about to do is
         # Find out how many appointments would be deleted
 
-        $sql = "select name, start_time, end_time from grr_entry where room_id=$room";
+        $sql = "select name, start_time, end_time from ".$_COOKIE["table_prefix"]."_entry where room_id=$room";
         $res = grr_sql_query($sql);
         if (! $res) echo grr_sql_error();
         elseif (grr_sql_count($res) > 0)
@@ -123,11 +122,11 @@ if($type == "area")
 
     # We are only going to let them delete an area if there are
     # no rooms. its easier
-    $n = grr_sql_query1("select count(*) from grr_room where area_id=$area");
+    $n = grr_sql_query1("select count(*) from ".$_COOKIE["table_prefix"]."_room where area_id=$area");
     if ($n == 0)
     {
         # OK, nothing there, lets blast it away
-        grr_sql_command("delete from grr_area where id=$area");
+        grr_sql_command("delete from ".$_COOKIE["table_prefix"]."_area where id=$area");
 
         # Redirect back to the admin page
         header("Location: admin_room.php");

@@ -37,6 +37,7 @@ $login_db = isset($_GET["login_db"]) ? $_GET["login_db"] : NULL;
 $pass_db = isset($_GET["pass_db"]) ? $_GET["pass_db"] : NULL;
 $choix_db = isset($_GET["choix_db"]) ? $_GET["choix_db"] : NULL;
 $table_new = isset($_GET["table_new"]) ? $_GET["table_new"] : NULL;
+$table_prefix = isset($_GET["table_prefix"]) ? $_GET["table_prefix"] : NULL;
 // Pour cette page uniquement, on désactive l'UTF8 et on impose l'ISO-8859-1
 $unicode_encoding = 1;
 $charset_html = "utf-8";
@@ -59,19 +60,40 @@ function mysqli_result($res, $row, $field = 0)
 }
 if (@file_exists($nom_fic))
 {
+	/* fix prefix missing 
+	if ( $table_prefix != NULL ) {
+		$table_prefix_from_user = $table_prefix;
+	} else {
+		$table_prefix_from_user = false;
+	}
 	require_once("include/connect.inc.php");
-	$db = @mysqli_connect("$dbHost", "$dbUser", "$dbPass");
+	if ( empty($table_prefix) &&  $table_prefix_from_user !== false) {
+		$table_prefix = $table_prefix_from_user;
+	}
+	*/
+	if (isset($table_prefix)){
+		$_COOKIE["table_prefix"] =	$_GET["table_prefix"];
+		setcookie("table_prefix", $_COOKIE["table_prefix"]); 
+	} else 
+	{
+	$_COOKIE["table_prefix"] = $table_new;
+	}
+	$db = mysqli_connect("$dbHost", "$dbUser", "$dbPass", "$dbDb");
 	if ($db)
 	{
-		if (mysqli_select_db($db, "$dbDb"))
-		{
+		//if (mysqli_select_db($db, "$dbDb"))
+		//{
 			// Premier test
 			$j = '0';
 			$test1 = 'yes';
-			$total = count($liste_tables);
+			$tot = count($liste_tables);
+			$result = mysqli_query($db, "SELECT count(name) FROM sites");
+			$num_rows = mysqli_num_rows($result);
+			$total = ($num_rows * $tot)-2;
+			echo "<br /><h2>Total :</h2>\n".$num_rows;
 			while ($j < $total)
 			{
-				$test = mysqli_query($db, "SELECT count(*) FROM ".$liste_tables[$j]);
+				$test = mysqli_query($db, "SELECT count(*) FROM ".$_COOKIE["table_prefix"].$liste_tables[$j]);
 				if (!$test)
 				{
 					$correct_install='no';
@@ -79,7 +101,7 @@ if (@file_exists($nom_fic))
 				}
 				$j++;
 			}
-			$call_test = mysqli_query($db, "SELECT * FROM grr_setting WHERE NAME='sessionMaxLength'");
+			$call_test = mysqli_query($db, "SELECT * FROM ".$_COOKIE["table_prefix"]."_setting WHERE NAME='sessionMaxLength'");
 			$test2 = mysqli_num_rows($call_test);
 			if (($test2 != 0) && ($test1 != 'no'))
 			{
@@ -112,12 +134,12 @@ if (@file_exists($nom_fic))
 					}
 					if ($test2 == 0)
 					{
-						echo "<p>L'installation n'a pas pu se terminer normalement : la table grr_setting est vide ou bien n'existe pas.</p>";
+						echo "<p>L'installation n'a pas pu se terminer normalement : la table ".$_COOKIE["table_prefix"]."_setting est vide ou bien n'existe pas.</p>";
 					}
 					end_html();
 				}
 			}
-		}
+		//}
 	}
 }
 if ($etape == 4)
@@ -141,11 +163,12 @@ if ($etape == 4)
 		$result_ok = 'yes';
 		while (!feof($fd))
 		{
-			$query = fgets($fd, 5000);
+			$query = fgets($fd);
 			$query = trim($query);
-			//$query = preg_replace("/DROP TABLE IF EXISTS grr/","DROP TABLE IF EXISTS ",$query);
-			//$query = preg_replace("/CREATE TABLE grr/","CREATE TABLE ",$query);
-			//$query = preg_replace("/INSERT INTO grr/","INSERT INTO ",$query);
+            $query = preg_replace("/DROP TABLE IF EXISTS grr/","DROP TABLE IF EXISTS ".$_COOKIE["table_prefix"],$query);
+            $query = preg_replace("/CREATE TABLE grr/","CREATE TABLE ".$_COOKIE["table_prefix"],$query);
+            $query = preg_replace("/INSERT INTO grr/","INSERT INTO ".$_COOKIE["table_prefix"],$query);
+			echo $query;
 			if ($query != '')
 			{
 				$reg = mysqli_query($db, $query);
@@ -156,6 +179,8 @@ if ($etape == 4)
 				}
 			}
 		}
+		$sql = "INSERT INTO sites (name)VALUES ('".$_COOKIE["table_prefix"]."')";
+		$result =mysqli_query($db, $sql);
 		fclose($fd);
 		if ($result_ok == 'yes')
 		{
@@ -180,6 +205,9 @@ if ($etape == 4)
 				$conn .= "\$dbUser=\"$login_db\";\n";
 				$conn .= "# ligne suivante : le mot de passe de l'utilisateur sql ci-dessus\n";
 				$conn .= "\$dbPass=\"$pass_db\";\n";
+                //$conn .= "# ligne suivante : préfixe du nom des tables de données\n";
+               // $conn .= "\$_COOKIE["table_prefix"]=\"$_COOKIE["table_prefix"]\";\n";
+
 				$conn .= "?".">";
 				@fputs($f, $conn);
 				if (!@fclose($f))
@@ -187,9 +215,11 @@ if ($etape == 4)
 			}
 			if ($ok == 'yes')
 			{
+				$table_prefix =$_COOKIE["table_prefix"];
 				echo "<b>La structure de votre base de données est installée.</b><br />Vous pouvez passer à l'étape suivante.";
 				echo "<form action='install_mysql.php' method='get'>";
 				echo "<input type='hidden' name='etape' value='5' />";
+				echo "<input type='hidden' name='table_prefix' value=\"$table_prefix\" />";
 				echo "<div style=\"text-align:right;\"><input type='submit' class='fondl' name='Valider' value='Suivant &gt;&gt;' /><div>";
 				echo "</form>";
 			}
@@ -261,6 +291,10 @@ else if ($etape == 3)
 		echo " checked=\"checked\"";
 	echo " />\n<label for='nou'>Créer une nouvelle base de données :</label>\n";
 	echo "<input type='text' name='table_new' class='fondo' value=\"grr\" size='20' /></fieldset>\n";
+    echo "<br /><fieldset><label><b>Préfixe des tables :</b><br /></label>\n";
+    echo "Vous pouvez modifier le préfixe du nom des tables de données (ceci est indispensable lorsque l'on souhaite installer plusieurs sites GTC dans la même base de données). Ce préfixe s'écrit en <b>lettres minuscules, non accentuées, et sans espace</b>.";
+    echo "<br /><input type='text' name='table_prefix' class='fondo' value=\"\" size='10' />\n";
+    echo "</fieldset>\n";
 	echo "<br /><b>Attention</b> : lors de la prochaine étape :\n";
 	echo "<ul>\n";
 	echo "<li>le fichier \"".$nom_fic."\" sera actualisé avec les données que vous avez fourni,</li>\n";

@@ -12,7 +12,6 @@
  * Copyright 2003-2008 stéphane duchemin
 
  */
-
 include "include/admin.inc.php";
 
 $valid = '';
@@ -53,7 +52,7 @@ echo "<td><b>".get_vocab("activ_no_activ")."</a></b></td>";
 echo "</tr>";
 
 
-$sql = "SELECT nom, prenom, licence, login, etat, statut FROM grr_utilisateurs ORDER BY $order_by";
+$sql = "SELECT nom, prenom, licence, login, etat, statut FROM ".$_COOKIE["table_prefix"]."_utilisateurs ORDER BY $order_by";
 $res = grr_sql_query($sql);
 if ($res) {
     for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -114,7 +113,7 @@ $valid = isset($_POST["valid"]) ? $_POST["valid"] : NULL;
 				$i = 0;
 					while ($i < $nbr) {
 					 $user = $actif[$i];
-					 $sql = "UPDATE grr_utilisateurs SET etat= 'actif' WHERE login = '".protect_data_sql($user)."'";
+					 $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET etat= 'actif' WHERE login = '".protect_data_sql($user)."'";
    		      grr_sql_query($sql);
 			  $i++;
 					}
@@ -125,7 +124,7 @@ $valid = isset($_POST["valid"]) ? $_POST["valid"] : NULL;
 				$i = 0;
 					while ($i < $nbr) {
 					 $user = $actif[$i];
-					 $sql = "UPDATE grr_utilisateurs SET etat= 'inactif' WHERE login = '".protect_data_sql($user)."'";
+					 $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET etat= 'inactif' WHERE login = '".protect_data_sql($user)."'";
    		      grr_sql_query($sql);
 			  $i++;
 					}

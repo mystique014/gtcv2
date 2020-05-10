@@ -33,7 +33,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 include "include/admin.inc.php";
 
 
@@ -119,14 +118,14 @@ if ($valid == "yes") {
                 $msg = get_vocab("passwd_error");
                 $retry = 'yes';
             } else {
-                $sql = "SELECT * FROM grr_utilisateurs WHERE login = '".$new_login."'";
+                $sql = "SELECT * FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".$new_login."'";
                 $res = grr_sql_query($sql);
                 $nombreligne = grr_sql_count ($res);
                 if ($nombreligne != 0) {
                     $msg = get_vocab("error_exist_login");
                     $retry = 'yes';
                 } else {
-                    $sql = "INSERT INTO grr_utilisateurs SET
+                    $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_utilisateurs SET
                     nom='".protect_data_sql($reg_nom)."',
                     prenom='".protect_data_sql($reg_prenom)."',
                     login='".protect_data_sql($new_login)."',
@@ -136,9 +135,9 @@ if ($valid == "yes") {
                     email='".protect_data_sql($reg_email)."',
                     etat='".protect_data_sql($reg_etat)."',
                     default_area = '1',
-                    default_room = '1',
+                    default_room = '-1',
                     default_style = 'forestier',
-                    default_list_type = 'list',
+                    default_list_type = 'select',
                     default_language = 'fr',
                     source='local',
                     datenais='".protect_data_sql($reg_datenais)."',
@@ -179,7 +178,7 @@ if ($valid == "yes") {
                 $source = "";
             }
         if ($retry != 'yes') {
-            $sql = "UPDATE grr_utilisateurs SET nom='".protect_data_sql($reg_nom)."',
+            $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET nom='".protect_data_sql($reg_nom)."',
             prenom='".protect_data_sql($reg_prenom)."',
             statut='".protect_data_sql($reg_statut)."',
             abt='".protect_data_sql($reg_abt)."',
@@ -206,32 +205,32 @@ if ($valid == "yes") {
                 $msg = get_vocab("message_records");
             }
 
-            // Cas où on a déclaré un utilisateur inactif, on le supprime dans les tables grr_j_user_area,  grr_j_mailuser_room
+            // Cas où on a déclaré un utilisateur inactif, on le supprime dans les tables ".$_COOKIE["table_prefix"]."_j_user_area,  ".$_COOKIE["table_prefix"]."_j_mailuser_room
             if ($reg_etat != 'actif') {
-                $sql = "DELETE FROM grr_j_user_area WHERE login='$user_login'";
+                $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_area WHERE login='$user_login'";
                 if (grr_sql_command($sql) < 0) fatal_error(0, get_vocab('message_records_error') . grr_sql_error());
-                $sql = "DELETE FROM grr_j_mailuser_room WHERE login='$user_login'";
+                $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_mailuser_room WHERE login='$user_login'";
                 if (grr_sql_command($sql) < 0) fatal_error(0, get_vocab('message_records_error') . grr_sql_error());
             }
 
-            // Cas où on a déclaré un utilisateur visiteur, on le supprime dans les tables grr_j_user_area, grr_j_mailuser_room et grr_j_user_room
+            // Cas où on a déclaré un utilisateur visiteur, on le supprime dans les tables ".$_COOKIE["table_prefix"]."_j_user_area, ".$_COOKIE["table_prefix"]."_j_mailuser_room et ".$_COOKIE["table_prefix"]."_j_user_room
 
             if ($reg_statut=='visiteur') {
-                $sql = "DELETE FROM grr_j_user_room WHERE login='$user_login'";
+                $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_room WHERE login='$user_login'";
                 if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab('message_records_error') . grr_sql_error());
-                $sql = "DELETE FROM grr_j_mailuser_room WHERE login='$user_login'";
+                $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_mailuser_room WHERE login='$user_login'";
                 if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab('message_records_error') . grr_sql_error());
-                $sql = "DELETE FROM grr_j_user_area WHERE login='$user_login'";
+                $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_area WHERE login='$user_login'";
                 if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab('message_records_error') . grr_sql_error());
             }
             if ($reg_statut=='administrateur') {
-                $sql = "DELETE FROM grr_j_user_room WHERE login='$user_login'";
+                $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_room WHERE login='$user_login'";
                 if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab('message_records_error') . grr_sql_error());
-                $sql = "DELETE FROM grr_j_user_area WHERE login='$user_login'";
+                $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_area WHERE login='$user_login'";
                 if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab('message_records_error') . grr_sql_error());
             }
@@ -269,7 +268,7 @@ if ($valid == "yes") {
 
 // On appelle les informations de l'utilisateur pour les afficher :
 if (isset($user_login) and ($user_login!='')) {
-    $sql = "SELECT nom, prenom, statut, etat, email, source, datenais, tel, telport, abt, adresse, code, ville, invite, group_id, licence, classement, champio, badge, solo, inviteactif FROM grr_utilisateurs WHERE login='$user_login'";
+    $sql = "SELECT nom, prenom, statut, etat, email, source, datenais, tel, telport, abt, adresse, code, ville, invite, group_id, licence, classement, champio, badge, solo, inviteactif FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$user_login'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -391,7 +390,7 @@ if ($user_telport) echo ($user_telport);
 echo "\"></td>\n";
 echo "<td>".get_vocab("abonnement").get_vocab("deux_points")."</td>";
 echo "<td><select name=\"reg_abt\" size=\"1\">\n";
-$sql = "select id, abt_name from grr_abt order by order_display";
+$sql = "select id, abt_name from ".$_COOKIE["table_prefix"]."_abt order by order_display";
 $res = grr_sql_query($sql);
     while ($resultat = mysqli_fetch_row($res)) {
     echo "<option value='$resultat[0]'";
@@ -433,7 +432,7 @@ echo ">".get_vocab("no_activ_user")."</option>\n";
 echo "</select></td>\n";
 echo "<td>".get_vocab("admin_group.php").get_vocab("deux_points")."</td>";
 echo "<td><select name=\"reg_group\" size=\"1\">\n";
-$sql = "select id, group_name from grr_group order by order_display";
+$sql = "select id, group_name from ".$_COOKIE["table_prefix"]."_group order by order_display";
 $res = grr_sql_query($sql);
     while ($resultat = mysqli_fetch_row($res)) {
     echo "<option value='$resultat[0]'";
@@ -499,21 +498,21 @@ echo "</span></form>\n";
 if ((isset($user_login)) and ($user_login!='')) {
   echo "<h2>".get_vocab('liste_privileges').$user_prenom." ".$user_nom." :</h2>";
   $a_privileges = 'n';
-  $req_area = "select id, area_name, access from grr_area order by order_display";
+  $req_area = "select id, area_name, access from ".$_COOKIE["table_prefix"]."_area order by order_display";
   $res_area = grr_sql_query($req_area);
   if ($res_area) {
     for ($i = 0; ($row_area = grr_sql_row($res_area, $i)); $i++) {
         // On teste si l'utilisateur administre le domaine
-        $test_admin = grr_sql_query1("select count(id_area) from grr_j_useradmin_area j where j.login = '".$user_login."' and j.id_area='".$row_area[0]."'");
+        $test_admin = grr_sql_query1("select count(id_area) from ".$_COOKIE["table_prefix"]."_j_useradmin_area j where j.login = '".$user_login."' and j.id_area='".$row_area[0]."'");
         if ($test_admin >= 1) $is_admin = 'y'; else $is_admin = 'n';
         // On teste si l'utilisateur gère des ressources dans ce domaine
-        $nb_room = grr_sql_query1("select count(r.room_name) from grr_room r
-        left join grr_area a on r.area_id=a.id
+        $nb_room = grr_sql_query1("select count(r.room_name) from ".$_COOKIE["table_prefix"]."_room r
+        left join ".$_COOKIE["table_prefix"]."_area a on r.area_id=a.id
         where a.id='".$row_area[0]."'");
 
-        $req_room = "select r.room_name from grr_room r
-        left join grr_j_user_room j on r.id=j.id_room
-        left join grr_area a on r.area_id=a.id
+        $req_room = "select r.room_name from ".$_COOKIE["table_prefix"]."_room r
+        left join ".$_COOKIE["table_prefix"]."_j_user_room j on r.id=j.id_room
+        left join ".$_COOKIE["table_prefix"]."_area a on r.area_id=a.id
         where j.login = '".$user_login."' and a.id='".$row_area[0]."'";
         $res_room = grr_sql_query($req_room);
         $is_gestionnaire = '';
@@ -526,9 +525,9 @@ if ((isset($user_login)) and ($user_login!='')) {
             }
         }
         // On teste si l'utilisateur reçoit des mails automatiques
-        $req_mail = "select r.room_name from grr_room r
-        left join grr_j_mailuser_room j on r.id=j.id_room
-        left join grr_area a on r.area_id=a.id
+        $req_mail = "select r.room_name from ".$_COOKIE["table_prefix"]."_room r
+        left join ".$_COOKIE["table_prefix"]."_j_mailuser_room j on r.id=j.id_room
+        left join ".$_COOKIE["table_prefix"]."_area a on r.area_id=a.id
         where j.login = '".$user_login."' and a.id='".$row_area[0]."'";
         $res_mail = grr_sql_query($req_mail);
         $is_mail = '';
@@ -539,7 +538,7 @@ if ((isset($user_login)) and ($user_login!='')) {
         }
         // Si le domaine est restreint, on teste si l'utilateur a accès
         if ($row_area[2] == 'r') {
-            $test_restreint = grr_sql_query1("select count(id_area) from grr_j_user_area j where j.login = '".$user_login."' and j.id_area='".$row_area[0]."'");
+            $test_restreint = grr_sql_query1("select count(id_area) from ".$_COOKIE["table_prefix"]."_j_user_area j where j.login = '".$user_login."' and j.id_area='".$row_area[0]."'");
             if ($test_restreint >= 1) $is_restreint = 'y'; else $is_restreint = 'n';
         } else $is_restreint = 'n';
 

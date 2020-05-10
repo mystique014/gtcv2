@@ -29,7 +29,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 include "include/admin.inc.php";
 
 
@@ -154,7 +153,7 @@ if ($valid == "yes") {
         if ($action_modify =='yes') {
 		$temp = $_GET['user_modify'];
 		if ($retry != 'yes') {
-            $sql = "UPDATE grr_compta SET login='".protect_data_sql($reg_login)."',
+            $sql = "UPDATE ".$_COOKIE["table_prefix"]."_compta SET login='".protect_data_sql($reg_login)."',
             statut='utilisateur',
 			date='".protect_data_sql($reg_date)."',
             description='".protect_data_sql($reg_description)."',
@@ -175,7 +174,7 @@ if ($valid == "yes") {
 		//actions si une nouvelle fiche comptable est créée
 		//
         } else if ($action_modify !='yes')  {
-          $sql = "INSERT INTO grr_compta SET
+          $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_compta SET
                     login='".protect_data_sql($reg_login)."',
 					statut='utilisateur',
                     date='".protect_data_sql($reg_date)."',
@@ -209,7 +208,7 @@ if ($valid == "yes") {
 
 // On appelle les informations de la fiche à modifier pour les afficher :
 if ($action_modify =='yes'  or $action_copy =='yes') {
-    $sql = "SELECT date, description, categorie, montant, mode, default_year FROM grr_compta WHERE id='$user_modify'";
+    $sql = "SELECT date, description, categorie, montant, mode, default_year FROM ".$_COOKIE["table_prefix"]."_compta WHERE id='$user_modify'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -247,7 +246,7 @@ if ($msg)   {
 //
 if ((isset($_GET['action_del']) and ($_GET['js_confirmed'] ==1))) {
 		$temp = $_GET['user_del'];
-        $sql = "DELETE FROM grr_compta WHERE id='$temp'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_compta WHERE id='$temp'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {
            $msg=get_vocab("del_fiche");
         }
@@ -272,7 +271,7 @@ echo "<td>".get_vocab("abonnes")." ".get_vocab("deux_points")."</td>";
 echo "<td><select name=\"reg_login\">";
 if (isset($aff_login)){
 	//recherche du nom prénom de l'utilisateur concerné
-	$sql = "SELECT nom, prenom FROM grr_utilisateurs WHERE login='$aff_login'";
+	$sql = "SELECT nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$aff_login'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -285,7 +284,7 @@ if (isset($aff_login)){
 	echo "<option $selected value='$aff_login'>".$user_nom."  ".$user_prenom."";
 	
 	} else {
-$sql = "SELECT login, nom, prenom FROM grr_utilisateurs WHERE statut='utilisateur' AND etat='actif' ORDER BY nom";
+$sql = "SELECT login, nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE statut='utilisateur' AND etat='actif' ORDER BY nom";
 $res = grr_sql_query($sql);
 
 
@@ -307,7 +306,7 @@ echo "\"></td>\n";
 //-----------------------//liste des catégories
 echo "<td>".get_vocab("nom_categorie")." ".get_vocab("deux_points")."</td>";
 echo "<td><select name=\"reg_categorie\">";
-$sql = "SELECT id, name FROM grr_categorie_compta ORDER BY name";
+$sql = "SELECT id, name FROM ".$_COOKIE["table_prefix"]."_categorie_compta ORDER BY name";
 $res = grr_sql_query($sql);
 
 
@@ -623,7 +622,7 @@ echo "<br><table><td><b>Liste des fiches pour l'ann&eacute;e :</b></td><td>";
 echo "<td><font color='red'><b>".getSettingValue("default_year")."</b></font></td>\n";
 $out_html = "<td><form name=\"aff_login\"><select name=\"aff_login\" onChange=\"login_go()\">";
 $out_html .= "<option value=\"admin_compta_abonnes.php?aff_login=-1\">".get_vocab('select');
-$sql = "SELECT login, nom, prenom FROM grr_utilisateurs WHERE statut='utilisateur' AND etat='actif' ORDER BY nom";
+$sql = "SELECT login, nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE statut='utilisateur' AND etat='actif' ORDER BY nom";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
@@ -651,7 +650,7 @@ echo $out_html."</td></table>";
 //-----------------Recherche du nom prnom de la fiche abonné sélectionnée
 if (isset($aff_login)){
 	//recherche du nom prénom de l'utilisateur conserné
-	$sql = "SELECT nom, prenom FROM grr_utilisateurs WHERE login='$aff_login'";
+	$sql = "SELECT nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$aff_login'";
     $res = grr_sql_query($sql);
     if ($res) {
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -677,7 +676,7 @@ echo "</tr>";
 
 
 // On appelle les informations de l'utilisateur pour les afficher :
-    $sql = "SELECT id, date, mode, description, categorie, montant, default_year, login, rap FROM grr_compta WHERE login='$aff_login' AND default_year='".getSettingValue("default_year")."' ORDER BY date DESC";
+    $sql = "SELECT id, date, mode, description, categorie, montant, default_year, login, rap FROM ".$_COOKIE["table_prefix"]."_compta WHERE login='$aff_login' AND default_year='".getSettingValue("default_year")."' ORDER BY date DESC";
     $res = grr_sql_query($sql);
     if ($res) {
 		$total ='';
@@ -700,7 +699,7 @@ echo "</tr>";
 		$col[$i][2] = $user_mode;
 		$col[$i][3] = $user_description;
 		//affichage du nom de la catégorie
-		$sql = "SELECT name FROM grr_categorie_compta WHERE id='$user_categorie'";
+		$sql = "SELECT name FROM ".$_COOKIE["table_prefix"]."_categorie_compta WHERE id='$user_categorie'";
 		$result = grr_sql_query($sql);
 		 for ($j = 0; ($row = grr_sql_row($result, $j)); $j++)
         {
@@ -761,7 +760,7 @@ echo "</table>";
 echo "<hr><table><td><p><b>Liste des fiches pour l'ann&eacute;e :</b></p></td><td>";
 $out_html = "<form name=\"year\"><select name=\"year\" onChange=\"year_go()\">";
 $out_html .= "<option value=\"admin_compta_abonnes.php?year=-1\">".get_vocab('select');
-$sql = "SELECT DISTINCT default_year FROM grr_compta ORDER BY default_year";
+$sql = "SELECT DISTINCT default_year FROM ".$_COOKIE["table_prefix"]."_compta ORDER BY default_year";
 $res = grr_sql_query($sql);
 if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
@@ -803,7 +802,7 @@ echo "</tr>";
 
 
 // On appelle les informations de l'utilisateur pour les afficher :
-    $sql = "SELECT grr_compta.id, grr_compta.date, grr_compta.mode, grr_compta.description, grr_compta.categorie, grr_compta.montant, grr_compta.default_year, grr_compta.rap, grr_compta.login, grr_utilisateurs.nom, grr_utilisateurs.prenom FROM grr_utilisateurs,grr_compta WHERE grr_compta.statut='utilisateur' AND grr_compta.default_year='$year' AND grr_utilisateurs.login=grr_compta.login ORDER BY $order_by";
+    $sql = "SELECT ".$_COOKIE["table_prefix"]."_compta.id, ".$_COOKIE["table_prefix"]."_compta.date, ".$_COOKIE["table_prefix"]."_compta.mode, ".$_COOKIE["table_prefix"]."_compta.description, ".$_COOKIE["table_prefix"]."_compta.categorie, ".$_COOKIE["table_prefix"]."_compta.montant, ".$_COOKIE["table_prefix"]."_compta.default_year, ".$_COOKIE["table_prefix"]."_compta.rap, ".$_COOKIE["table_prefix"]."_compta.login, ".$_COOKIE["table_prefix"]."_utilisateurs.nom, ".$_COOKIE["table_prefix"]."_utilisateurs.prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs,".$_COOKIE["table_prefix"]."_compta WHERE ".$_COOKIE["table_prefix"]."_compta.statut='utilisateur' AND ".$_COOKIE["table_prefix"]."_compta.default_year='$year' AND ".$_COOKIE["table_prefix"]."_utilisateurs.login=".$_COOKIE["table_prefix"]."_compta.login ORDER BY $order_by";
     $res = grr_sql_query($sql);
     if ($res) {
 		$total ='';
@@ -830,7 +829,7 @@ echo "</tr>";
 		$col[$i][4] = $user_mode;
 		$col[$i][5] = $user_description;
 		//affichage du nom de la catégorie
-		$sql = "SELECT name FROM grr_categorie_compta WHERE id='$user_categorie'";
+		$sql = "SELECT name FROM ".$_COOKIE["table_prefix"]."_categorie_compta WHERE id='$user_categorie'";
 		$result = grr_sql_query($sql);
 		 for ($j = 0; ($row = grr_sql_row($result, $j)); $j++)
         {

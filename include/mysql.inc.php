@@ -53,7 +53,7 @@ if (!$con || !mysqli_select_db ($con,$dbDb))
 }
 
 
-// Free a results handle. You need not call this if you call grr_sql_row or
+// Free a results handle. You need not call this if you call ".$_COOKIE["table_prefix"]."_sql_row or
 // grr_sql_row_keyed until the row returns 0, since grr_sql_row frees the results
 // handle when you finish reading the rows.
 function grr_sql_free($r)
@@ -63,7 +63,7 @@ function grr_sql_free($r)
 
 // Execute a non-SELECT SQL command (insert/update/delete).
 // Returns the number of tuples affected if OK (a number >= 0).
-// Returns -1 on error; use grr_sql_error to get the error message.
+// Returns -1 on error; use ".$_COOKIE["table_prefix"]."_sql_error to get the error message.
 function grr_sql_command ($sql)
 {
     global $con;
@@ -72,7 +72,7 @@ function grr_sql_command ($sql)
 }
 
 // Execute an SQL query which should return a single non-negative number value.
-// This is a lightweight alternative to grr_sql_query, good for use with count(*)
+// This is a lightweight alternative to ".$_COOKIE["table_prefix"]."_sql_query, good for use with count(*)
 // and similar queries. It returns -1 on error or if the query did not return
 // exactly one value, so error checking is somewhat limited.
 // It also returns -1 if the query returns a single NULL value, such as from
@@ -90,8 +90,8 @@ function grr_sql_query1 ($sql)
 }
 
 // Execute an SQL query. Returns a database-dependent result handle,
-// which should be passed back to grr_sql_row or grr_sql_row_keyed to get the results.
-// Returns 0 on error; use grr_sql_error to get the error message.
+// which should be passed back to ".$_COOKIE["table_prefix"]."_sql_row or grr_sql_row_keyed to get the results.
+// Returns 0 on error; use ".$_COOKIE["table_prefix"]."_sql_error to get the error message.
 function grr_sql_query($sql)
 {
     global $con;
@@ -103,7 +103,7 @@ function grr_sql_query($sql)
 // The row is returned as an array with index 0=first column, etc.
 // When called with i >= number of rows in the result, cleans up from
 // the query and returns 0.
-// Typical usage: $i = 0; while ((a = grr_sql_row($r, $i++))) { ... }
+// Typical usage: $i = 0; while ((a = ".$_COOKIE["table_prefix"]."_sql_row($r, $i++))) { ... }
 function grr_sql_row ($r, $i)
 {
     if ($i >= mysqli_num_rows($r))
@@ -117,7 +117,7 @@ function grr_sql_row ($r, $i)
 
 // Return a row from a result as an associative array keyed by field name.
 // The first row is 0.
-// This is actually upward compatible with grr_sql_row since the underlying
+// This is actually upward compatible with ".$_COOKIE["table_prefix"]."_sql_row since the underlying
 // routing also stores the data under number indexes.
 // When called with i >= number of rows in the result, cleans up from
 // the query and returns 0.
@@ -149,7 +149,8 @@ function grr_sql_insert_id($table, $field)
 // Return the text of the last error message.
 function grr_sql_error()
 {
-    return mysqli_error();
+    global $con;
+	return mysqli_error($con);
 }
 
 // Begin a transaction, if the database supports it. This is used to

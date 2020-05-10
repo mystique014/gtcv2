@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -58,15 +57,15 @@ include "admin_col_gauche.php";
 //
 if ((isset($_GET['action_del'])) and ($_GET['js_confirmed'] ==1) and ($_GET['action_del']='yes')) {
     // faire le test si il existe une réservation en cours avec ce type de réservation
-    $type_id = grr_sql_query1("select type_letter from grr_type_area where id = '".$_GET['type_del']."'");
-    $test1 = grr_sql_query1("select count(id) from grr_entry where type= '".$type_id."'");
-    $test2 = grr_sql_query1("select count(id) from grr_repeat where type= '".$type_id."'");
+    $type_id = grr_sql_query1("select type_letter from ".$_COOKIE["table_prefix"]."_type_area where id = '".$_GET['type_del']."'");
+    $test1 = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_entry where type= '".$type_id."'");
+    $test2 = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_repeat where type= '".$type_id."'");
     if (($test1 != 0) or ($test2 != 0)) {
         $msg =  "Suppression impossible : des réservations ont été enregistrées avec ce type.";
     } else {
-        $sql = "DELETE FROM grr_type_area WHERE id='".$_GET['type_del']."'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_type_area WHERE id='".$_GET['type_del']."'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}
-        $sql = "DELETE FROM grr_j_type_area WHERE id_type='".$_GET['type_del']."'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_j_type_area WHERE id_type='".$_GET['type_del']."'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}
 
     }
@@ -89,7 +88,7 @@ echo "<BR>\n";
 echo "<BR>\n";
 echo "| <a href=\"admin_type_modify.php?id=0\">".get_vocab("display_add_type")."</a> |\n";
 
-$sql = "SELECT id, type_name, order_display, couleur, type_letter FROM grr_type_area
+$sql = "SELECT id, type_name, order_display, couleur, type_letter FROM ".$_COOKIE["table_prefix"]."_type_area
 ORDER BY order_display,type_letter";
 $res = grr_sql_query($sql);
 $nb_lignes = grr_sql_count($res);
@@ -143,12 +142,12 @@ echo "</table>";
 
 // Test de cohérence des types de réservation
 
-    $res = grr_sql_query("select distinct type from grr_entry order by type");
+    $res = grr_sql_query("select distinct type from ".$_COOKIE["table_prefix"]."_entry order by type");
     if ($res) {
         $liste = "";
         for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
         {
-            $test = grr_sql_query1("select type_letter from grr_type_area where type_letter='".$row[0]."'");
+            $test = grr_sql_query1("select type_letter from ".$_COOKIE["table_prefix"]."_type_area where type_letter='".$row[0]."'");
             if ($test == -1) $liste .= $row[0]." ";
         }
         if ($liste != "") {

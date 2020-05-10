@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 include "include/misc.inc.php";
 
@@ -43,7 +42,7 @@ if(authGetUserLevel(getUserName(),-1) < 5)
 }
 
 //Extraire le nom des colonnes
-$rsColumn = grr_sql_query("SHOW COLUMNS FROM grr_compta");
+$rsColumn = grr_sql_query("SHOW COLUMNS FROM ".$_COOKIE["table_prefix"]."_compta");
 $columnLine="";
 $columnCount=0;
 $separator=";";
@@ -58,7 +57,7 @@ if ($rsColumn) {
 }
 
 //Extraire les données
-$rsData=grr_sql_query("SELECT * FROM grr_compta");
+$rsData=grr_sql_query("SELECT * FROM ".$_COOKIE["table_prefix"]."_compta");
 $dataLine="";
 while ($row = mysqli_fetch_array($rsData)) {
     for ($i = 0; $i < $columnCount; $i++) {

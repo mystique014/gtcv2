@@ -1,2 +1,2 @@
-Login;Nom;Prénom;motdepasse;Mail;Date Naiss;N° et voie;CP;Ville;Tel Domicile;Tel Portable
-LBENARD;BENARD;LUC;19991008;luc.benard@citron.fr;19991008;1 rue du clos;75000;Paris;102030405;600000001
+Login;Nom;Prénom;motdepasse;Mail;Date Naiss;N° et voie;CP;Ville;Tel Domicile;Tel Portable;Groupe
+LBENARD;BENARD;LUC;19991008;luc.benard@citron.fr;19991008;1 rue du clos;75000;Paris;102030405;600000001;1

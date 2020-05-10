@@ -114,7 +114,7 @@ if (isset($_SERVER['HTTP_REFERER'])) $back = $_SERVER['HTTP_REFERER'];
         . "e.type, e.create_by, "
         .  grr_sql_syntax_timestamp_to_unix("e.timestamp")
         . ", a.area_name, r.room_name, r.description, a.id"
-        . " FROM grr_entry e, grr_area a, grr_room r, grr_type_area t"
+        . " FROM ".$_COOKIE["table_prefix"]."_entry e, ".$_COOKIE["table_prefix"]."_area a, ".$_COOKIE["table_prefix"]."_room r, ".$_COOKIE["table_prefix"]."_type_area t"
         . " WHERE e.room_id = r.id AND r.area_id = a.id"
         . " AND e.start_time < $report_end AND e.end_time > $report_start";
     if (!empty($areamatch))

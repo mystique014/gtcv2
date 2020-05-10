@@ -26,7 +26,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 
@@ -73,7 +72,7 @@ if ($valid == "yes"){
         //
 		$i = 0;
 		while ($i < $nbr) {
-		    $sql = "UPDATE grr_compta SET rap='1' WHERE id='".protect_data_sql($rap[$i])."'";
+		    $sql = "UPDATE ".$_COOKIE["table_prefix"]."_compta SET rap='1' WHERE id='".protect_data_sql($rap[$i])."'";
             if (grr_sql_command($sql) < 0)
                 {fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
             } else {
@@ -89,7 +88,7 @@ if ($valid == "yes"){
         //
 		$i = 0;
 		while ($i < $nbr) {
-		    $sql = "UPDATE grr_compta SET rap='0' WHERE id='".protect_data_sql($sec[$i])."'";
+		    $sql = "UPDATE ".$_COOKIE["table_prefix"]."_compta SET rap='0' WHERE id='".protect_data_sql($sec[$i])."'";
             if (grr_sql_command($sql) < 0)
                 {fatal_error(0, get_vocab("message_records_error") . grr_sql_error());
             } else {
@@ -153,7 +152,7 @@ echo "</tr>";
 
 
 // On appelle les informations de l'utilisateur pour les afficher :
-    $sql = "SELECT id, date, mode, description, login, categorie, montant, default_year, rap  FROM grr_compta WHERE default_year='$default_year' ORDER BY date DESC";
+    $sql = "SELECT id, date, mode, description, login, categorie, montant, default_year, rap  FROM ".$_COOKIE["table_prefix"]."_compta WHERE default_year='$default_year' ORDER BY date DESC";
     $res = grr_sql_query($sql);
     if ($res) {
 		for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -177,7 +176,7 @@ echo "</tr>";
 		$col[$i][3] = $user_description;
 		$col[$i][4] = $user_login;
 		//affichage du nom de la catégorie
-		$sql = "SELECT name FROM grr_categorie_compta WHERE id='$user_categorie'";
+		$sql = "SELECT name FROM ".$_COOKIE["table_prefix"]."_categorie_compta WHERE id='$user_categorie'";
 		$result = grr_sql_query($sql);
 		 for ($j = 0; ($row = grr_sql_row($result, $j)); $j++)
         {

@@ -66,7 +66,7 @@ include "admin_col_gauche.php";
 // On propose de supprimer les utilisateurs ext de GRR qui ne sont plus présents dans la base LCS
 if ((isset($_GET['action'])) and ($_GET['action'] =="nettoyage") and (getSettingValue("sso_statut") == "lcs")) {
     // Sélection des utilisateurs non locaux
-    $sql = "SELECT login, etat, source FROM grr_utilisateurs where source='ext'";
+    $sql = "SELECT login, etat, source FROM ".$_COOKIE["table_prefix"]."_utilisateurs where source='ext'";
     $res = grr_sql_query($sql);
     if ($res) {
         include LCS_PAGE_LDAP_INC_PHP;
@@ -81,12 +81,13 @@ if ((isset($_GET['action'])) and ($_GET['action'] =="nettoyage") and (getSetting
             if ($flag == 1) $msg=get_vocab("mess2_maj_base_locale");
             $flag = 0;
             // L'utilisateur n'est plus présent dans la base LCS, on le supprime
-            $sql = "DELETE FROM grr_utilisateurs WHERE login='".$user_login."'";
+            $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='".$user_login."'";
             if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {
-                grr_sql_command("DELETE FROM grr_j_mailuser_room WHERE login='".$user_login."'");
-                grr_sql_command("DELETE FROM grr_j_user_area WHERE login='".$user_login."'");
-                grr_sql_command("DELETE FROM grr_j_user_room WHERE login='".$user_login."'");
-                grr_sql_command("DELETE FROM grr_j_useradmin_area WHERE login='".$user_login."'");
+                grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_mailuser_room WHERE login='".$user_login."'");
+                grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_area WHERE login='".$user_login."'");
+                grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_room WHERE login='".$user_login."'");
+                grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_useradmin_area WHERE login='".$user_login."'");
+                grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_useradmin_site WHERE login='".$user_login."'");
                 $msg .= "\\n".$user_login;
             }
         }
@@ -126,10 +127,10 @@ if ((isset($_GET['action'])) and ($_GET['action'] =="synchro") and (getSettingVa
         if ($groupe == "") $groupe = "vide";
 
 
-        $test = grr_sql_query1("select count(login) from grr_utilisateurs where login = '".$user_login."'");
+        $test = grr_sql_query1("select count(login) from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '".$user_login."'");
         if ($test == 0) {
             // On insert le nouvel utilisteur
-            $sql = "INSERT INTO grr_utilisateurs SET
+            $sql = "INSERT INTO ".$_COOKIE["table_prefix"]."_utilisateurs SET
             nom='".protect_data_sql($user_nom)."',
             prenom='".protect_data_sql($user_prenom)."',
             statut='".protect_data_sql($user_statut)."',
@@ -142,10 +143,10 @@ if ((isset($_GET['action'])) and ($_GET['action'] =="synchro") and (getSettingVa
             else
                 $liste_nouveaux .= $user_login." (".$user_prenom." ".$user_nom.")<br>";
         } else {
-            $test2 = grr_sql_query1("select source from grr_utilisateurs where login = '".$user_login."'");
+            $test2 = grr_sql_query1("select source from ".$_COOKIE["table_prefix"]."_utilisateurs where login = '".$user_login."'");
             if ($test2 == 'ext') {
                 // On met à jour
-                $sql = "UPDATE grr_utilisateurs SET
+                $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET
                 nom='".protect_data_sql($user_nom)."',
                 prenom='".protect_data_sql($user_prenom)."',
                 email='".protect_data_sql($user_email)."'
@@ -178,13 +179,14 @@ if ((isset($_GET['action'])) and ($_GET['action'] =="synchro") and (getSettingVa
 if ((isset($_GET['action_del'])) and ($_GET['js_confirmed'] ==1)) {
     $temp = $_GET['user_del'];
     if ($temp != $_SESSION['login']) {
-        $sql = "DELETE FROM grr_utilisateurs WHERE login='$temp'";
+        $sql = "DELETE FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$temp'";
         if (grr_sql_command($sql) < 0) {fatal_error(1, "<p>" . grr_sql_error());}  else {
-            grr_sql_command("DELETE FROM grr_j_mailuser_room WHERE login='$temp'");
-            grr_sql_command("DELETE FROM grr_j_user_area WHERE login='$temp'");
-            grr_sql_command("DELETE FROM grr_j_user_room WHERE login='$temp'");
-            grr_sql_command("DELETE FROM grr_j_useradmin_area WHERE login='$temp'");
-			grr_sql_command("DELETE FROM grr_compta WHERE login='$temp'");
+            grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_mailuser_room WHERE login='$temp'");
+            grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_area WHERE login='$temp'");
+            grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_user_room WHERE login='$temp'");
+            grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_useradmin_area WHERE login='$temp'");
+            grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_j_useradmin_site WHERE login='$temp'");
+	    grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_compta WHERE login='$temp'");
             $msg=get_vocab("del_user_succeed");
         }
     }
@@ -223,17 +225,17 @@ if (getSettingValue("sso_statut") == "lcs") {
 echo "<form action=\"admin_user.php\" method=\"get\">\n";
 echo "<table border=\"1\">\n";
 echo "<tr>\n";
-echo "<td>".get_vocab("display_all_user.php")."<INPUT TYPE=\"radio\" NAME=\"display\" value=\"tous\"";
-if ($display=='tous') {echo " CHECKED";}
-echo "></td>";
+echo "<td>".get_vocab("display_all_user.php")."<input type=\"radio\" name=\"display\" value=\"tous\"";
+if ($display=='tous') {echo " checked=\"checked\"";}
+echo " /></td>";
 ?>
 <td>
- &nbsp;&nbsp;<?php echo get_vocab("display_user_on.php"); ?><INPUT TYPE="radio" NAME="display" value='actifs' <?php if ($display=='actifs') {echo " CHECKED";} ?>></td>
+ &nbsp;&nbsp;<?php echo get_vocab("display_user_on.php"); ?><input type="radio" name="display" value='actifs' <?php if ($display=='actifs') {echo " checked=\"checked\"";} ?> /></td>
  <td>
- &nbsp;&nbsp;<?php echo get_vocab("display_user_off.php"); ?><INPUT TYPE="radio" NAME="display" value='inactifs' <?php if ($display=='inactifs') {echo " CHECKED";} ?>></td>
+ &nbsp;&nbsp;<?php echo get_vocab("display_user_off.php"); ?><input type="radio" name="display" value='inactifs' <?php if ($display=='inactifs') {echo " checked=\"checked\"";} ?> /></td>
   <td>
  &nbsp;&nbsp;<?php echo get_vocab("display_admins.php"); ?><INPUT TYPE="radio" NAME="display" value='admins' <?php if ($display=='admins') {echo " CHECKED";} ?>></td>
- <td><input type=submit value=<?php echo get_vocab("OK"); ?>></td>
+ <td><input type="submit" value="<?php echo get_vocab("OK");?>" /></td>
  </tr>
  </table>
 
@@ -254,7 +256,7 @@ echo "<td>".get_vocab("mail_user_off.php")."<INPUT TYPE=\"radio\" NAME=\"cochema
 if ($cochemail=='aucun') {echo "checked";}
 echo "></td>";
 //Recherche du nom des groupes d'utilisateurs
-	$sql = "SELECT group_name FROM grr_group";
+	$sql = "SELECT group_name FROM ".$_COOKIE["table_prefix"]."_group";
 	$res = grr_sql_query($sql);
 	for ($i = 0; ($rowgr = grr_sql_row($res, $i)); $i++)
 	{
@@ -270,7 +272,7 @@ echo "<input type=hidden name=order_by value=".$order_by;
 echo "></form>";
 
 // Affichage du tableau
-echo "<table border=1 cellpadding=3>";
+echo "<table border=\"1\" cellpadding=\"3\">";
 echo "<tr><td><b><a href='admin_user.php?order_by=login&amp;display=$display'>".get_vocab("login_name")."</a></b></td>";
 echo "<td><b><a href='admin_user.php?order_by=nom,prenom&amp;display=$display'>".get_vocab("names")."</a></b></td>";
 echo "<td><b>".get_vocab("tel")."</b></td>";
@@ -280,6 +282,7 @@ echo "<td><b><a href='admin_user.php?order_by=datenais,nom,prenom&amp;display=$d
 echo "<td><b><a href='admin_user.php?order_by=abt,nom,prenom&amp;display=$display'>".get_vocab("abonnement")."</b></td>";
 echo "<td><b><a href='admin_user.php?order_by=group_id,nom,prenom&amp;display=$display'>".get_vocab("group")."</b></td>";
 echo "<td><b>".get_vocab("photo")."</b></td>";
+echo "<td><b>Privileges</b></td>";
 echo "<td><b>".get_vocab("mail_user")."</b></td>";
 echo "<td><b>".get_vocab("courrier")."</b></td>";
 echo "<td><b>".get_vocab("delete")."</b></td>";
@@ -289,14 +292,14 @@ $nba = 0;
 $nbi = 0;
 //initialisation des compteurs d'abonnements en fonction du nombre de ces abonnements
 $compteur = NULL;
-$nb_abt = grr_sql_query1("select count(id) from grr_abt");
+$nb_abt = grr_sql_query1("select count(id) from ".$_COOKIE["table_prefix"]."_abt");
 $h = 0;
 while ($h < $nb_abt+1){
  $compteur[$h] = 0;
  $h++;
  }
 
-$sql = "SELECT nom, prenom, licence, login, etat, source, email, datenais, tel, telport, abt, statut, classement, champio, group_id FROM grr_utilisateurs ORDER BY $order_by";
+$sql = "SELECT nom, prenom, licence, login, etat, source, email, datenais, tel, telport, abt, statut, classement, champio, group_id FROM ".$_COOKIE["table_prefix"]."_utilisateurs ORDER BY $order_by";
 $res = grr_sql_query($sql);
 if ($res) {
     for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
@@ -335,42 +338,47 @@ if ($res) {
     $col[$i][2] = "$user_nom $user_prenom";
 
     // Affichage des ressources gérées
-
+    $col[$i][15]="";
+    if (getSettingValue("module_multisite") == "Oui") {
+      // On teste si l'utilisateur administre un site
+      $test_admin_site = grr_sql_query1("select count(s.id) from ".$_COOKIE["table_prefix"]."_site s
+      left join ".$_COOKIE["table_prefix"]."_j_useradmin_site j on s.id=j.id_site
+      where j.login = '".$user_login."'");
+      if (($test_admin_site > 0) or ($user_statut== 'administrateur')) $col[$i][3] = "<span class=\"style_privilege\">S</span>"; else $col[$i][3] = "";
+    }
     // On teste si l'utilisateur administre un domaine
- //   $test_admin = grr_sql_query1("select count(a.area_name) from grr_area a
-//    left join grr_j_useradmin_area j on a.id=j.id_area
-//    where j.login = '".$user_login."'");
-//    if (($test_admin > 0) or ($user_statut== 'administrateur')) $col[$i][3] = "<font color=\"#FF0000\"><b>A</b></font>"; else $col[$i][3] = "";
+    $test_admin = grr_sql_query1("select count(a.area_name) from ".$_COOKIE["table_prefix"]."_area a left join ".$_COOKIE["table_prefix"]."_j_useradmin_area j on a.id=j.id_area where j.login = '".$user_login."'");
+    if (($test_admin > 0) or ($user_statut== 'administrateur')) $col[$i][15] = "<font color=\"#FF0000\"><b>A</b></font>"; else $col[$i][15] = "";
     // Si le domaine est restreint, on teste si l'utilateur a accès
-//    $test_restreint = grr_sql_query1("select count(a.area_name) from grr_area a
-//    left join grr_j_user_area j on a.id = j.id_area
- //   where j.login = '".$user_login."'");
-//    if (($test_restreint > 0)  or ($user_statut== 'administrateur')) $col[$i][3] .= "<font color=\"#FF0000\"><b> R</b></font>"; else $col[$i][3] .= "";
-//    // On teste si l'utilisateur administre une ressource
-//    $test_room = grr_sql_query1("select count(r.room_name) from grr_room r
-//    left join grr_j_user_room j on r.id=j.id_room
-//    where j.login = '".$user_login."'");
-//    if (($test_room > 0)  or ($user_statut== 'administrateur')) $col[$i][3] .= "<font color=\"#FF0000\"><b> G</b></font>"; else $col[$i][3] .= "";
-//    // On teste si l'utilisateur reçoit des mails automatiques
-//    $test_mail = grr_sql_query1("select count(r.room_name) from grr_room r
-//    left join grr_j_mailuser_room j on r.id=j.id_room
-//    where j.login = '".$user_login."'");
-//    if ($test_mail > 0) $col[$i][3] .= "<font color=\"#FF0000\"><b> E</b></font>"; else $col[$i][3] .= "&nbsp;";
-///
+    $test_restreint = grr_sql_query1("select count(a.area_name) from ".$_COOKIE["table_prefix"]."_area a
+    left join ".$_COOKIE["table_prefix"]."_j_user_area j on a.id = j.id_area
+    where j.login = '".$user_login."'");
+    if (($test_restreint > 0)  or ($user_statut== 'administrateur')) $col[$i][15] .= "<font color=\"#FF0000\"><b> R</b></font>"; else $col[$i][15] .= "";
+    // On teste si l'utilisateur administre une ressource
+    $test_room = grr_sql_query1("select count(r.room_name) from ".$_COOKIE["table_prefix"]."_room r
+    left join ".$_COOKIE["table_prefix"]."_j_user_room j on r.id=j.id_room
+    where j.login = '".$user_login."'");
+    if (($test_room > 0)  or ($user_statut== 'administrateur')) $col[$i][15] .= "<font color=\"#FF0000\"><b> G</b></font>"; else $col[$i][15] .= "";
+    // On teste si l'utilisateur reçoit des mails automatiques
+    $test_mail = grr_sql_query1("select count(r.room_name) from ".$_COOKIE["table_prefix"]."_room r
+    left join ".$_COOKIE["table_prefix"]."_j_mailuser_room j on r.id=j.id_room
+    where j.login = '".$user_login."'");
+    if ($test_mail > 0) $col[$i][15] .= "<font color=\"#FF0000\"><b> E</b></font>"; else $col[$i][15] .= "&nbsp;";
+
 
     // Affichage du statut
-  //  if ($user_statut == "administrateur") {
-  //      $color[$i]='red';
-  //      $col[$i][4]=get_vocab("statut_administrator");
-  //      }
-  //  if ($user_statut == "visiteur") {
-  //      $color[$i]='yellow';
-  //      $col[$i][4]=get_vocab("statut_visitor");
-  //      }
-  //  if ($user_statut == "utilisateur") {
-  //      $color[$i]='blue';
-  //      $col[$i][4]=get_vocab("statut_user");
-  //  }
+    if ($user_statut == "administrateur") {
+        $color[$i]='red';
+        $col[$i][15]=get_vocab("statut_administrator");
+        }
+    if ($user_statut == "visiteur") {
+        $color[$i]='yellow';
+        $col[$i][15]=get_vocab("statut_visitor");
+        }
+    if ($user_statut == "utilisateur") {
+        $color[$i]='blue';
+        $col[$i][15]=get_vocab("statut_user");
+    }
    
     if ($user_etat[$i] == 'actif') {
         if ($user_champio == 'actif') {
@@ -397,15 +405,44 @@ if ($res) {
     $col[$i][8] = $user_tel;
     $col[$i][9] = $user_telport;
  // Recherche du nom de l'abonnement pour affichage
-	$sql = "SELECT abt_name FROM grr_abt where id='$user_abt'";
+	$sql = "SELECT abt_name FROM ".$_COOKIE["table_prefix"]."_abt where id='$user_abt'";
 	$resultat = grr_sql_query($sql);
 	$row = mysqli_fetch_row($resultat);
 	$col[$i][10] =  $row[0];
 // Recherche du nom du groupe d'utilisateur
-	$sql = "SELECT group_name FROM grr_group where id='$user_groupe'";
+	$sql = "SELECT group_name FROM ".$_COOKIE["table_prefix"]."_group where id='$user_groupe'";
 	$resultat = grr_sql_query($sql);
 	$row = mysqli_fetch_row($resultat);
 	$col[$i][14] =  $row[0];
+	
+// Affichage des ressources gérées
+    $col[$i][15]="";
+    if (getSettingValue("module_multisite") == "Oui") {
+   // On teste si l'utilisateur administre un site
+      $test_admin_site = grr_sql_query1("select count(s.id) from ".$_COOKIE["table_prefix"]."_site s
+      left join ".$_COOKIE["table_prefix"]."_j_useradmin_site j on s.id=j.id_site
+      where j.login = '".$user_login."'");
+      if (($test_admin_site > 0) or ($user_statut== 'administrateur')) $col[$i][15] = "<span class=\"style_privilege\">S</span>"; else $col[$i][15] = "";
+    }
+   // On teste si l'utilisateur administre un domaine
+    $test_admin = grr_sql_query1("select count(a.area_name) from ".$_COOKIE["table_prefix"]."_area a left join ".$_COOKIE["table_prefix"]."_j_useradmin_area j on a.id=j.id_area where j.login = '".$user_login."'");
+    if (($test_admin > 0) or ($user_statut== 'administrateur')) $col[$i][15] = "<font color=\"#FF0000\"><b>A</b></font>"; else $col[$i][15] = "";
+   // Si le domaine est restreint, on teste si l'utilateur a accès
+    $test_restreint = grr_sql_query1("select count(a.area_name) from ".$_COOKIE["table_prefix"]."_area a
+    left join ".$_COOKIE["table_prefix"]."_j_user_area j on a.id = j.id_area
+    where j.login = '".$user_login."'");
+    if (($test_restreint > 0)  or ($user_statut== 'administrateur')) $col[$i][15] .= "<font color=\"#FF0000\"><b> R</b></font>"; else $col[$i][15] .= "";
+   // On teste si l'utilisateur administre une ressource
+    $test_room = grr_sql_query1("select count(r.room_name) from ".$_COOKIE["table_prefix"]."_room r
+    left join ".$_COOKIE["table_prefix"]."_j_user_room j on r.id=j.id_room
+    where j.login = '".$user_login."'");
+    if (($test_room > 0)  or ($user_statut== 'administrateur')) $col[$i][15] .= "<font color=\"#FF0000\"><b> G</b></font>"; else $col[$i][15] .= "";
+   // On teste si l'utilisateur reçoit des mails automatiques
+    $test_mail = grr_sql_query1("select count(r.room_name) from ".$_COOKIE["table_prefix"]."_room r
+    left join ".$_COOKIE["table_prefix"]."_j_mailuser_room j on r.id=j.id_room
+    where j.login = '".$user_login."'");
+    if ($test_mail > 0) $col[$i][15] .= "<font color=\"#FF0000\"><b> E</b></font>"; else $col[$i][15] .= "&nbsp;";
+
 	
   
     echo "<tr><td bgcolor='$bgcolor'>{$col[$i][1]}</td>";
@@ -417,7 +454,7 @@ if ($res) {
     echo "<td bgcolor='$bgcolor'>{$col[$i][7]}</td>";
     echo "<td bgcolor='$bgcolor'>{$col[$i][10]}</td>";
 	echo "<td bgcolor='$bgcolor'>{$col[$i][14]}</td>";
-    // Affichage du lien photo d'identité
+	// Affichage du lien photo d'identité
     if ($_SESSION['login'] != $user_login) {
 			if (file_exists('images/'.$user_login.'.jpg')){
         $themessage = get_vocab("ok");
@@ -427,6 +464,8 @@ if ($res) {
         echo "<td bgcolor='$bgcolor'><a href='admin_photo.php?user_login=$user_login&amp;display=$display'>".get_vocab("photo")."</a></td>";
     }
 		}
+	//Affichage des privilèges
+	echo "<td bgcolor='$bgcolor'>{$col[$i][15]}</td>";
      // Affichage du lien e-mail
     if ($_SESSION['login'] != $user_login) {
     // on test si un e-mail existe
@@ -453,7 +492,7 @@ echo "<form ENCTYPE=\"multipart/form-data\" action=\"admin_user.php\" method=\"p
 			if (empty($date_1)) { $date_1 = '1900'; }
 			if (empty($date_2)) { $date_2 = $year; }
     		//Recherche du nom des groupes d'utilisateurs
-				$sql = "SELECT group_name FROM grr_group WHERE id = '$user_groupe'";
+				$sql = "SELECT group_name FROM ".$_COOKIE["table_prefix"]."_group WHERE id = '$user_groupe'";
 				$resul = grr_sql_query($sql);
 				for ($j = 0; ($rowg = grr_sql_row($resul, $j)); $j++)
 				if (($cochemail == $rowg[0]) AND $user_datenais >= $date_1 AND $user_datenais <= $date_2){
@@ -472,8 +511,7 @@ echo "<form ENCTYPE=\"multipart/form-data\" action=\"admin_user.php\" method=\"p
     } else {
         echo "<td bgcolor='$bgcolor'>&nbsp;</td>";
     }
-
-    // Fin de la ligne courante
+	// Fin de la ligne courante
     echo "</tr>";
     } 
 	
@@ -495,6 +533,36 @@ echo "<form ENCTYPE=\"multipart/form-data\" action=\"admin_user.php\" method=\"p
 	echo "<td bgcolor='$bgcolor'>&nbsp;</td>";
 	echo "<td bgcolor='$bgcolor'>&nbsp;</td>";
 	echo "<td bgcolor='$bgcolor'>&nbsp;</td>";
+	
+// Affichage des ressources gérées
+    $col[$i][15]="";
+    if (getSettingValue("module_multisite") == "Oui") {
+   // On teste si l'utilisateur administre un site
+      $test_admin_site = grr_sql_query1("select count(s.id) from ".$_COOKIE["table_prefix"]."_site s
+      left join ".$_COOKIE["table_prefix"]."_j_useradmin_site j on s.id=j.id_site
+      where j.login = '".$user_login."'");
+      if (($test_admin_site > 0) or ($user_statut== 'administrateur')) $col[$i][15] = "<span class=\"style_privilege\">S</span>"; else $col[$i][15] = "";
+    }
+   // On teste si l'utilisateur administre un domaine
+    $test_admin = grr_sql_query1("select count(a.area_name) from ".$_COOKIE["table_prefix"]."_area a left join ".$_COOKIE["table_prefix"]."_j_useradmin_area j on a.id=j.id_area where j.login = '".$user_login."'");
+    if (($test_admin > 0) or ($user_statut== 'administrateur')) $col[$i][15] = "<font color=\"#FF0000\"><b>A</b></font>"; else $col[$i][15] = "";
+   // Si le domaine est restreint, on teste si l'utilateur a accès
+    $test_restreint = grr_sql_query1("select count(a.area_name) from ".$_COOKIE["table_prefix"]."_area a
+    left join ".$_COOKIE["table_prefix"]."_j_user_area j on a.id = j.id_area
+    where j.login = '".$user_login."'");
+    if (($test_restreint > 0)  or ($user_statut== 'administrateur')) $col[$i][15] .= "<font color=\"#FF0000\"><b> R</b></font>"; else $col[$i][15] .= "";
+   // On teste si l'utilisateur administre une ressource
+    $test_room = grr_sql_query1("select count(r.room_name) from ".$_COOKIE["table_prefix"]."_room r
+    left join ".$_COOKIE["table_prefix"]."_j_user_room j on r.id=j.id_room
+    where j.login = '".$user_login."'");
+    if (($test_room > 0)  or ($user_statut== 'administrateur')) $col[$i][15] .= "<font color=\"#FF0000\"><b> G</b></font>"; else $col[$i][15] .= "";
+   // On teste si l'utilisateur reçoit des mails automatiques
+    $test_mail = grr_sql_query1("select count(r.room_name) from ".$_COOKIE["table_prefix"]."_room r
+    left join ".$_COOKIE["table_prefix"]."_j_mailuser_room j on r.id=j.id_room
+    where j.login = '".$user_login."'");
+    if ($test_mail > 0) $col[$i][15] .= "<font color=\"#FF0000\"><b> E</b></font>"; else $col[$i][15] .= "&nbsp;";
+				
+	echo "<td bgcolor='$bgcolor'>{$col[$i][15]}</td>";
 	if ($_SESSION['login'] != $user_login) {
     // on test si un e-mail existe
       if ($user_email !="" ){
@@ -506,9 +574,9 @@ echo "<form ENCTYPE=\"multipart/form-data\" action=\"admin_user.php\" method=\"p
     }
 	echo "<td bgcolor='$bgcolor'>&nbsp;</td>";
 	}
-	        echo "<td bgcolor='$bgcolor'>&nbsp;</td>";
-    }
-	}	
+	echo "<td bgcolor='$bgcolor'>&nbsp;</td>";
+   }
+}	
 }
 
 echo "</table>";
@@ -524,7 +592,7 @@ echo "<div align=center>Nombre d'abonn&eacute;s actifs : ".$nba;
 echo "<center><table border=1 cellpadding=3>";
 $j = 1;
 while($j < $nb_abt+1) {
-	$sql = "SELECT abt_name FROM grr_abt WHERE id='$j'";
+	$sql = "SELECT abt_name FROM ".$_COOKIE["table_prefix"]."_abt WHERE id='$j'";
 	$resultat = grr_sql_query($sql);
 	$row = mysqli_fetch_row($resultat);
 	$nom_abt =  $row[0];
@@ -541,9 +609,9 @@ echo "<input type=\"hidden\" name=\"envoi\" value=\"yes\">\n";
 echo "<br><input type=\"submit\" value='Envoyer'>\n";	
 echo "<table border=1>";
 echo "<tr><td style='background-color: #CC9933'>Sujet du courrier :</td><br>";
-echo "<tr><td><textarea name=\"sujet\" cols=50 rows=0>Le bureau ...</textarea></td></tr>\n";
+echo "<tr><td><textarea name=\"sujet\" cols=50 rows=0>Le bureau du Tennis Club...</textarea></td></tr>\n";
 echo "<tr><td style='background-color: #CC9933'>Tapez le courrier &agrave; adresser aux membres s&eacute;lectionn&eacute;s :</td><br>";
-echo "<tr><td><textarea name=\"courrier\" cols=80 rows=20>Le bureau vous informe ...</textarea></td></tr>\n";
+echo "<tr><td><textarea name=\"courrier\" cols=80 rows=20>Le bureau du tennis club vous informe ...</textarea></td></tr>\n";
 echo "<tr><td style='background-color: #CC9933'>Fichier joint:</td><br>";
 echo "<tr><td><input type=\"file\" name=\"nomfichier\"></td></tr>\n";
 echo "</form>";

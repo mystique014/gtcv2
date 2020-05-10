@@ -31,12 +31,12 @@
  */
 
 // Affichage d'un lien pour format imprimable
-if ( ( !isset($_GET['pview'])  or ($_GET['pview'] != 1)) and (isset($affiche_pview))) {
-    echo '<p><center><a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '&amp;pview=1" ';
-    if ($pview_new_windows==1) echo ' target="_blank"';
-    echo '>' . get_vocab("ppreview") . '</a></center><p>';
-}
-
+//if ( ( !isset($_GET['pview'])  or ($_GET['pview'] != 1)) and (isset($affiche_pview))) {
+//    echo '<p><center><a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '&amp;pview=1" ';
+//    if ($pview_new_windows==1) echo ' target="_blank"';
+//    echo '>' . get_vocab("ppreview") . '</a></center><p>';
+//}
+//
 ?>
 </BODY>
 </HTML>

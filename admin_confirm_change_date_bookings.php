@@ -27,7 +27,6 @@
  * along with GRR; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 include "include/admin.inc.php";
 
 $back = '';
@@ -46,15 +45,15 @@ if (isset($_GET['valid']) and ($_GET['valid'] == "yes")) {
     if (!saveSetting("begin_bookings", $_GET['begin_bookings'])) {
         echo "Erreur lors de l'enregistrement de begin_bookings !<br>";
     } else {
-        $del = grr_sql_query("DELETE FROM grr_entry WHERE (end_time < ".getSettingValue('begin_bookings').")");
-        $del = grr_sql_query("DELETE FROM grr_repeat WHERE end_date < ".getSettingValue("begin_bookings"));
+        $del = grr_sql_query("DELETE FROM ".$_COOKIE["table_prefix"]."_entry WHERE (end_time < ".getSettingValue('begin_bookings').")");
+        $del = grr_sql_query("DELETE FROM ".$_COOKIE["table_prefix"]."_repeat WHERE end_date < ".getSettingValue("begin_bookings"));
     }
 
     if (!saveSetting("end_bookings", $_GET['end_bookings'])) {
         echo "Erreur lors de l'enregistrement de end_bookings !<br>";
     } else {
-        $del = grr_sql_query("DELETE FROM grr_entry WHERE start_time > ".getSettingValue("end_bookings"));
-        $del = grr_sql_query("DELETE FROM grr_repeat WHERE start_time > ".getSettingValue("end_bookings"));
+        $del = grr_sql_query("DELETE FROM ".$_COOKIE["table_prefix"]."_entry WHERE start_time > ".getSettingValue("end_bookings"));
+        $del = grr_sql_query("DELETE FROM ".$_COOKIE["table_prefix"]."_repeat WHERE start_time > ".getSettingValue("end_bookings"));
     }
 
     header("Location: ./admin_config.php");

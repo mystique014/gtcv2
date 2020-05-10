@@ -116,8 +116,8 @@ print_header($day, $month, $year, $area, $type_session);
 	{
 	echo'<div class="row">'.PHP_EOL;
 	echo'<div class="col-md-12 center">'.PHP_EOL;
-    echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
-	minicals($year, $month, $day, $area, -1, 'day');
+	echo "<table width=\"100%\" cellspacing=1 border=0><tr>\n<td>";
+    minicals($year, $month, $day, $area, $room, 'month_all2');
 	echo "</table><table width=\"100%\" cellspacing=1 border=0>\n";
 	echo'</div>'.PHP_EOL;
 	echo'</div>'.PHP_EOL;
@@ -134,7 +134,7 @@ unset ($_SESSION['displ_msg']);
 if (empty($area))
     $area = get_default_area();
 if (empty($room))
-    $room = grr_sql_query1("select min(id) from grr_room where area_id=$area");
+    $room = grr_sql_query1("select min(id) from ".$_COOKIE["table_prefix"]."_room where area_id=$area");
 # Note $room will be -1 if there are no rooms; this is checked for below.
 
 // Récupération des données concernant l'affichage du planning du domaine
@@ -219,9 +219,9 @@ if ($_GET['pview'] != 1) {
 
 }
 
-$this_area_name = grr_sql_query1("select area_name from grr_area where id=$area");
-$this_room_name = grr_sql_query1("select room_name from grr_room where id=$room");
-$this_room_name_des = grr_sql_query1("select description from grr_room where id=$room");
+$this_area_name = grr_sql_query1("select area_name from ".$_COOKIE["table_prefix"]."_area where id=$area");
+$this_room_name = grr_sql_query1("select room_name from ".$_COOKIE["table_prefix"]."_room where id=$room");
+$this_room_name_des = grr_sql_query1("select description from ".$_COOKIE["table_prefix"]."_room where id=$room");
 
 # Don't continue if this area has no rooms:
 if ($room <= 0)
@@ -282,10 +282,10 @@ $all_day = str_replace(" ", "&nbsp;", get_vocab("all_day"));
 
 
 
-$sql = "SELECT start_time, end_time,grr_entry.id, name, create_by, room_name, statut_entry, grr_entry.description, grr_entry.option_reservation, grr_room.delais_option_reservation, type
-   FROM grr_entry inner join grr_room on grr_entry.room_id=grr_room.id
+$sql = "SELECT start_time, end_time,".$_COOKIE["table_prefix"]."_entry.id, name, create_by, room_name, statut_entry, ".$_COOKIE["table_prefix"]."_entry.description, ".$_COOKIE["table_prefix"]."_entry.option_reservation, ".$_COOKIE["table_prefix"]."_room.delais_option_reservation, type
+   FROM ".$_COOKIE["table_prefix"]."_entry inner join ".$_COOKIE["table_prefix"]."_room on ".$_COOKIE["table_prefix"]."_entry.room_id=".$_COOKIE["table_prefix"]."_room.id
    WHERE (start_time <= $month_end AND end_time > $month_start and area_id='".$area."')
-   ORDER by start_time, end_time, grr_room.room_name";
+   ORDER by start_time, end_time, ".$_COOKIE["table_prefix"]."_room.room_name";
 
 # Build an array of information about each day in the month.
 # The information is stored as:
@@ -302,7 +302,7 @@ if (grr_sql_count($res) == 0) {
 
 for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
 {
-    $sql_creator = "SELECT prenom, nom FROM grr_utilisateurs WHERE login = '$row[4]'";
+    $sql_creator = "SELECT prenom, nom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '$row[4]'";
     $res_creator = grr_sql_query($sql_creator);
     if ($res_creator) $row_user = grr_sql_row($res_creator, 0);
 
@@ -451,7 +451,7 @@ for ($weekcol = 0; $weekcol < 5; $weekcol++)
 echo "</tr>\n";*/
 
 
-$sql = "select room_name, capacity, id, description from grr_room where area_id=$area order by order_display,room_name";
+$sql = "select room_name, capacity, id, description from ".$_COOKIE["table_prefix"]."_room where area_id=$area order by order_display,room_name";
 $res = grr_sql_query($sql);
 
 // Début affichage de la première ligne
@@ -538,6 +538,6 @@ if ($weekcol > 0) for (; $weekcol < 7; $weekcol++)
     echo "<td class=\"cell_month_o\" height=100>&nbsp;</td>\n";
 }*/
 echo "</tr></table>\n";
-show_colour_key($area);
+//show_colour_key($area);
 include "include/trailer.inc.php";
 ?>

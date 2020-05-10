@@ -41,8 +41,12 @@
 function loadSettings()
 {
     global $grrSettings;
-    
-    $sql = "select `NAME`, `VALUE` from grr_setting";
+    // Pour tenir compte du changement de nom de la table setting à partir de la version 1.8
+    $test = grr_sql_query1("select NAME  from ".$_COOKIE["table_prefix"]."_setting where NAME='version'");
+    if ($test != -1)
+       $sql = "select `NAME`, `VALUE` from ".$_COOKIE["table_prefix"]."_setting";
+    else
+        $sql = "select `NAME`, `VALUE` from setting";
     $res = grr_sql_query($sql);
     if (! $res) return (false);
     if (grr_sql_count($res) == 0) {
@@ -56,7 +60,7 @@ function loadSettings()
 }
 
 /**
- * Get the value of a grr_setting by its name
+ * Get the value of a ".$_COOKIE["table_prefix"]."_setting by its name
  *
  * Use this function within other functions so you don'y have to declare
  * $grrSettings global
@@ -91,11 +95,11 @@ function saveSetting($_name, $_value)
 {
     global $grrSettings;
     if (isset($grrSettings[$_name])) {
-    $sql = "update grr_setting set VALUE = '" . protect_data_sql($_value) . "' where NAME = '" . protect_data_sql($_name) . "'";
+    $sql = "update ".$_COOKIE["table_prefix"]."_setting set VALUE = '" . protect_data_sql($_value) . "' where NAME = '" . protect_data_sql($_name) . "'";
     $res = grr_sql_query($sql);
          if ( ! $res) return (false);
     } else {
-        $sql = "insert into grr_setting set NAME = '" . protect_data_sql($_name) . "', VALUE = '" . protect_data_sql($_value) . "'";
+        $sql = "insert into ".$_COOKIE["table_prefix"]."_setting set NAME = '" . protect_data_sql($_name) . "', VALUE = '" . protect_data_sql($_value) . "'";
     $res = grr_sql_query($sql);
         if ( ! $res) return (false);
     }

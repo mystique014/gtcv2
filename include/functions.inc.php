@@ -285,33 +285,11 @@ function print_header($day, $month, $year, $area, $type="with_session", $page="n
 		if (!(isset($search_str))) $search_str = get_vocab("search_for");
 		if (empty($search_str)) $search_str = "";
    }
-  //----------------------------------------------------------------
-  // Début d'élément à cacher
-  //-----------------------------------------------------------------
-?>
-
-<script type="text/javascript">
-     
-    function ouvrirFermerSpoiler(div)
-    {
-        var divContenu = div.getElementsByTagName('div')[1];
-         
-        if(divContenu.style.display == 'block')
-            divContenu.style.display = 'none';
-        else
-            divContenu.style.display = 'block';
-    }
-     
-</script>
-<?php
-echo '<div class="spoilerDiv" onclick="ouvrirFermerSpoiler(this);">';
-	//echo '<span class="lienAfficher">Clique pour afficher</span>';
-	echo '<div class="spoiler">';
-		echo '<div class="contenuSpoiler">';
-			echo'<div class="container-fluid">'.PHP_EOL;
-				echo'<div class="row">'.PHP_EOL;
-					echo'<div class="col-md-3 center">'.PHP_EOL;
-					$param= 'yes';
+  
+		echo'<div class="container-fluid">'.PHP_EOL;
+		echo'<div class="row">'.PHP_EOL;
+		echo'<div class="col-md-3 center">'.PHP_EOL;
+        $param= 'yes';
 		
 		  
 		
@@ -374,12 +352,11 @@ echo '<div class="spoilerDiv" onclick="ouvrirFermerSpoiler(this);">';
 			}
 	echo'</div>'.PHP_EOL;   
 	echo'<div class="col-md-3 center hidden-xs bordure" >'.PHP_EOL; 
-		echo "<img src=\"img_grr/logo.gif\" class=\"img-fluid\" alt=\"logo\" title=\"grr\" height=\"100%\" align=\"middle\" border=\"0\" /></TD>";
+		echo "<img src=\"img_grr/".$_COOKIE["table_prefix"].".jpg\" class=\"img-fluid\" alt=\"logo\" title=\"".$_COOKIE["table_prefix"]."\" height=\"100%\" align=\"middle\" border=\"0\" /></TD>";
     echo'</div>'.PHP_EOL;
 	echo'<div class="col-md-3 center hidden-xs bordure">'.PHP_EOL;
 		
-	echo "<h3><a href='".page_accueil($param)."day=$day&amp;year=$year&amp;month=$month'>".get_vocab('welcome')."</a>";
-	echo "<a href='login.php'>-".getSettingValue("company")."</a>";
+	echo "<h2><a href='login.php'>".getSettingValue("company")."</a>";
 	
      if ($page=="no_admin") {
      ?>
@@ -450,13 +427,10 @@ echo '<div class="spoilerDiv" onclick="ouvrirFermerSpoiler(this);">';
 	echo'</div>'.PHP_EOL;
     echo'</div>'.PHP_EOL;
     echo'</div>'.PHP_EOL;
-	echo '</div>';
-  echo '</div>';
-echo '</div>';
-   echo '</div>';
+   
 }
 
-// Tr    ansforme $dur en un nombre entier
+// Transforme $dur en un nombre entier
 // $dur : durée
 // $units : unité
 function toTimeString(&$dur, &$units)
@@ -608,43 +582,82 @@ function fatal_error($need_header, $message)
 
 
 # Retourne le domaine par défaut; Utilisé si aucun domaine n'a été défini.
-function get_default_area()
+function get_default_area($id_site=-1)
 {
+    if (getSettingValue("module_multisite") == "Oui")
+      $use_multisite = TRUE;
+    else
+      $use_multisite = FALSE;
     if (OPTION_IP_ADR==1) {
         // Affichage d'un domaine par defaut en fonction de l'adresse IP de la machine cliente
-        $res = grr_sql_query("SELECT id FROM grr_area WHERE ip_adr='".protect_data_sql($_SERVER['REMOTE_ADDR'])."' ORDER BY access, order_display, area_name");
-        if ($res && grr_sql_count($res)>0 ) {
-            $row = grr_sql_row($res, 0);
-            return $row[0];
-
+        /*if (($id_site != -1) and ($use_multisite))
+          $sql= "SELECT a.ip_adr, a.id
+          FROM ".$_COOKIE["table_prefix"]."_area a, ".$_COOKIE["table_prefix"]."_j_site_area j
+          WHERE a.id=j.id_area and j.id_site=$id_site and a.ip_adr!=''
+          ORDER BY a.access, a.order_display, a.area_name";
+        else */
+          $sql = "SELECT ip_adr, id FROM ".$_COOKIE["table_prefix"]."_area WHERE ip_adr!='' ORDER BY access, order_display, area_name";
+        $res = grr_sql_query($sql);
+        if ($res) {
+          for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
+          {
+            if (compare_ip_adr($_SERVER['REMOTE_ADDR'],$row[0])) {
+                return $row[1];}
+          }
         }
     }
     if(authGetUserLevel(getUserName(),-1) >= 5)
         // si l'admin est connecté, on cherche le premier domaine venu
-        $res = grr_sql_query("SELECT id FROM grr_area ORDER BY access, order_display, area_name");
+        if (($id_site != -1) and ($use_multisite))
+          $res = grr_sql_query("SELECT a.id
+          FROM ".$_COOKIE["table_prefix"]."_area a, ".$_COOKIE["table_prefix"]."_j_site_area j
+          WHERE a.id=j.id_area and j.id_site=$id_site
+          ORDER BY a.order_display, a.area_name");
+        else
+          $res = grr_sql_query("SELECT id FROM ".$_COOKIE["table_prefix"]."_area ORDER BY access, order_display, area_name");
     else
         // s'il ne s'agit pas de l'admin, on cherche le premier domaine à accès non restreint
-        $res = grr_sql_query("SELECT id FROM grr_area where access!='r' ORDER BY access, order_display, area_name");
+        if (($id_site != -1) and ($use_multisite))
+          $res = grr_sql_query("SELECT a.id
+          FROM ".$_COOKIE["table_prefix"]."_area a, ".$_COOKIE["table_prefix"]."_j_site_area j
+          WHERE a.id=j.id_area and j.id_site=$id_site and a.access!='r'
+          ORDER BY a.order_display, a.area_name");
+        else
+          $res = grr_sql_query("SELECT id FROM ".$_COOKIE["table_prefix"]."_area where access!='r' ORDER BY access, order_display, area_name");
 
     if ($res && grr_sql_count($res)>0 ) {
         $row = grr_sql_row($res, 0);
+        grr_sql_free($res);
         return $row[0];
     } else {
         // On cherche le premier domaine à accès restreint
-        $res = grr_sql_query("select id from grr_area, grr_j_user_area where
-        grr_area.id=grr_j_user_area.id_area and
+        if (($id_site != -1) and ($use_multisite))
+          $res = grr_sql_query("SELECT a.id
+          FROM ".$_COOKIE["table_prefix"]."_area a, ".$_COOKIE["table_prefix"]."_j_site_area j, ".$_COOKIE["table_prefix"]."_j_user_area u
+          WHERE a.id=j.id_area and j.id_site=$id_site and a.id=u.id_area and u.login='" . getUserName() . "'
+          ORDER BY a.order_display, a.area_name");
+        else
+        $res = grr_sql_query("select id from ".$_COOKIE["table_prefix"]."_area, ".$_COOKIE["table_prefix"]."_j_user_area where
+          ".$_COOKIE["table_prefix"]."_area.id=".$_COOKIE["table_prefix"]."_j_user_area.id_area and
         login='" . getUserName() . "'
         ORDER BY order_display, area_name");
         if ($res && grr_sql_count($res)>0 ) {
             $row = grr_sql_row($res, 0);
+            grr_sql_free($res);
             return $row[0];
         }
     else
-        return 0;
+        return -1;
     }
 
 }
 
+# Retourne le site par défaut;
+function get_default_site()
+{
+        $res = grr_sql_query1("SELECT min(id) FROM ".$_COOKIE["table_prefix"]."_site");
+        return $res;
+}
 # Get the local day name based on language. Note 2000-01-02 is a Sunday.
 function day_name($daynumber)
 {
@@ -663,7 +676,12 @@ function hour_min_format()
         return "h:ia";
     }
 }
-
+/*
+Fonction utilisée dans le cas où les créneaux de réservation sont basés sur des intitulés pré-définis :
+Formatage de la date de début ou de fin de réservation.
+Dans le cas du début de réservation on a $mod_time=0
+Dans le cas de la fin de réservation on a $mod_time=-1
+*/
 function period_date_string($t, $mod_time=0)
 {
     global $periods_name, $dformat;
@@ -674,7 +692,12 @@ function period_date_string($t, $mod_time=0)
     return array($p_num, $periods_name[$p_num] . utf8_strftime(", ".$dformat,$t));
 }
 
-
+/*
+Fonction utilisée dans le cas où les créneaux de réservation sont basés sur des intitulés pré-définis :
+Formatage des périodes de début ou de fin de réservation.
+Dans le cas du début de réservation on a $mod_time=0
+Dans le cas de la fin de réservation on a $mod_time=-1
+*/
 function period_time_string($t, $mod_time=0)
 {
     global $periods_name;
@@ -722,9 +745,9 @@ function time_date_string_jma($t,$dformat)
 // Renvoie une balise span avec un style backgrounf-color correspondant au type de  la réservation
 function span_bgground($colclass)
 {
-    global $tab_couleur;
+	global $tab_couleur;
     static $ecolors;
-    $num_couleur = grr_sql_query1("select couleur from grr_type_area where type_letter='".$colclass."'");
+    $num_couleur = grr_sql_query1("select couleur from ".$_COOKIE["table_prefix"]."_type_area where type_letter='".$colclass."'");
     echo "<span style=\"background-color: ".$tab_couleur[$num_couleur]."; background-image: none; background-repeat: repeat; background-attachment: scroll;\">";
 }
 
@@ -732,11 +755,11 @@ function span_bgground($colclass)
 # Output a start table cell tag <td> with color class and fallback color.
 function tdcell($colclass, $width='')
 {
-    if ($width!="") $temp = " style=\"vertical-align: width: ".$width."%;\" "; else $temp = "";
+	if ($width!="") $temp = " style=\"vertical-align: width: ".$width."%;\" "; else $temp = "";
     global $tab_couleur;
     static $ecolors;
     if (($colclass >= "A") and ($colclass <= "Z")) {
-        $num_couleur = grr_sql_query1("select couleur from grr_type_area where type_letter='".$colclass."'");
+        $num_couleur = grr_sql_query1("select couleur from ".$_COOKIE["table_prefix"]."_type_area where type_letter='".$colclass."'");
         echo "<td bgcolor=\"".$tab_couleur[$num_couleur]."\" ".$temp.">";
     } else
         echo "<td class=\"$colclass\" ".$temp.">";
@@ -745,23 +768,24 @@ function tdcell($colclass, $width='')
 // Paul Force
 function tdcell_rowspan($colclass , $step)
 {
+	 
     global $tab_couleur;
     static $ecolors;
     if (($colclass >= "A") and ($colclass <= "Z")) {
-        $num_couleur = grr_sql_query1("select couleur from grr_type_area where type_letter='".$colclass."'");
+        $num_couleur = grr_sql_query1("select couleur from ".$_COOKIE["table_prefix"]."_type_area where type_letter='".$colclass."'");
         echo "<td rowspan=$step bgcolor=\"".$tab_couleur[$num_couleur]."\">";
     } else
-        echo "<td rowspan=$step td class=\"".$colclass."\">";
+        echo "<td rowspan=\"$step\" td class=\"".$colclass."\">";
 }
 
 
 # Display the entry-type color key. This has up to 2 rows, up to 10 columns.
 function show_colour_key($area_id)
 {
-    echo "<table border=0  width=\"100%\"><tr>\n";
+	echo "<table border=\"0\"><tr>\n";
     $nct = 0;
-    $sql = "SELECT DISTINCT t.id, t.type_name, t.type_letter FROM grr_type_area t
-    LEFT JOIN grr_j_type_area j on j.id_type=t.id
+    $sql = "SELECT DISTINCT t.id, t.type_name, t.type_letter FROM ".$_COOKIE["table_prefix"]."_type_area t
+    LEFT JOIN ".$_COOKIE["table_prefix"]."_j_type_area j on j.id_type=t.id
     WHERE (j.id_area  IS NULL or j.id_area != '".$area_id."')
     ORDER BY t.order_display";
     $res = grr_sql_query($sql);
@@ -769,7 +793,7 @@ function show_colour_key($area_id)
     for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
     {
         // La requête sql précédente laisse passer les cas où un type est non valide dans le domaine concerné ET au moins dans un autre domaine, d'où le test suivant
-        $test = grr_sql_query1("select id_type from grr_j_type_area where id_type = '".$row[0]."' and id_area='".$area_id."'");
+        $test = grr_sql_query1("select id_type from ".$_COOKIE["table_prefix"]."_j_type_area where id_type = '".$row[0]."' and id_area='".$area_id."'");
         if ($test == -1) {
             $id_type        = $row[0];
             $type_name        = $row[1];
@@ -815,11 +839,11 @@ function round_t_up($t, $resolution, $am7)
 # displayed.
 function make_area_select_html( $link, $current, $year, $month, $day, $user )
 {
-    global $vocab;
+	global $vocab;
     $out_html = "<b><i>".get_vocab("areas")."</i></b><form name=\"area\">
                  <select name=\"area\" onChange=\"area_go()\">";
 
-    $sql = "select id, area_name from grr_area order by order_display, area_name";
+    $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area order by order_display, area_name";
        $res = grr_sql_query($sql);
        if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
        {
@@ -851,12 +875,12 @@ function make_area_select_html( $link, $current, $year, $month, $day, $user )
 
 function make_room_select_html( $link, $area, $current, $year, $month, $day )
 {
-    global $vocab;
+	global $vocab;
     $out_html = "<b><i>".get_vocab('rooms')."</i></b><br><form name=\"room\">
                  <select name=\"room\" onChange=\"room_go()\">";
 
     $out_html .= "<option value=\"".$link."_all.php?year=$year&amp;month=$month&amp;day=$day&amp;area=$area\">".get_vocab("all_rooms")."</option>";
-    $sql = "select id, room_name, description from grr_room where area_id='".protect_data_sql($area)."' order by order_display,room_name";
+    $sql = "select id, room_name, description from ".$_COOKIE["table_prefix"]."_room where area_id='".protect_data_sql($area)."' order by order_display,room_name";
        $res = grr_sql_query($sql);
        if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
        {
@@ -888,7 +912,7 @@ function make_room_select_html( $link, $area, $current, $year, $month, $day )
 function make_area_list_html($link, $current, $year, $month, $day, $user) {
    global $vocab;
    echo "<b><i><span class=\"bground\">".get_vocab("areas")."</span></i></b><br>";
-   $sql = "select id, area_name from grr_area order by order_display, area_name";
+   $sql = "select id, area_name from ".$_COOKIE["table_prefix"]."_area order by order_display, area_name";
    $res = grr_sql_query($sql);
    if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
     {
@@ -905,7 +929,7 @@ function make_area_list_html($link, $current, $year, $month, $day, $user) {
 function make_room_list_html($link, $area, $current, $year, $month, $day) {
    global $vocab;
    echo "<b><i><span class=\"bground\">".get_vocab("rooms")."</span></i></b><br>";
-   $sql = "select id, room_name, description from grr_room where area_id='".protect_data_sql($area)."' order by order_display,room_name";
+   $sql = "select id, room_name, description from ".$_COOKIE["table_prefix"]."_room where area_id='".protect_data_sql($area)."' order by order_display,room_name";
    $res = grr_sql_query($sql);
    if ($res) for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
    {
@@ -921,29 +945,29 @@ function make_room_list_html($link, $area, $current, $year, $month, $day) {
 
 function send_mail($id_entry,$action,$dformat)
 {
-    global $vocab, $grrSettings, $locale, $weekstarts, $enable_periods, $periods_name;
+	global $vocab, $grrSettings, $locale, $weekstarts, $enable_periods, $periods_name;
     require_once "lib.inc.php";
     setlocale(LC_ALL,$locale);
     $sql = "
-    SELECT grr_entry.name,
-    grr_entry.description,
-    grr_entry.create_by,
-    grr_room.room_name,
-    grr_area.area_name,
-    grr_entry.type,
-    grr_entry.room_id,
-    grr_entry.repeat_id,
-    " . grr_sql_syntax_timestamp_to_unix("grr_entry.timestamp") . ",
-    (grr_entry.end_time - grr_entry.start_time),
-    grr_entry.start_time,
-    grr_entry.end_time,
-    grr_room.area_id,
-    grr_room.delais_option_reservation,
-    grr_entry.option_reservation
-    FROM grr_entry, grr_room, grr_area
-    WHERE grr_entry.room_id = grr_room.id
-    AND grr_room.area_id = grr_area.id
-    AND grr_entry.id='".protect_data_sql($id_entry)."'
+    SELECT ".$_COOKIE["table_prefix"]."_entry.name,
+    ".$_COOKIE["table_prefix"]."_entry.description,
+   ".$_COOKIE["table_prefix"]."_entry.create_by,
+    ".$_COOKIE["table_prefix"]."_room.room_name,
+    ".$_COOKIE["table_prefix"]."_area.area_name,
+    ".$_COOKIE["table_prefix"]."_entry.type,
+    ".$_COOKIE["table_prefix"]."_entry.room_id,
+    ".$_COOKIE["table_prefix"]."_entry.repeat_id,
+    " . grr_sql_syntax_timestamp_to_unix("".$_COOKIE["table_prefix"]."_entry.timestamp") . ",
+    (".$_COOKIE["table_prefix"]."_entry.end_time - ".$_COOKIE["table_prefix"]."_entry.start_time),
+    ".$_COOKIE["table_prefix"]."_entry.start_time,
+    ".$_COOKIE["table_prefix"]."_entry.end_time,
+    ".$_COOKIE["table_prefix"]."_room.area_id,
+    ".$_COOKIE["table_prefix"]."_room.delais_option_reservation,
+    ".$_COOKIE["table_prefix"]."_entry.option_reservation
+    FROM ".$_COOKIE["table_prefix"]."_entry, ".$_COOKIE["table_prefix"]."_room, ".$_COOKIE["table_prefix"]."_area
+    WHERE ".$_COOKIE["table_prefix"]."_entry.room_id = ".$_COOKIE["table_prefix"]."_room.id
+    AND ".$_COOKIE["table_prefix"]."_room.area_id = ".$_COOKIE["table_prefix"]."_area.id
+    AND ".$_COOKIE["table_prefix"]."_entry.id='".protect_data_sql($id_entry)."'
     ";
     $res = grr_sql_query($sql);
     if (! $res) fatal_error(0, grr_sql_error());
@@ -977,7 +1001,7 @@ function send_mail($id_entry,$action,$dformat)
 
     if($repeat_id != 0)
     {
-        $res = grr_sql_query("SELECT rep_type, end_date, rep_opt, rep_num_weeks FROM grr_repeat WHERE id='".protect_data_sql($repeat_id)."'");
+        $res = grr_sql_query("SELECT rep_type, end_date, rep_opt, rep_num_weeks FROM ".$_COOKIE["table_prefix"]."_repeat WHERE id='".protect_data_sql($repeat_id)."'");
         if (! $res) fatal_error(0, grr_sql_error());
 
         if (grr_sql_count($res) == 1)
@@ -999,14 +1023,14 @@ function send_mail($id_entry,$action,$dformat)
 
     # Now that we know all the data we start drawing it
 
-    $sql = "select nom, prenom, email, etat from grr_utilisateurs where login='$create_by'";
+    $sql = "select nom, prenom, email, etat from ".$_COOKIE["table_prefix"]."_utilisateurs where login='$create_by'";
     $res = grr_sql_query($sql);
     if (! $res) fatal_error(0, grr_sql_error());
     $row_user = grr_sql_row($res, 0);
 
     if ($action != '4') {
         $user_login=$_SESSION['login'];
-        $sql = "select nom, prenom, email from grr_utilisateurs where login='$user_login'";
+        $sql = "select nom, prenom, email from ".$_COOKIE["table_prefix"]."_utilisateurs where login='$user_login'";
         $res = grr_sql_query($sql);
         if (! $res) fatal_error(0, grr_sql_error());
         $row_user_login = grr_sql_row($res, 0);
@@ -1056,7 +1080,7 @@ function send_mail($id_entry,$action,$dformat)
         $reservation = $reservation.$vocab["description"]." ".$description."\n";
     }
     #Type de réservation
-    $temp = grr_sql_query1("select type_name from grr_type_area where type_letter='".$row[5]."'");
+    $temp = grr_sql_query1("select type_name from ".$_COOKIE["table_prefix"]."_type_area where type_letter='".$row[5]."'");
     if ($temp == -1) $temp = "?".$row[5]."?"; else $temp = removeMailUnicode($temp);
     $reservation = $reservation.$vocab["type"].str_replace("&nbsp;", " ",$vocab["deux_points"])." ".$temp."\n";
     if($rep_type != 0) {
@@ -1142,7 +1166,7 @@ function send_mail($id_entry,$action,$dformat)
         $m2->Get();
     }
 
-    $sql = "SELECT u.email FROM grr_utilisateurs u, grr_j_mailuser_room j WHERE
+    $sql = "SELECT u.email FROM ".$_COOKIE["table_prefix"]."_utilisateurs u, ".$_COOKIE["table_prefix"]."_j_mailuser_room j WHERE
     (j.id_room='".protect_data_sql($room_id)."' and u.login=j.login and u.etat='actif')  order by u.nom, u.prenom";
     $res = grr_sql_query($sql);
     $nombre = grr_sql_count($res);
@@ -1210,8 +1234,8 @@ function getUserName()
  */
 function getWritable($creator, $user, $id)
 {
-    $id_room = grr_sql_query1("SELECT room_id FROM grr_entry WHERE id='".protect_data_sql($id)."'");
-    $dont_allow_modify = grr_sql_query1("select dont_allow_modify from grr_room where id = '".$id_room."'");
+	$id_room = grr_sql_query1("SELECT room_id FROM ".$_COOKIE["table_prefix"]."_entry WHERE id='".protect_data_sql($id)."'");
+    $dont_allow_modify = grr_sql_query1("select dont_allow_modify from ".$_COOKIE["table_prefix"]."_room where id = '".$id_room."'");
     if ($dont_allow_modify != 'y') {  // si la valeur de dont_allow_modify est "n" ou bien "-1"
         // Always allowed to modify your own stuff
         if($creator == $user)
@@ -1241,7 +1265,7 @@ function authGetUserLevel($user,$id, $type='room')
     $level = "";
     // User not logged in, user level '0'
     if(!isset($user)) return 0;
-    $res = grr_sql_query("SELECT statut FROM grr_utilisateurs WHERE login ='".protect_data_sql($user)."'");
+    $res = grr_sql_query("SELECT statut FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login ='".protect_data_sql($user)."'");
     if (!$res || grr_sql_count($res) == 0) return 0;
     $status = mysqli_fetch_row($res);
     if (strtolower($status[0]) == 'visiteur') return 1;
@@ -1249,13 +1273,13 @@ function authGetUserLevel($user,$id, $type='room')
     if (strtolower($status[0]) == 'utilisateur') {
         if ($type == 'room') {
         // On regarde si l'utilisateur est gestionnaire des réservations pour une ressource
-            $res2 = grr_sql_query("SELECT * FROM grr_utilisateurs u, grr_j_user_room j
+            $res2 = grr_sql_query("SELECT * FROM ".$_COOKIE["table_prefix"]."_utilisateurs u, ".$_COOKIE["table_prefix"]."_j_user_room j
             WHERE u.login=j.login and u.login = '".protect_data_sql($user)."' and j.id_room='".protect_data_sql($id)."'");
             if (grr_sql_count($res2) > 0)
                 return 3;
         // On regarde si l'utilisateur est administrateur du domaine auquel la ressource $id appartient
             $id_area = grr_sql_query1("select area_id from grr_room where id='".protect_data_sql($id)."'");
-            $res3 = grr_sql_query("SELECT u.login FROM grr_utilisateurs u, grr_j_useradmin_area j
+            $res3 = grr_sql_query("SELECT u.login FROM ".$_COOKIE["table_prefix"]."_utilisateurs u, ".$_COOKIE["table_prefix"]."_j_useradmin_area j
             WHERE (u.login=j.login and j.id_area='".protect_data_sql($id_area)."' and u.login='".protect_data_sql($user)."')");
             if (grr_sql_count($res3) > 0)
                 return 4;
@@ -1267,13 +1291,13 @@ function authGetUserLevel($user,$id, $type='room')
         if ($type == 'area') {
             if ($id == '-1') {
                 //On regarde si l'utilisateur est administrateur d'un domaine quelconque
-                $res2 = grr_sql_query("SELECT u.login FROM grr_utilisateurs u, grr_j_useradmin_area j
+                $res2 = grr_sql_query("SELECT u.login FROM ".$_COOKIE["table_prefix"]."_utilisateurs u, ".$_COOKIE["table_prefix"]."_j_useradmin_area j
                 WHERE (u.login=j.login and u.login='".protect_data_sql($user)."')");
                 if (grr_sql_count($res2) > 0)
                     return 4;
             } else {
                 //On regarde si l'utilisateur est administrateur du domaine dont l'id est $id
-                $res3 = grr_sql_query("SELECT u.login FROM grr_utilisateurs u, grr_j_useradmin_area j
+                $res3 = grr_sql_query("SELECT u.login FROM ".$_COOKIE["table_prefix"]."_utilisateurs u, ".$_COOKIE["table_prefix"]."_j_useradmin_area j
                 WHERE (u.login=j.login and j.id_area='".protect_data_sql($id)."' and u.login='".protect_data_sql($user)."')");
                 if (grr_sql_count($res3) > 0)
                     return 4;
@@ -1297,17 +1321,17 @@ function authUserAccesArea($user,$id)
         return 0;
         die();
     }
-    $sql = "SELECT * FROM grr_utilisateurs WHERE (login = '".protect_data_sql($user)."' and statut='administrateur')";
+    $sql = "SELECT * FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE (login = '".protect_data_sql($user)."' and statut='administrateur')";
     $res = grr_sql_query($sql);
     if (grr_sql_count($res) != "0") return 1;
 
-    $sql = "SELECT * FROM grr_area WHERE (id = '".protect_data_sql($id)."' and access='r')";
+    $sql = "SELECT * FROM ".$_COOKIE["table_prefix"]."_area WHERE (id = '".protect_data_sql($id)."' and access='r')";
     $res = grr_sql_query($sql);
     $test = grr_sql_count($res);
     if ($test == "0") {
         return 1;
     } else {
-        $sql2 = "SELECT * FROM grr_j_user_area WHERE (login = '".protect_data_sql($user)."' and id_area = '".protect_data_sql($id)."')";
+        $sql2 = "SELECT * FROM ".$_COOKIE["table_prefix"]."_j_user_area WHERE (login = '".protect_data_sql($user)."' and id_area = '".protect_data_sql($id)."')";
         $res2 = grr_sql_query($sql2);
         $test2 = grr_sql_count($res2);
         if ($test2 != "0") {
@@ -1324,7 +1348,7 @@ function authUserAccesArea($user,$id)
 function UserRoomMaxBooking($user, $id_room, $number) {
   if ($id_room == '') return 0;
   // On regarde si le nombre de réservation de la ressource est limité
-  $sql = "SELECT max_booking FROM grr_room WHERE id = '".protect_data_sql($id_room)."'";
+  $sql = "SELECT max_booking FROM ".$_COOKIE["table_prefix"]."_room WHERE id = '".protect_data_sql($id_room)."'";
   $result = grr_sql_query1($sql);
   if ($result > 0) {
      if(authGetUserLevel($user,$id_room) < 2 ) {
@@ -1336,9 +1360,9 @@ function UserRoomMaxBooking($user, $id_room, $number) {
         $hour  = date("H");
         $minute = date("i");
         $now = mktime($hour, $minute, 0, $month, $day, $year);
-        $max_booking = grr_sql_query1("SELECT max_booking FROM grr_room WHERE id='".protect_data_sql($id_room)."'");
+        $max_booking = grr_sql_query1("SELECT max_booking FROM ".$_COOKIE["table_prefix"]."_room WHERE id='".protect_data_sql($id_room)."'");
 		$adversaire = $_SESSION['nom']." ".$_SESSION['prenom'];
-		$sql2 = "SELECT * FROM grr_entry WHERE (room_id = '".protect_data_sql($id_room)."' and description != 'championnat individuel' and (create_by = '".protect_data_sql($user)."' OR description = '".$adversaire."') and end_time > '$now')";
+		$sql2 = "SELECT * FROM ".$_COOKIE["table_prefix"]."_entry WHERE (room_id = '".protect_data_sql($id_room)."' and description != 'championnat individuel' and (create_by = '".protect_data_sql($user)."' OR description = '".$adversaire."') and end_time > '$now')";
         $res = grr_sql_query($sql2);
         $nb_bookings = grr_sql_count($res) + $number;
         if ($nb_bookings > $max_booking) {
@@ -1368,7 +1392,7 @@ function UserRoomMaxBooking($user, $id_room, $number) {
 function AdvRoomMaxBooking($user, $description, $id_room, $number) {
   if ($id_room == '') return 0;
   // On regarde si le nombre de réservation de la ressource est limité
-  $sql = "SELECT max_booking FROM grr_room WHERE id = '".protect_data_sql($id_room)."'";
+  $sql = "SELECT max_booking FROM ".$_COOKIE["table_prefix"]."_room WHERE id = '".protect_data_sql($id_room)."'";
   $result = grr_sql_query1($sql);
   if ($result > 0) {
      if(authGetUserLevel($user,$id_room) < 2 ) {
@@ -1380,7 +1404,7 @@ function AdvRoomMaxBooking($user, $description, $id_room, $number) {
         $hour  = date("H");
         $minute = date("i");
         $now = mktime($hour, $minute, 0, $month, $day, $year);
-        $max_booking = grr_sql_query1("SELECT max_booking FROM grr_room WHERE id='".protect_data_sql($id_room)."'");
+        $max_booking = grr_sql_query1("SELECT max_booking FROM ".$_COOKIE["table_prefix"]."_room WHERE id='".protect_data_sql($id_room)."'");
 		//recherche du login de l'adversaire pour vérifier s'il a déjà des réservations en cours (vérification avec la fonction AdvRoomMaxbooking)
 			if (isset($description)){
 			$tableau = explode(" ", $description);
@@ -1388,14 +1412,14 @@ function AdvRoomMaxBooking($user, $description, $id_room, $number) {
 			if ($exp == 2){
 			$nomadv = $tableau[0];
 			$prenomadv = $tableau[1];
-			$sql = "select login from grr_utilisateurs where nom ='".$nomadv."' and prenom = '".$prenomadv."'order by nom";
+			$sql = "select login from ".$_COOKIE["table_prefix"]."_utilisateurs where nom ='".$nomadv."' and prenom = '".$prenomadv."'order by nom";
 			$adv = grr_sql_query($sql);
 	
 			for ($i = 0; ($row = grr_sql_row($adv, $i)); $i++)
 			$adversaire = $row[0];
 			}
 			}
-        $sql2 = "SELECT * FROM grr_entry WHERE (room_id = '".protect_data_sql($id_room)."' and create_by = '".protect_data_sql($adversaire)."' and end_time > '$now')";
+        $sql2 = "SELECT * FROM ".$_COOKIE["table_prefix"]."_entry WHERE (room_id = '".protect_data_sql($id_room)."' and create_by = '".protect_data_sql($adversaire)."' and end_time > '$now')";
         $res = grr_sql_query($sql2);
         $nb_bookings = grr_sql_count($res) + $number;
         if ($nb_bookings > $max_booking) {
@@ -1424,7 +1448,7 @@ function AdvRoomMaxBooking($user, $description, $id_room, $number) {
 function UserAreaGroup($user, $id_area) {
 
 	// On teste si l'utilisateur est administrateur
-  $sql = "select statut from grr_utilisateurs WHERE login = '".protect_data_sql($user)."'";
+  $sql = "select statut from ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".protect_data_sql($user)."'";
   $statut_user = grr_sql_query1($sql);
   if ($statut_user == 'administrateur') {
     return true;
@@ -1432,12 +1456,12 @@ function UserAreaGroup($user, $id_area) {
   }
   
   // On cherche le groupe de l'utilisateur
-  $sql2= "SELECT group_id FROM grr_utilisateurs WHERE login='".protect_data_sql($user)."'"; 
+  $sql2= "SELECT group_id FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='".protect_data_sql($user)."'"; 
   $result_group = grr_sql_query1($sql2);
   
   global $enable_periods;
   // On regarde si id de l'area est le même que le groupe de l'utilisateur qui réserve
-  $sql = "SELECT group_id FROM grr_area WHERE id = '".protect_data_sql($id_area)."'";
+  $sql = "SELECT group_id FROM ".$_COOKIE["table_prefix"]."_area WHERE id = '".protect_data_sql($id_area)."'";
   $result_area = grr_sql_query1($sql);
   if (($result_group == $result_area) OR ($enable_periods != 'n')) {
        return true;
@@ -1458,7 +1482,7 @@ function verif_booking_date($user, $id, $id_room, $date_booking, $date_now, $ena
   global $allow_user_delete_after_beginning, $correct_diff_time_local_serveur;
 
   // On teste si l'utilisateur est administrateur
-  $sql = "select statut from grr_utilisateurs WHERE login = '".protect_data_sql($user)."'";
+  $sql = "select statut from ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".protect_data_sql($user)."'";
   $statut_user = grr_sql_query1($sql);
   if ($statut_user == 'administrateur') {
     return true;
@@ -1466,7 +1490,7 @@ function verif_booking_date($user, $id, $id_room, $date_booking, $date_now, $ena
   }
 
   // A-t-on le droit d'agir dans le passé ?
-  $allow_action_in_past = grr_sql_query1("select allow_action_in_past from grr_room where id = '".protect_data_sql($id_room)."'");
+  $allow_action_in_past = grr_sql_query1("select allow_action_in_past from ".$_COOKIE["table_prefix"]."_room where id = '".protect_data_sql($id_room)."'");
   if ($allow_action_in_past == 'y') {
     return true;
     die();
@@ -1497,9 +1521,9 @@ function verif_booking_date($user, $id, $id_room, $date_booking, $date_now, $ena
     }
 
     if (isset($allow_user_delete_after_beginning) and ($allow_user_delete_after_beginning == 1))
-        $sql = "SELECT end_time FROM grr_entry WHERE id = '".protect_data_sql($id)."'";
+        $sql = "SELECT end_time FROM ".$_COOKIE["table_prefix"]."_entry WHERE id = '".protect_data_sql($id)."'";
     else
-        $sql = "SELECT start_time FROM grr_entry WHERE id = '".protect_data_sql($id)."'";
+        $sql = "SELECT start_time FROM ".$_COOKIE["table_prefix"]."_entry WHERE id = '".protect_data_sql($id)."'";
     $date_booking = grr_sql_query1($sql);
     if ($date_booking < $date_now) {
       return false;
@@ -1526,16 +1550,16 @@ function verif_booking_double($create_by, $name, $description, $area, $id_room, 
   
  // On teste si l'utilisateur est administrateur général, de domaine ou de ressource !
   //admin de domaine
-  $sqldom = "select id_area from grr_j_useradmin_area WHERE login = '".protect_data_sql($create_by)."' AND id_area = '".protect_data_sql($area)."'";
+  $sqldom = "select id_area from ".$_COOKIE["table_prefix"]."_j_useradmin_area WHERE login = '".protect_data_sql($create_by)."' AND id_area = '".protect_data_sql($area)."'";
   $statut_user_dom = grr_sql_query($sqldom);
   $result_dom = grr_sql_count($statut_user_dom);
   
   //admin de ressource
-  $sqlres = "select id_room from grr_j_user_room WHERE login = '".protect_data_sql($create_by)."' AND id_room = '".protect_data_sql($id_room)."'";
+  $sqlres = "select id_room from ".$_COOKIE["table_prefix"]."_j_user_room WHERE login = '".protect_data_sql($create_by)."' AND id_room = '".protect_data_sql($id_room)."'";
   $statut_user_res = grr_sql_query($sqlres);
   $result_res = grr_sql_count($statut_user_res);
   
-  $sql = "select statut from grr_utilisateurs WHERE login = '".protect_data_sql($create_by)."'";
+  $sql = "select statut from ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".protect_data_sql($create_by)."'";
   $statut_user = grr_sql_query1($sql);
   if (($statut_user == 'administrateur') OR ($result_dom == 1) OR ($result_res == 1)){
     return true;
@@ -1543,7 +1567,7 @@ function verif_booking_double($create_by, $name, $description, $area, $id_room, 
   }
   
   //on recherche si les joueurs qui réservent ont déjà une réservation avant ou après celle souhaitée !
-$sql = " SELECT id FROM grr_entry WHERE name = '".protect_data_sql($description)."' AND room_id = '".protect_data_sql($id_room)."' AND end_time= '".protect_data_sql($starttime)."'
+$sql = " SELECT id FROM ".$_COOKIE["table_prefix"]."_entry WHERE name = '".protect_data_sql($description)."' AND room_id = '".protect_data_sql($id_room)."' AND end_time= '".protect_data_sql($starttime)."'
 						 OR description = '".protect_data_sql($description)."' AND description !='invite' AND description !='solo' AND room_id = '".protect_data_sql($id_room)."' AND end_time= '".protect_data_sql($starttime)."'
 						 OR name = '".protect_data_sql($description)."' AND room_id = '".protect_data_sql($id_room)."' AND start_time= '".protect_data_sql($endtime)."'
 						 OR description = '".protect_data_sql($description)."' AND description !='invite' AND description !='solo' AND room_id = '".protect_data_sql($id_room)."' AND start_time= '".protect_data_sql($endtime)."'
@@ -1565,7 +1589,7 @@ if (mysqli_num_rows($result) == 1){
 function verif_booking_week($create_by, $name, $description, $id_room, $starttime, $endtime) {
   
   // On teste si l'utilisateur est administrateur
-  $sql = "select statut from grr_utilisateurs WHERE login = '".protect_data_sql($create_by)."'";
+  $sql = "select statut from ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".protect_data_sql($create_by)."'";
   $statut_user = grr_sql_query1($sql);
   if ($statut_user == 'administrateur') {
     return true;
@@ -1583,7 +1607,7 @@ $end_week = $begin_week + 604800;
 
  
  // On regarde si le nombre de réservation de la ressource est limité
-  $sql = "SELECT max_booking_week FROM grr_room WHERE id = '".protect_data_sql($id_room)."'";
+  $sql = "SELECT max_booking_week FROM ".$_COOKIE["table_prefix"]."_room WHERE id = '".protect_data_sql($id_room)."'";
   $result_week = grr_sql_query1($sql);
 
 
@@ -1592,11 +1616,11 @@ $end_week = $begin_week + 604800;
   //premier test sur le paramètre 'championnat individuel' pour permettre aux joueurs d'éffecteur plusieurs résa de champ ind malgré la restriction du nombre de résa sur le court
 	if ($description != 'championnat individuel')
 	{
-	$sql2 = " SELECT id FROM grr_entry WHERE name = '".protect_data_sql($name)."' AND room_id = '".protect_data_sql($id_room)."'AND start_time > '".protect_data_sql($begin_week)."'AND end_time < '".protect_data_sql($end_week)."'
+	$sql2 = " SELECT id FROM ".$_COOKIE["table_prefix"]."_entry WHERE name = '".protect_data_sql($name)."' AND room_id = '".protect_data_sql($id_room)."'AND start_time > '".protect_data_sql($begin_week)."'AND end_time < '".protect_data_sql($end_week)."'
 						OR description = '".protect_data_sql($name)."' AND room_id = '".protect_data_sql($id_room)."'AND start_time > '".protect_data_sql($begin_week)."'AND end_time < '".protect_data_sql($end_week)."'";
 						
 	$result2 = grr_sql_query($sql2);
-	$sql3 = " SELECT id FROM grr_entry WHERE  name = '".protect_data_sql($description)."' AND room_id = '".protect_data_sql($id_room)."'AND start_time > '".protect_data_sql($begin_week)."'AND end_time < '".protect_data_sql($end_week)."'
+	$sql3 = " SELECT id FROM ".$_COOKIE["table_prefix"]."_entry WHERE  name = '".protect_data_sql($description)."' AND room_id = '".protect_data_sql($id_room)."'AND start_time > '".protect_data_sql($begin_week)."'AND end_time < '".protect_data_sql($end_week)."'
 						OR description = '".protect_data_sql($description)."' AND room_id = '".protect_data_sql($id_room)."'AND start_time > '".protect_data_sql($begin_week)."'AND end_time < '".protect_data_sql($end_week)."'";
 	$result3 = grr_sql_query($sql3);
 	} else {
@@ -1624,16 +1648,16 @@ function verif_booking_max_all_ressources($create_by, $name, $description, $area
   
   // On teste si l'utilisateur est administrateur général, de domaine ou de ressource !
   //admin de domaine
-  $sqldom = "select id_area from grr_j_useradmin_area WHERE login = '".protect_data_sql($create_by)."' AND id_area = '".protect_data_sql($area)."'";
+  $sqldom = "select id_area from ".$_COOKIE["table_prefix"]."_j_useradmin_area WHERE login = '".protect_data_sql($create_by)."' AND id_area = '".protect_data_sql($area)."'";
   $statut_user_dom = grr_sql_query($sqldom);
   $result_dom = grr_sql_count($statut_user_dom);
   
   //admin de ressource
-  $sqlres = "select id_room from grr_j_user_room WHERE login = '".protect_data_sql($create_by)."' AND id_room = '".protect_data_sql($room_id)."'";
+  $sqlres = "select id_room from ".$_COOKIE["table_prefix"]."_j_user_room WHERE login = '".protect_data_sql($create_by)."' AND id_room = '".protect_data_sql($room_id)."'";
   $statut_user_res = grr_sql_query($sqlres);
   $result_res = grr_sql_count($statut_user_res);
   
-  $sql = "select statut from grr_utilisateurs WHERE login = '".protect_data_sql($create_by)."'";
+  $sql = "select statut from ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".protect_data_sql($create_by)."'";
   $statut_user = grr_sql_query1($sql);
   if (($statut_user == 'administrateur') OR ($result_dom == 1) OR ($result_res == 1)){
     return true;
@@ -1656,18 +1680,18 @@ function verif_booking_max_all_ressources($create_by, $name, $description, $area
 		//recherche pour le joueur qui reserve
 	
 		//Recherche nom prénom du joueur qui réserve
-		$query = "SELECT nom, prenom FROM grr_utilisateurs WHERE login='$create_by'";
+		$query = "SELECT nom, prenom FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login='$create_by'";
 		$resul = grr_sql_query ($query) or die ("Erreur pendant la requête");
 		$line = mysqli_fetch_array ($resul);
 		list($nomres, $prenomres)=$line;
 	
-		$sql = " SELECT id FROM grr_entry WHERE ((create_by = '".protect_data_sql($create_by)."' AND (description <> 'championnat individuel')) OR description = '".protect_data_sql($nomres)." ".protect_data_sql($prenomres)."') AND end_time > '".protect_data_sql($date_now)."'";
+		$sql = " SELECT id FROM ".$_COOKIE["table_prefix"]."_entry WHERE ((create_by = '".protect_data_sql($create_by)."' AND (description <> 'championnat individuel')) OR description = '".protect_data_sql($nomres)." ".protect_data_sql($prenomres)."') AND end_time > '".protect_data_sql($date_now)."'";
 		$res = grr_sql_query($sql);
 		$result = grr_sql_count($res);
 	
 	
 		//recherche pour le joueur  adversaire
-		$sql1 = " SELECT id FROM grr_entry WHERE ((( description = '".protect_data_sql($description)."' AND description <> 'invite') OR name = '".protect_data_sql($description)."') AND description <> 'championnat individuel') AND end_time > '".protect_data_sql($date_now)."'";
+		$sql1 = " SELECT id FROM ".$_COOKIE["table_prefix"]."_entry WHERE ((( description = '".protect_data_sql($description)."' AND description <> 'invite') OR name = '".protect_data_sql($description)."') AND description <> 'championnat individuel') AND end_time > '".protect_data_sql($date_now)."'";
 		$res1 = grr_sql_query($sql1);
 		$result1 = grr_sql_count($res1);	
 		
@@ -1685,7 +1709,7 @@ function verif_booking_max_all_ressources($create_by, $name, $description, $area
 function verif_invite($user, $description) {
   
 	// On teste si l'utilisateur est administrateur
-	$sql = "select statut from grr_utilisateurs WHERE login = '".protect_data_sql($user)."'";
+	$sql = "select statut from ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".protect_data_sql($user)."'";
 	$statut_user = grr_sql_query1($sql);
 	if ($statut_user == 'administrateur') {
     return true;
@@ -1693,14 +1717,14 @@ function verif_invite($user, $description) {
 	}elseif($description == 'invite ')
 	{
 	//on recherche si l'invité a encore du crédit et on décrémente de 1
-	$sql = " SELECT invite FROM grr_utilisateurs WHERE login = '".protect_data_sql($user)."'";
+	$sql = " SELECT invite FROM ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".protect_data_sql($user)."'";
 	$result = grr_sql_query1($sql);
 	  if ( $result[0] == 0){
       return false;
 	  die();
       } else {
 	   $result--;
-	   grr_sql_query("UPDATE grr_utilisateurs SET invite = '".protect_data_sql($result)."' WHERE login = '".protect_data_sql($user)."'");
+	   grr_sql_query("UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET invite = '".protect_data_sql($result)."' WHERE login = '".protect_data_sql($user)."'");
        return true;
 	   die();
       }
@@ -1716,23 +1740,23 @@ function verif_booking_same_date_other_room ($user, $name, $description, $area, 
   
 // On teste si l'utilisateur est administrateur général, de domaine ou de ressource !
   //admin de domaine
-  $sqldom = "select id_area from grr_j_useradmin_area WHERE login = '".protect_data_sql($user)."' AND id_area = '".protect_data_sql($area)."'";
+  $sqldom = "select id_area from ".$_COOKIE["table_prefix"]."_j_useradmin_area WHERE login = '".protect_data_sql($user)."' AND id_area = '".protect_data_sql($area)."'";
   $statut_user_dom = grr_sql_query($sqldom);
   $result_dom = grr_sql_count($statut_user_dom);
   
   //admin de ressource
-  $sqlres = "select id_room from grr_j_user_room WHERE login = '".protect_data_sql($user)."' AND id_room = '".protect_data_sql($room_id)."'";
+  $sqlres = "select id_room from ".$_COOKIE["table_prefix"]."_j_user_room WHERE login = '".protect_data_sql($user)."' AND id_room = '".protect_data_sql($room_id)."'";
   $statut_user_res = grr_sql_query($sqlres);
   $result_res = grr_sql_count($statut_user_res);
   
-  $sql = "select statut from grr_utilisateurs WHERE login = '".protect_data_sql($user)."'";
+  $sql = "select statut from ".$_COOKIE["table_prefix"]."_utilisateurs WHERE login = '".protect_data_sql($user)."'";
   $statut_user = grr_sql_query1($sql);
   if (($statut_user == 'administrateur') OR ($result_dom == 1) OR ($result_res == 1)){
     return true;
     die();
   }
 //on recherche si la résa existe avec le nom d'une autre ressource
-$sql = " SELECT id FROM grr_entry WHERE ((name ='".protect_data_sql($name)."' OR name ='".protect_data_sql($description)."') OR (description ='".protect_data_sql($name)."' OR (description ='".protect_data_sql($description)."' AND description != 'invite' AND description != 'solo'))) AND start_time= '".protect_data_sql($starttime)."'";
+$sql = " SELECT id FROM ".$_COOKIE["table_prefix"]."_entry WHERE ((name ='".protect_data_sql($name)."' OR name ='".protect_data_sql($description)."') OR (description ='".protect_data_sql($name)."' OR (description ='".protect_data_sql($description)."' AND description != 'invite' AND description != 'solo'))) AND start_time= '".protect_data_sql($starttime)."'";
 $result = grr_sql_query($sql);
 if (mysqli_num_rows($result) == 0){
       return true;
@@ -1762,7 +1786,7 @@ function verif_delais_max_resa_room($user, $id_room, $date_booking) {
     return true;
     die();
   }
-  $delais_max_resa_room = grr_sql_query1("select delais_max_resa_room from grr_room where id='".protect_data_sql($id_room)."'");
+  $delais_max_resa_room = grr_sql_query1("select delais_max_resa_room from ".$_COOKIE["table_prefix"]."_room where id='".protect_data_sql($id_room)."'");
   if ($delais_max_resa_room == -1) {
     return true;
     die();
@@ -1772,6 +1796,29 @@ function verif_delais_max_resa_room($user, $id_room, $date_booking) {
   } else {
     return true;
     die();
+  }
+}
+/* function verif_acces_ressource : vérifier l'accès à la ressource
+ *$user : le login de l'utilisateur
+ * $id_room : l'id de la ressource.
+ */
+function verif_acces_ressource($user, $id_room) {
+  if ($id_room != 'all') {
+    $who_can_see = grr_sql_query1("select who_can_see from ".$_COOKIE["table_prefix"]."_room where id='".$id_room."'");
+    if(authGetUserLevel($user,$id_room) >= $who_can_see)
+        return TRUE;
+    else
+        return FALSE;
+  } else {
+    $tab_rooms_noaccess = array();
+    $sql = "select id, who_can_see from ".$_COOKIE["table_prefix"]."_room";
+    $res = grr_sql_query($sql);
+    if (! $res) fatal_error(0, grr_sql_error());
+    for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
+      if(authGetUserLevel($user,$row[0]) < $row[1])
+          $tab_rooms_noaccess[] = $row[0];
+    }
+    return $tab_rooms_noaccess;
   }
 }
 
@@ -1787,7 +1834,7 @@ function verif_delais_min_resa_room($user, $id_room, $date_booking) {
     return true;
     die();
   }
-  $delais_min_resa_room = grr_sql_query1("select delais_min_resa_room from grr_room where id='".protect_data_sql($id_room)."'");
+  $delais_min_resa_room = grr_sql_query1("select delais_min_resa_room from ".$_COOKIE["table_prefix"]."_room where id='".protect_data_sql($id_room)."'");
   if ($delais_min_resa_room == 0) {
     return true;
     die();
@@ -1868,7 +1915,7 @@ function showAccessDeniedMaxBookings($day, $month, $year, $area, $id_room,$back)
     <H1><?php echo get_vocab("accessdenied")?></H1>
     <P>
     <?php
-    $max_booking = grr_sql_query1("SELECT max_booking FROM grr_room WHERE id='".protect_data_sql($id_room)."'");
+    $max_booking_per_room = grr_sql_query1("SELECT max_booking FROM ".$_COOKIE["table_prefix"]."_room WHERE id='".protect_data_sql($id_room)."'");
     echo get_vocab("msg_max_booking").$max_booking."<br><br>".get_vocab("accessdeniedtoomanybooking");
     ?>
     </P>
@@ -1977,7 +2024,7 @@ function unhtmlentities ($string)
 function get_planning_area_values($id_area) {
     global $resolution, $morningstarts, $eveningends, $eveningends_minutes, $weekstarts, $twentyfourhour_format, $enable_periods, $periods_name, $display_day, $nb_display_day;
     $sql = "SELECT calendar_default_values, resolution_area, morningstarts_area, eveningends_area, eveningends_minutes_area, weekstarts_area, twentyfourhour_format_area, enable_periods, display_days
-    FROM grr_area
+    FROM ".$_COOKIE["table_prefix"]."_area
     WHERE id = '".protect_data_sql($id_area)."'";
     $res = grr_sql_query($sql);
     if (! $res) {
@@ -2003,11 +2050,11 @@ function get_planning_area_values($id_area) {
         $resolution = 60;
         $morningstarts = 12;
         $eveningends = 12;
-        $sql_periode = grr_sql_query("SELECT nom_periode FROM grr_area_periodes where id_area='".$id_area."'");
+        $sql_periode = grr_sql_query("SELECT nom_periode FROM ".$_COOKIE["table_prefix"]."_area_periodes where id_area='".$id_area."'");
         $eveningends_minutes = grr_sql_count($sql_periode)-1;
         $i = 0;
         while ($i < grr_sql_count($sql_periode)) {
-            $periods_name[$i] = grr_sql_query1("select nom_periode FROM grr_area_periodes where id_area='".$id_area."' and num_periode= '".$i."'");
+            $periods_name[$i] = grr_sql_query1("select nom_periode FROM ".$_COOKIE["table_prefix"]."_area_periodes where id_area='".$id_area."' and num_periode= '".$i."'");
             $i++;
         }
         $enable_periods = "y";
@@ -2066,14 +2113,14 @@ function verify_confirm_reservation() {
     $year  = date("Y");
     $date_now = mktime(0,0,0,$month,$day,$year);
     if ((getSettingValue("date_verify_reservation") == "") or (getSettingValue("date_verify_reservation") < $date_now )) {
-        $res = grr_sql_query("select id from grr_room where delais_option_reservation > 0");
+        $res = grr_sql_query("select id from ".$_COOKIE["table_prefix"]."_room where delais_option_reservation > 0");
         if (! $res) {
             //    fatal_error(0, grr_sql_error());
             include "trailer.inc.php";
             exit;
         } else {
             for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
-                $res2 = grr_sql_query("select id from grr_entry where option_reservation < '".$date_now."' and option_reservation != '-1' and room_id='".$row[0]."'");
+                $res2 = grr_sql_query("select id from ".$_COOKIE["table_prefix"]."_entry where option_reservation < '".$date_now."' and option_reservation != '-1' and room_id='".$row[0]."'");
                 if (! $res2) {
                     //    fatal_error(0, grr_sql_error());
                     include "trailer.inc.php";
@@ -2082,7 +2129,7 @@ function verify_confirm_reservation() {
                     for ($j = 0; ($row2 = grr_sql_row($res2, $j)); $j++) {
                         if (getSettingValue("automatic_mail") == 'yes') echo send_mail($row2[0],4,$dformat);
                         // On efface la réservation
-                        grr_sql_command("DELETE FROM grr_entry WHERE id=" . $row2[0]);
+                        grr_sql_command("DELETE FROM ".$_COOKIE["table_prefix"]."_entry WHERE id=" . $row2[0]);
 
                      }
                 }
@@ -2096,7 +2143,7 @@ function verify_confirm_reservation() {
 }
 
 function est_hors_reservation($time) {
-    $test = grr_sql_query1("select DAY from grr_calendar where DAY = '".$time."'");
+    $test = grr_sql_query1("select DAY from ".$_COOKIE["table_prefix"]."_calendar where DAY = '".$time."'");
     if ($test != -1)
         return TRUE;
     else
@@ -2105,12 +2152,51 @@ function est_hors_reservation($time) {
 }
 
 function resa_est_hors_reservation($start_time,$end_time) {
-    $test = grr_sql_query1("select DAY from grr_calendar where DAY >= '".$start_time."' and DAY <= '".$end_time."'");
+    $test = grr_sql_query1("select DAY from ".$_COOKIE["table_prefix"]."_calendar where DAY >= '".$start_time."' and DAY <= '".$end_time."'");
     if ($test != -1)
         return TRUE;
     else
         return FALSE;
 
+/*
+Affiche un message pop-up
+$type_affichage = "user" -> Affichage des "pop-up" de confirmation après la création/modification/suppression d'une réservation
+Dans ce cas, l'affichage n'a lieu que si $_SESSION['displ_msg']='yes'
+$type_affichage = "admin" -> Affichage des "pop-up" de confirmation dans les menus d'administration
+$type_affichage = "force" -> On force l'affichage du pop-up même si javascript_info_admin_disabled est TRUE
+*/
+function affiche_pop_up($msg="",$type_affichage="user"){
+    // Si $_SESSION["msg_a_afficher"] est défini, on l'affiche, sinon, on affiche $msg passé en variable
+    if ((isset($_SESSION["msg_a_afficher"])) and ($_SESSION["msg_a_afficher"] != "")) {
+        $msg = $_SESSION["msg_a_afficher"];
+    }
+    if ($msg != "") {
+      if ($type_affichage == "user") {
+        if (!(getSettingValue("javascript_info_disabled"))) {
+          echo "<script type=\"text/javascript\">";
+          if ((isset($_SESSION['displ_msg'])) and ($_SESSION['displ_msg']=='yes'))  echo " alert(\"".$msg."\")";
+          echo "</script>";
+       }
+      } else if ($type_affichage == "admin") {
+        if (!(getSettingValue("javascript_info_admin_disabled")))  {
+            echo "<script type=\"text/javascript\">";
+            echo "<!--\n";
+            echo " alert(\"".$msg."\")";
+            echo "//-->";
+            echo "</script>";
+        }
+     } else {
+            echo "<script type=\"text/javascript\">";
+            echo "<!--\n";
+            echo " alert(\"".$msg."\")";
+            echo "//-->";
+            echo "</script>";
+     }
+    }
+    $_SESSION['displ_msg']="";
+    $_SESSION["msg_a_afficher"] = "";
+
+}
 }
 // Les lignes suivantes permettent la compatibilité de GRR avec la variables register_global à off
 unset($day);
@@ -2157,7 +2243,7 @@ function verif_group($user, $group) {
   
   
   //on recherche si l'utilisateur fait partie du bon groupe $group
-$sql = " SELECT group FROM grr_entry WHERE login = '".protect_data_sql($user)."'";
+$sql = " SELECT group FROM ".$_COOKIE["table_prefix"]."_entry WHERE login = '".protect_data_sql($user)."'";
 $result = grr_sql_query($sql);
 if ((mysqli_num_rows($result) != 0) and (mysqli_num_rows($result) == $group)){
       return true;

@@ -29,6 +29,7 @@
 
 require_once("include/connect.inc.php");
 require_once("include/config.inc.php");
+include "include/misc.inc.php";
 include "include/functions.inc.php";
 require_once("include/$dbsys.inc.php");
 // Settings

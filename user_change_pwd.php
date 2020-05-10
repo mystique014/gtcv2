@@ -75,14 +75,14 @@ if (isset($_POST['valid']) AND ($_POST['reg_email1'] != '') AND ($_POST['reg_log
 	if ($mail1 != $mail2){
 	echo  "<h3>".get_vocab("error_mail")."</h3>";
 	} else {
-		$sql = "SELECT count(datenais) FROM grr_utilisateurs where email='$mail1' AND login='$login'";
+		$sql = "SELECT count(datenais) FROM ".$_COOKIE["table_prefix"]."_utilisateurs where email='$mail1' AND login='$login'";
 		$resultat = grr_sql_query1($sql);
 		if ($resultat == 0){
 		echo  "<h3>".get_vocab("error_mail_empty")."</h3>";
 		} else {
 		
 		//recherche de la date de naissance
-		$sql = "SELECT datenais FROM grr_utilisateurs where email='$mail1' AND login='$login'";
+		$sql = "SELECT datenais FROM ".$_COOKIE["table_prefix"]."_utilisateurs where email='$mail1' AND login='$login'";
 		$resultat = grr_sql_query($sql);
 		$row = mysqli_fetch_row($resultat);
 		$datenais =  $row[0]; 
@@ -114,7 +114,7 @@ if (isset($_POST['valid']) AND ($_POST['reg_email1'] != '') AND ($_POST['reg_log
 		// Réinitialisation du mot de passe
 				
 		$reg_password1 = md5($datenais);
-        $sql = "UPDATE grr_utilisateurs SET password='" . protect_data_sql($reg_password1)."' WHERE login='$login'";
+        $sql = "UPDATE ".$_COOKIE["table_prefix"]."_utilisateurs SET password='" . protect_data_sql($reg_password1)."' WHERE login='$login'";
 		if (grr_sql_command($sql) < 0)
                     fatal_error(0, get_vocab("update_pwd_failed") . grr_sql_error());
                 else
