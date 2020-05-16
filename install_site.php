@@ -47,10 +47,11 @@ if ($etape == 5)
 	echo "<p>";
 	echo "<p>Vous pouvez maintenant commencer à utiliser le système de réservation pour votre site : ".$_COOKIE["table_prefix"]."</p>";
 	echo "<br>Soit, en passant par le <a href = 'site.php'>Portail </a>";
-	echo "<br>Soit, directement sans passer par le portail à cette adresse <a href = 'login.php?table_prefix=".$_COOKIE["table_prefix"]."' >Votre site </a>";
+	echo "<br>Soit, directement sans passer par le portail à cette adresse <a href = 'login.php?table_prefix=".$_COOKIE["table_prefix"].". Pensez à mettre ce lien en favori !' >Votre site </a>";
 	echo "<p>";
-	echo "<p>Pour vous connecter la première fois en tant qu'administrateur, utilisez l'identifiant de connection <b>\"administrateur\"</b> et le mot de passe <b>\"azerty\"</b>. N'oubliez pas de changer le mot de passe !</p>";
-	echo "<p>Enjoy !</p>";
+	echo "<p>Pour vous connecter la première fois en tant qu'administrateur, utilisez l'identifiant de connection <b>\"administrateur\"</b> et le mot de passe <b>\"azerty\"</b>.</p>";
+	echo "<p>N'oubliez pas de changer le mot de passe !</p>";
+		echo "<p>Enjoy !</p>";
 				
 	end_html();
 	die();
@@ -122,7 +123,8 @@ if ($etape == 4)
 				$sql = "INSERT INTO sites (description, name, email, timestamp)VALUES ('".$description."','".$_COOKIE["table_prefix"]."','".$ad_mail."',CURRENT_TIMESTAMP)";
 				$result =mysqli_query($db, $sql);
 				fclose($fd);
-				mail('stephane.duchemin3@libertysurf.fr', 'Nouvelle installation GTCV2',$ad_mail."  ".$_COOKIE["table_prefix"],'');
+				mail('stephane.duchemin3@libertysurf.fr', 'Nouvelle installation GTCV2',$ad_mail."  ".$description."  ".$_COOKIE["table_prefix"],'');
+				mail('gtcmulti@gmail.com', 'Nouvelle installation GTCV2',$ad_mail."  ".$description."  ".$_COOKIE["table_prefix"],'');
 				mail($ad_mail, 'Nouvelle installation GTCV2','Bienvenue le site '.$_COOKIE["table_prefix"].' est installé vous pouvez vous connecter sur le portail http://gtcv2multi.alwaysdata.net/site.php en indiquant le nom du site que vous avez renseigné dans le formulaire. Soit, directement sans passer par le portail à cette adresse http://gtcv2multi.alwaysdata.net/login.php?table_prefix='.$_COOKIE["table_prefix"].'. Utilisez l\'identifiant: "administrateur" et le mot de passe "azerty". Pensez à les modifier dans votre espace administration. Bonne navigation','');
 					if ($result_ok == 'yes')
 				{

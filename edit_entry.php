@@ -429,10 +429,7 @@ $row = grr_sql_row($res, 0);
 $area_id = $row[0];
 
 
-echo'<div class="container-fluid">'.PHP_EOL;
-echo'<div class="row">'.PHP_EOL;
-echo'<div class="col-md-3" >'.PHP_EOL;
-echo "<h2>$A</H2>
+echo "<center><h2>$A</H2>
 <FORM name=\"main\" action=\"edit_entry_handler.php\" method=\"get\">
 
 <input type=hidden name=room value=\"$room\">
@@ -968,11 +965,8 @@ else
 ?>
 
 </TABLE></TD></TR>
-<?php
-echo'</div>'.PHP_EOL;
-echo'</div>'.PHP_EOL;
-echo'</div>'.PHP_EOL;
-?>
+
+
 <TR>
 <TD CLASS=CL><BR><center>
 <SCRIPT type="text/javascript" LANGUAGE="JavaScript">

@@ -436,8 +436,8 @@ function mrbsGetRepeatEntryList($time, $enddate, $rep_type, $rep_opt, $max_ittr,
     $month = date("m", $time);
     $year  = date("Y", $time);
 
-    $entrys = "";
-    $entrys_return = "";
+    $entrys = array();
+    $entrys_return = array();
     $k=0;
     for($i = 0; $i < $max_ittr; $i++)
     {
@@ -572,21 +572,20 @@ function mrbsGetEntryInfo($id)
    if (! $res)
      return;
 
-   $ret = "";
+    $ret = array();
     if(grr_sql_count($res) > 0)
     {
         $row = grr_sql_row($res, 0);
-
-        $ret["start_time"]  = $row[0];
-        $ret["end_time"]    = $row[1];
-        $ret["entry_type"]  = $row[2];
-        $ret["repeat_id"]   = $row[3];
-        $ret["room_id"]     = $row[4];
-        $ret["timestamp"]   = $row[5];
-        $ret["create_by"]   = $row[6];
-        $ret["name"]        = $row[7];
-        $ret["type"]        = $row[8];
-        $ret["description"] = $row[9];
+        $ret['start_time']  = $row[0];
+        $ret['end_time']    = $row[1];
+        $ret['entry_type']  = $row[2];
+        $ret['repeat_id']   = $row[3];
+        $ret['room_id']     = $row[4];
+        $ret['timestamp']   = $row[5];
+        $ret['create_by']   = $row[6];
+        $ret['name']        = $row[7];
+        $ret['type']        = $row[8];
+        $ret['description'] = $row[9];
     }
     grr_sql_free($res);
 

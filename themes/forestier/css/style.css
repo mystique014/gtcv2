@@ -76,8 +76,7 @@ font-family:verdana,sans-serif;
 background-color:#508050;
 border-width:1px;
 border-color:black;
-vertical-align:top;
-text-align:center
+vertical-align:top
 }
 TD.cell_hours {background-color:#B8E4B8; text-align:center}
 TD.cell_month {font-size: 8pt; background-color:#FFFFFF}
@@ -109,7 +108,7 @@ text-align:center;
 td.calendar2 {text-align:center; border:2px; font-size: 8pt}
 td.calendarHeader2 {text-align:center; border:0px; font-size: 10pt; width: 200px;}
 .formo {width: 100%; background-color: #FFF0E0; background-position: center bottom; float: none; color: #000000}
-.fondo {background-color: #FFF0E0; background-position: center bottom; float: none; color: #FF8585}
+.fondo {background-color: #FFF0E0; background-position: center bottom; float: none; color: #000000}
 .fondl {background-color: #CCCCCC; background-position: center bottom; float: none; color: #000000}
 /* La colonne de gauche de l'administration
 ------------------------------------------*/
@@ -134,12 +133,3 @@ td.calendarHeader2 {text-align:center; border:0px; font-size: 10pt; width: 200px
 td.colgauche_admin {
     width: 25%;
 }
-
-#toppanel{position:relative;top:0;width:100%;z-index:999;text-align:center;border-bottom:1px solid #05BA41}
-#panel{width:100%;height:150px;overflow:hidden;position:relative;z-index:3}
-#panel a{text-decoration:none}
-.pad-15,.pad-15 tboby{padding-left:15px !important}
-#fixe{position:fixed;right:5%;bottom:5%}
-.small a{color:#000 !important}
-.col a{color:#000 !important}
-.col span a{color:#000 !important}

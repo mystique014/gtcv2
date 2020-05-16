@@ -643,7 +643,7 @@ if ((!empty($id_area)) or (isset($add_area)))
             display_days = '".$display_days."',
 			group_id = '".protect_data_sql($_POST['group_id'])."'
             ";
-			echo $sql;
+			//echo $sql;
             if (grr_sql_command($sql) < 0) fatal_error(1, "<p>" . grr_sql_error());
           $id_area = grr_sql_insert_id("".$_COOKIE["table_prefix"]."_area", "id");
         }

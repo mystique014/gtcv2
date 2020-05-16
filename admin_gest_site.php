@@ -43,7 +43,7 @@ if (isset($_GET['table_sup']))
 
        if (mysqli_query($con, $sql)) {
 			echo "Les tables de ".$table_sup." sont d&eacute;truite";
-			mail($row_mail[0], 'Utilisation du site de réservation GTCV2','Vous avez installé un espace de réservation '.$table_sup.' sur le site GTCV2 http://clubtcr.teria.org/ - Site de réservation en ligne. Nous avons constaté qu\'il n\'était pas utilisé. Il a donc éte détruit. Bien cordialement. L\'équipe GTCV2','');
+			mail($row_mail[0], 'Utilisation du site de réservation GTCV2','Vous avez installé un espace de réservation '.$table_sup.' sur le site GTCV2 http://gtcv2multi.alwaysdata.net/gtc/ - Site de réservation en ligne. Nous avons constaté qu\'il n\'était pas utilisé. Il a donc éte détruit. Bien cordialement. L\'équipe GTC','');
 			} else {
 			echo "Error deleting record: " . mysqli_error($con);
 			}

@@ -285,7 +285,8 @@ function print_header($day, $month, $year, $area, $type="with_session", $page="n
 		if (!(isset($search_str))) $search_str = get_vocab("search_for");
 		if (empty($search_str)) $search_str = "";
    }
-  
+  // Si format imprimable ($_GET['pview'] = 1), on n'affiche pas cette partie
+if ($_GET['pview'] != 1) { 
 		echo'<div class="container-fluid">'.PHP_EOL;
 		echo'<div class="row">'.PHP_EOL;
 		echo'<div class="col-md-3 center">'.PHP_EOL;
@@ -356,7 +357,8 @@ function print_header($day, $month, $year, $area, $type="with_session", $page="n
     echo'</div>'.PHP_EOL;
 	echo'<div class="col-md-3 center hidden-xs bordure">'.PHP_EOL;
 		
-	echo "<h2><a href='login.php'>".getSettingValue("company")."</a>";
+	echo "<h3><a href='".page_accueil($param)."day=$day&amp;year=$year&amp;month=$month'>".get_vocab('welcome')."</a>";
+	echo "<a href='login.php'>-".getSettingValue("company")."</a>";
 	
      if ($page=="no_admin") {
      ?>
@@ -427,7 +429,7 @@ function print_header($day, $month, $year, $area, $type="with_session", $page="n
 	echo'</div>'.PHP_EOL;
     echo'</div>'.PHP_EOL;
     echo'</div>'.PHP_EOL;
-   
+	} 
 }
 
 // Transforme $dur en un nombre entier
