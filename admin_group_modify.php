@@ -148,11 +148,11 @@ if (isset($_GET['change_group'])) {
         $change_group='modif';
         echo "<h2 ALIGN=CENTER>".get_vocab("admin_group_modify_modify.php")."</h2>";
     } else {
-        $row["id"] = '0';
-        $row["group_name"] = '';
-        $row["group_letter"] = '';
-        $row["order_display"]  = 0;
-        $row["couleur"]  = '';
+        $row['id'] = '0';
+        $row['group_name'] = '';
+        $row['group_letter'] = '';
+        $row['order_display']  = 0;
+        $row['couleur']  = '';
         echo "<h2 ALIGN=CENTER>".get_vocab('admin_group_modify_create.php')."</h2>";
     }
     echo get_vocab('admin_group_explications')."<BR><BR>";
@@ -165,7 +165,7 @@ if (isset($_GET['change_group'])) {
     <TABLE border=1>\n";
     echo "<TR>";
     echo "<TD>".get_vocab("group_name").get_vocab("deux_points")."</TD>\n";
-    echo "<TD><input type=\"text\" name=\"group_name\" value=\"".htmlspecialchars($row["group_name"])."\" size=\"20\" /></TD>\n";
+    echo "<TD><input type=\"text\" name=\"group_name\" value=\"".htmlspecialchars($row["group_name'])."\" size=\"20\" /></TD>\n";
     echo "</TR><TR>\n";
     echo "<TD>".get_vocab("group_num").get_vocab("deux_points")."</TD>\n";
     echo "<TD>";
@@ -182,12 +182,12 @@ if (isset($_GET['change_group'])) {
     echo "</TD>\n";
     echo "</TR><TR>\n";
     echo "<TD>".get_vocab("group_order").get_vocab("deux_points")."</TD>\n";
-    echo "<TD><input type=\"text\" name=\"order_display\" value=\"".htmlspecialchars($row["order_display"])."\" size=\"20\" /></TD>\n";
+    echo "<TD><input type=\"text\" name=\"order_display\" value=\"".htmlspecialchars($row['order_display'])."\" size=\"20\" /></TD>\n";
     echo "</TR>";
-   if ($row["couleur"]  != '') {
+   if ($row["couleur']  != '') {
         echo "<TR>\n";
         echo "<TD>".get_vocab("group_color").get_vocab("deux_points")."</TD>\n";
-        echo "<TD bgcolor=\"".$tab_couleur[$row["couleur"]]."\">&nbsp;</TD>";
+        echo "<TD bgcolor=\"".$tab_couleur[$row['couleur']]."\">&nbsp;</TD>";
         echo "</TR>";
     }
     echo "</TABLE>\n";
@@ -197,7 +197,7 @@ if (isset($_GET['change_group'])) {
     foreach($tab_couleur as $key=>$value)
     {
       $checked = " ";
-      if ($key == $row["couleur"])
+      if ($key == $row['couleur'])
           $checked = "checked";
       if (++$nct > 4)
             {

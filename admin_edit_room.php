@@ -301,20 +301,20 @@ if ((!empty($room)) or (isset($area_id))) {
     } else {
         // Il s'agit de l'enregistrement d'une nouvelle ressource
         $row['picture_room'] = '';
-        $row["id"] = '';
-        $row["room_name"]= '';
-        $row["description"] = '';
+        $row['id'] = '';
+        $row['room_name']= '';
+        $row['description'] = '';
         $row['comment_room'] = '';
-        $row["capacity"]   = '';
-        $row["delais_max_resa_room"] = -1;
-        $row["delais_min_resa_room"] = 0;
-        $row["delais_option_reservation"] = 0;
-        $row["allow_action_in_past"] = 'n';
-        $row["dont_allow_modify"] = 'n';
-        $row["order_display"]  = 0;
-        $row["type_affichage_reser"]  = 0;
-        $row["max_booking"] = -1;
-        $row["max_booking_week"] = -1;
+        $row['capacity']   = '';
+        $row['delais_max_resa_room'] = -1;
+        $row['delais_min_resa_room'] = 0;
+        $row['delais_option_reservation'] = 0;
+        $row['allow_action_in_past'] = 'n';
+        $row['dont_allow_modify'] = 'n';
+        $row['order_display']  = 0;
+        $row['type_affichage_reser']  = 0;
+        $row['max_booking'] = -1;
+        $row['max_booking_week'] = -1;
         $row['statut_room'] = '';
         $row['show_fic_room'] = '';
         $area_name = grr_sql_query1("select area_name from grr_area where id='".$area_id."'");
@@ -325,7 +325,7 @@ if ((!empty($room)) or (isset($area_id))) {
     <form enctype="multipart/form-data" action="admin_edit_room.php" method="post" name="main">
 
     <?php
-    if ($row["id"] != '') echo "<input type=\"hidden\" name=\"room\" value=\"".$row["id"]."\">\n";
+    if ($row['id'] != '') echo "<input type=\"hidden\" name=\"room\" value=\"".$row['id']."\">\n";
     if (isset($retour_page)) echo "<input type=\"hidden\" name=\"retour_page\" value=\"".$retour_page."\">\n";
     if (isset($area_id)) echo "<input type=\"hidden\" name=\"area_id\" value=\"".$area_id."\">\n";
     ?>
@@ -341,28 +341,28 @@ if ((!empty($room)) or (isset($area_id))) {
     if ((authGetUserLevel(getUserName(),$area_id,"area") >=4) or (authGetUserLevel(getUserName(),$room) >=4)) {
         echo "<input type=\"text\" name=\"room_name\" size=\"50\" value=\"".htmlspecialchars($row["room_name"])."\">\n";
     } else {
-        echo "<input type=\"hidden\" name=\"room_name\" value=\"".htmlspecialchars($row["room_name"])."\" />\n";
-        echo "<b>".htmlspecialchars($row["room_name"])."</b>\n";
+        echo "<input type=\"hidden\" name=\"room_name\" value=\"".htmlspecialchars($row['room_name'])."\" />\n";
+        echo "<b>".htmlspecialchars($row['room_name'])."</b>\n";
     }
     echo "</TD></TR>\n";
     // Description
-    echo "<TR><TD>".get_vocab("description")."</TD><TD><input type=\"text\" name=\"description\"  size=\"50\" value=\"".htmlspecialchars($row["description"])."\"></TD></TR>\n";
+    echo "<TR><TD>".get_vocab("description")."</TD><TD><input type=\"text\" name=\"description\"  size=\"50\" value=\"".htmlspecialchars($row['description'])."\"></TD></TR>\n";
     // Description complète
     echo "<TR><TD>".get_vocab("description complète")."</TD><TD><textarea name=\"comment_room\" rows=\"8\" cols=\"80\" wrap=\"virtual\">".$row['comment_room']."</textarea></TD></TR>\n";
     // Ordre d'affichage du domaine
     echo "<tr><TD>".get_vocab("order_display").get_vocab("deux_points")."</TD>\n";
-    echo "<TD><input type=text name=\"area_order\" value=\"".htmlspecialchars($row["order_display"])."\"></TD>\n";
+    echo "<TD><input type=text name=\"area_order\" value=\"".htmlspecialchars($row['order_display'])."\"></TD>\n";
     echo "</TR>\n";
 
     // Type d'affichage : durée ou heure/date de fin de réservation
     echo "<tr><TD>".get_vocab("type_affichage_reservation").get_vocab("deux_points")."</TD>\n";
     echo "<TD>";
     echo "<input type=\"radio\" name=\"type_affichage_reser\" value=\"0\" ";
-    if (($row["type_affichage_reser"]) == 0) echo " checked ";
+    if (($row['type_affichage_reser']) == 0) echo " checked ";
     echo "/>";
     echo get_vocab("affichage_reservation_duree");
     /*echo "<br><input type=\"radio\" name=\"type_affichage_reser\" value=\"1\" ";
-    if (($row["type_affichage_reser"]) == 1) echo " checked ";
+    if (($row['type_affichage_reser']) == 1) echo " checked ";
     echo "/>";
     echo get_vocab("affichage_reservation_date_heure");*/
     echo "</TD>\n";
@@ -370,47 +370,47 @@ if ((!empty($room)) or (isset($area_id))) {
     echo "</table>\n<TABLE border=\"1\" cellspacing=\"0\" cellpadding=\"6\">\n";
 
     // Capacité
-    echo "<TR><TD>".get_vocab("capacity").": </TD><TD><input type=text name=capacity value=\"".$row["capacity"]."\"></TD></TR>\n";
+    echo "<TR><TD>".get_vocab("capacity").": </TD><TD><input type=text name=capacity value=\"".$row['capacity']."\"></TD></TR>\n";
     // seul les administrateurs de la ressource peuvent modifier le nombre max de réservation par utilisateur
     if ((authGetUserLevel(getUserName(),$area_id,"area") >=3) or (authGetUserLevel(getUserName(),$room) >=3)) {
         echo "<TR><TD>".get_vocab("max_booking")." - <A href='javascript:centrerpopup(\"astuce1_fr.php\",600,480,\"scrollbars=yes,statusbar=no,resizable=yes\")'>Astuce</A><br><i>".get_vocab("explain_max_booking")."</i> </TD><TD>
-        <input type=\"text\" name=\"max_booking\" value=\"".$row["max_booking"]."\"></TD></TR>";
+        <input type=\"text\" name=\"max_booking\" value=\"".$row['max_booking']."\"></TD></TR>";
 
-    } else if ($row["max_booking"] != "-1") {
+    } else if ($row['max_booking'] != "-1") {
         echo "<TR><TD>".get_vocab("msg_max_booking")."</TD><TD>
-        <input type=\"hidden\" name=\"max_booking\" value=\"".$row["max_booking"]."\">
-        <b>".htmlspecialchars($row["max_booking"])."</b>
+        <input type=\"hidden\" name=\"max_booking\" value=\"".$row['max_booking']."\">
+        <b>".htmlspecialchars($row['max_booking'])."</b>
         </TD></TR>";
     }
     // Nombre d'heures de réservation possible par semaine !
     // seul les administrateurs de la ressource peuvent modifier le nombre max de réservation par utilisateur et par semaine
     if ((authGetUserLevel(getUserName(),$area_id,"area") >=3) or (authGetUserLevel(getUserName(),$room) >=3)) {
         echo "<TR><TD>".get_vocab("max_booking_week")." </TD><TD>
-        <input type=\"text\" name=\"max_booking_week\" value=\"".$row["max_booking_week"]."\"></TD></TR>";
+        <input type=\"text\" name=\"max_booking_week\" value=\"".$row['max_booking_week']."\"></TD></TR>";
 
-    } else if ($row["max_booking_week"] != "-1") {
+    } else if ($row['max_booking_week'] != "-1") {
         echo "<TR><TD>".get_vocab("msg_max_booking_week")."</TD><TD>
-        <input type=\"hidden\" name=\"max_booking_week\" value=\"".$row["max_booking_week"]."\">
-        <b>".htmlspecialchars($row["max_booking_week"])."</b>
+        <input type=\"hidden\" name=\"max_booking_week\" value=\"".$row['max_booking_week']."\">
+        <b>".htmlspecialchars($row['max_booking_week'])."</b>
         </TD></TR>";
     }
 
     // L'utilisateur ne peut pas réserver au-delà d'un certain temps
-    echo "<TR><TD>".get_vocab("delais_max_resa_room").": </TD><TD><input type=text name=delais_max_resa_room value=\"".$row["delais_max_resa_room"]."\"></TD></TR>\n";
+    echo "<TR><TD>".get_vocab("delais_max_resa_room").": </TD><TD><input type=text name=delais_max_resa_room value=\"".$row['delais_max_resa_room']."\"></TD></TR>\n";
     // L'utilisateur ne peut pas réserver en-dessous d'un certain temps
-    echo "<TR><TD>".get_vocab("delais_min_resa_room").": </TD><TD><input type=text name=delais_min_resa_room value=\"".$row["delais_min_resa_room"]."\"></TD></TR>\n";
+    echo "<TR><TD>".get_vocab("delais_min_resa_room").": </TD><TD><input type=text name=delais_min_resa_room value=\"".$row['delais_min_resa_room']."\"></TD></TR>\n";
     // L'utilisateur peut poser poser une option de réservation
     echo "<TR><TD>".get_vocab("msg_option_de_reservation").": </TD>
-    <TD><input type=text name=delais_option_reservation value=\"".$row["delais_option_reservation"]."\"></TD></TR>\n";
+    <TD><input type=text name=delais_option_reservation value=\"".$row['delais_option_reservation']."\"></TD></TR>\n";
 
     // L'utilisateur peut réserver dans le passé
     echo "<TR><TD>".get_vocab("allow_action_in_past")."<br><i>".get_vocab("allow_action_in_past_explain")."</i></TD><TD><input type=\"checkbox\" name=\"allow_action_in_past\" value=\"y\" ";
-    if ($row["allow_action_in_past"] == 'y') echo " checked";
+    if ($row['allow_action_in_past'] == 'y') echo " checked";
     echo " /></TD></tr>\n";
 
     // L'utilisateur ne peut pas modifier ou supprimer ses propres réservations
     echo "<TR><TD>".get_vocab("dont_allow_modify")."</TD><TD><input type=\"checkbox\" name=\"dont_allow_modify\" value=\"y\" ";
-    if ($row["dont_allow_modify"] == 'y') echo " checked";
+    if ($row['dont_allow_modify'] == 'y') echo " checked";
     echo " /></TD></tr>\n";
 
     // Déclarer ressource indisponible
@@ -613,56 +613,56 @@ if ((!empty($area)) or (isset($add_area))) {
         $row = grr_sql_row_keyed($res, 0);
         grr_sql_free($res);
         echo "<h2 ALIGN=CENTER>".get_vocab("editarea")."</h2>";
-        if ($row["calendar_default_values"] == 'y') {
-			$row["minute_morningstarts_area"] = $minute_morningstarts_area;
-            $row["morningstarts_area"] = $morningstarts;
-            $row["eveningends_area"] = $eveningends;
-            $row["resolution_area"] = $resolution;
-            $row["eveningends_minutes_area"] = $eveningends_minutes;
-            $row["weekstarts_area"] = $weekstarts;
-            $row["twentyfourhour_format_area"] = $twentyfourhour_format;
-            $row["display_days"] = $display_days;
-			$row["group_id"] = $group_id;
+        if ($row['calendar_default_values'] == 'y') {
+			$row['minute_morningstarts_area'] = $minute_morningstarts_area;
+            $row['morningstarts_area'] = $morningstarts;
+            $row['eveningends_area'] = $eveningends;
+            $row['resolution_area'] = $resolution;
+            $row['eveningends_minutes_area'] = $eveningends_minutes;
+            $row['weekstarts_area'] = $weekstarts;
+            $row['twentyfourhour_format_area'] = $twentyfourhour_format;
+            $row['display_days'] = $display_days;
+			$row['group_id'] = $group_id;
         }
-        if ($row["enable_periods"] != 'y') $row["enable_periods"] = 'n';
+        if ($row['enable_periods'] != 'y') $row['enable_periods'] = 'n';
     } else {
-        $row["id"] = '';
-        $row["area_name"] = '';
-        $row["order_display"]  = '';
-        $row["access"] = '';
-        $row["ip_adr"] = '';
-		$row["minute_morningstarts_area"] = 0;
-        $row["morningstarts_area"] = $morningstarts;
-        $row["eveningends_area"] = $eveningends;
-        $row["resolution_area"] = $resolution;
-        $row["eveningends_minutes_area"] = $eveningends_minutes;
-        $row["weekstarts_area"] = $weekstarts;
-        $row["twentyfourhour_format_area"] = $twentyfourhour_format;
-        $row["enable_periods"] = 'n';
-        $row["display_days"] = "yyyyyyy";
-		$row["group_id"] = $group_id;
+        $row['id'] = '';
+        $row['area_name'] = '';
+        $row['order_display']  = '';
+        $row['access'] = '';
+        $row['ip_adr'] = '';
+		$row['minute_morningstarts_area'] = 0;
+        $row['morningstarts_area'] = $morningstarts;
+        $row['eveningends_area'] = $eveningends;
+        $row['resolution_area'] = $resolution;
+        $row['eveningends_minutes_area'] = $eveningends_minutes;
+        $row['weekstarts_area'] = $weekstarts;
+        $row['twentyfourhour_format_area'] = $twentyfourhour_format;
+        $row['enable_periods'] = 'n';
+        $row['display_days'] = "yyyyyyy";
+		$row['group_id'] = $group_id;
         echo "<h2 ALIGN=CENTER>".get_vocab('addarea')."</h2>";
     }
     ?>
     <form action="admin_edit_room.php" method="post" name="main">
     <?php
     if (isset($retour_page)) echo "<input type=\"hidden\" name=\"retour_page\" value=\"".$retour_page."\">";
-    if ($row['id'] != '') echo "<input type=\"hidden\" name=\"area\" value=\"".$row["id"]."\">";
+    if ($row['id'] != '') echo "<input type=\"hidden\" name=\"area\" value=\"".$row['id']."\">";
     if (isset($add_area)) echo "<input type=\"hidden\" name=\"add_area\" value=\"".$add_area."\">\n";
 	
     echo "<CENTER><TABLE border=1><TR>";
     // Nom du domaine
     echo "<TD>".get_vocab("name").get_vocab("deux_points")."</TD>\n";
-    echo "<TD><input type=text name=\"area_name\" value=\"".htmlspecialchars($row["area_name"])."\"></TD>\n";
+    echo "<TD><input type=text name=\"area_name\" value=\"".htmlspecialchars($row['area_name'])."\"></TD>\n";
     echo "</TR><TR>\n";
     // Ordre d'affichage du domaine
     echo "<TD>".get_vocab("order_display").get_vocab("deux_points")."</TD>\n";
-    echo "<TD><input type=text name=\"area_order\" value=\"".htmlspecialchars($row["order_display"])."\"></TD>\n";
+    echo "<TD><input type=text name=\"area_order\" value=\"".htmlspecialchars($row['order_display'])."\"></TD>\n";
     echo "</TR><TR>\n";
     // Accès restreint ou non ?
     echo "<TD>".get_vocab("access").get_vocab("deux_points")."</TD>\n";
     echo "<TD><input type=checkbox name=\"access\"";
-    if ($row["access"] == 'r') echo "checked";
+    if ($row['access'] == 'r') echo "checked";
     echo "></TD>\n";
     echo "</TR>\n";
 	// Nom du groupe d'utilisateurs
@@ -687,7 +687,7 @@ if ((!empty($area)) or (isset($add_area))) {
     if (OPTION_IP_ADR==1) {
         echo "<TR>\n";
         echo "<TD>".get_vocab("ip_adr").get_vocab("deux_points")."</TD>";
-        echo "<TD><input type=text name=\"ip_adr\" value=\"".htmlspecialchars($row["ip_adr"])."\"></TD>\n";
+        echo "<TD><input type=text name=\"ip_adr\" value=\"".htmlspecialchars($row['ip_adr'])."\"></TD>\n";
         echo "</TR>\n";
     }
     echo "</TABLE>";
@@ -718,8 +718,8 @@ if ((!empty($area)) or (isset($add_area))) {
     echo "<TR>\n";
     for ($i = 0; $i < 7; $i++)
     {
-      echo "<TD><INPUT NAME=\"display_day[".$i."]\" TYPE=CHECKBOX";
-      if (substr($row["display_days"],$i,1) == 'y') echo " CHECKED";
+      echo "<TD><INPUT NAME=\"display_day['.$i.']\" TYPE=CHECKBOX";
+      if (substr($row['display_days'],$i,1) == 'y') echo " CHECKED";
       echo " >" . day_name($i) . "</td>\n";
     }
     echo "</TR></table>";
@@ -732,10 +732,10 @@ if ((!empty($area)) or (isset($add_area))) {
     //echo "<p style=\"text-align:left;\"><b>ATTENTION :</b> Les deux types de configuration des créneaux sont incompatibles entre eux : un changement du type de créneaux entraîne donc, après validation, un <b>effacement de toutes les réservations  de ce domaine</b></p>.";
     echo "<table border=\"0\">";
     echo "<tr><td><input type=\"radio\" name=\"enable_periods\" value=\"n\" onclick=\"bascule()\" ";
-    if ($row["enable_periods"] == 'n') echo "checked";
+    if ($row['enable_periods'] == 'n') echo "checked";
     echo " /></td><td>".get_vocab("creneaux_de_reservation_temps")."</td></tr>";
     echo "<tr><td><input type=\"radio\" name=\"enable_periods\" value=\"y\" onclick=\"bascule()\" ";
-    if ($row["enable_periods"] == 'y') echo "checked";
+    if ($row['enable_periods'] == 'y') echo "checked";
     echo " /></td><td>".get_vocab("creneaux_de_reservation_pre_definis")."</td></tr>";
     echo "</table>";
 
@@ -748,7 +748,7 @@ if ((!empty($area)) or (isset($add_area))) {
         else
             $number_periodes = $num_periodes;
 
-    if ($row["enable_periods"] == 'y')
+    if ($row['enable_periods'] == 'y')
         echo "<TABLE border=\"1\" id=\"menu2\" cellpadding=\"5\">";
     else
         echo "<TABLE style=\"display:none\" border=\"1\" id=\"menu2\" cellpadding=\"5\">";
@@ -774,7 +774,7 @@ if ((!empty($area)) or (isset($add_area))) {
     echo "</table>";
 
     // Cas ou les créneaux de réservations sont basés sur le temps
-    if ($row["enable_periods"] == 'n')
+    if ($row['enable_periods'] == 'n')
         echo "<TABLE border=\"1\" id=\"menu1\" cellpadding=\"5\">";
     else
         echo "<TABLE style=\"display:none\" border=\"1\" id=\"menu1\" cellpadding=\"5\">";
@@ -820,13 +820,13 @@ if ((!empty($area)) or (isset($add_area))) {
     // Minutes à ajouter à l'heure $eveningends pour avoir la fin réelle d'une journée.
     echo "<TR>\n";
     echo "<TD>".get_vocab("eveningends_minutes_area").get_vocab("deux_points")."</TD>\n";
-    echo "<TD><input type=text name=\"eveningends_minutes_area\" value=\"".htmlspecialchars($row["eveningends_minutes_area"])."\"></TD>\n";
+    echo "<TD><input type=text name=\"eveningends_minutes_area\" value=\"".htmlspecialchars($row['eveningends_minutes_area'])."\"></TD>\n";
     echo "</TR>";
 
     // Resolution - quel bloc peut être réservé, en secondes
     echo "<TR>\n";
     echo "<TD>".get_vocab("resolution_area").get_vocab("deux_points")."</TD>\n";
-    echo "<TD><input type=text name=\"resolution_area\" value=\"".htmlspecialchars($row["resolution_area"])."\"></TD>\n";
+    echo "<TD><input type=text name=\"resolution_area\" value=\"".htmlspecialchars($row['resolution_area'])."\"></TD>\n";
     echo "</TR><TR>\n";
     echo "</TR>";
 

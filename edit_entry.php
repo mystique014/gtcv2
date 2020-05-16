@@ -85,8 +85,8 @@ if (isset($id))
 {
   if ($info = mrbsGetEntryInfo($id))
     {
-      $area  = mrbsGetRoomArea($info["room_id"]);
-      $room = $info["room_id"];
+      $area  = mrbsGetRoomArea($info['room_id']);
+      $room = $info['room_id'];
     }
   else
     {
@@ -446,18 +446,18 @@ foreach ($allareas_id as $idtmp) {
     $overload_fields = mrbsOverloadGetFieldslist($idtmp);
     foreach ($overload_fields as $fieldname=>$fieldtype) {
         if ($idtmp == $area_id)
-            echo "<table style=\"display:''\" id=\"id_".$idtmp."_".$overload_fields[$fieldname]["id"]."\">\n";
+            echo "<table style=\"display:''\" id=\"id_".$idtmp."_".$overload_fields[$fieldname]['id']."\">\n";
         else
-            echo "<table style=\"display:none\" id=\"id_".$idtmp."_".$overload_fields[$fieldname]["id"]."\">\n";
+            echo "<table style=\"display:none\" id=\"id_".$idtmp."_".$overload_fields[$fieldname]['id']."\">\n";
         echo "<TR><TD class=E><b>".$fieldname."</b></TD></TR>\n";
         if (isset($overload_data[$fieldname]))
             $data = $overload_data[$fieldname];
         else
             $data = "";
-        if ($overload_fields[$fieldname]["type"] == "textarea" )
-            echo "<TR><TD><TEXTAREA COLS=80 ROWS=2 name=\"addon_".$overload_fields[$fieldname]["id"]."\">$data</TEXTAREA></TD></TR>\n";
+        if ($overload_fields[$fieldname]['type'] == "textarea" )
+            echo "<TR><TD><TEXTAREA COLS=80 ROWS=2 name=\"addon_".$overload_fields[$fieldname]['id']."\">$data</TEXTAREA></TD></TR>\n";
         else
-            echo "<TR><TD><INPUT size=80 type=text name=\"addon_".$overload_fields[$fieldname]["id"]."\" value=\"$data\"></TD></TR>\n";
+            echo "<TR><TD><INPUT size=80 type=text name=\"addon_".$overload_fields[$fieldname]['id']."\" value=\"$data\"></TD></TR>\n";
         echo "</table>\n";
     }
 }
@@ -695,9 +695,9 @@ function changeRooms( formObj )
             $overload_fields = mrbsOverloadGetFieldslist($idtmp);
                 foreach ($overload_fields as $fieldname=>$fieldtype) {
                     if ($idtmp == $row[0])
-                        echo "        id_".$idtmp."_".$overload_fields[$fieldname]["id"].".style.display = \"\"\n";
+                        echo "        id_".$idtmp."_".$overload_fields[$fieldname]['id'].".style.display = \"\"\n";
                     else
-                        echo "        id_".$idtmp."_".$overload_fields[$fieldname]["id"].".style.display = \"none\"\n";
+                        echo "        id_".$idtmp."_".$overload_fields[$fieldname]['id'].".style.display = \"none\"\n";
                  }
         }
         print "        break\n";

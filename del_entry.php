@@ -63,11 +63,11 @@ if (isset($_GET["id"])) {
 
 if($info = mrbsGetEntryInfo($id))
 {
-    $day   = strftime("%d", $info["start_time"]);
-    $month = strftime("%m", $info["start_time"]);
-    $year  = strftime("%Y", $info["start_time"]);
+    $day   = strftime("%d", $info['start_time']);
+    $month = strftime("%m", $info['start_time']);
+    $year  = strftime("%Y", $info['start_time']);
 
-    $area  = mrbsGetRoomArea($info["room_id"]);
+    $area  = mrbsGetRoomArea($info['room_id']);
     $back = "";
     if (isset($_SERVER['HTTP_REFERER'])) $back = $_SERVER['HTTP_REFERER'];
     if(authGetUserLevel(getUserName(),-1) < 2)
@@ -75,7 +75,7 @@ if($info = mrbsGetEntryInfo($id))
         showAccessDenied($day, $month, $year, $area,$back);
         exit();
     }
-    if(!getWritable($info["create_by"], getUserName(),$id))
+    if(!getWritable($info['create_by'], getUserName(),$id))
     {
         showAccessDenied($day, $month, $year, $area,$back);
         exit;
@@ -96,7 +96,7 @@ if($info = mrbsGetEntryInfo($id))
     if ($result)
     {
         $_SESSION['displ_msg'] = 'yes';
-        Header("Location: ".$page.".php?day=$day&month=$month&year=$year&area=$area&room=".$info["room_id"]);
+        Header("Location: ".$page.".php?day=$day&month=$month&year=$year&area=$area&room=".$info['room_id']);
         exit();
     }
 }

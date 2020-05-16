@@ -38,7 +38,7 @@ include "include/admin.inc.php";
 
 $back = '';
 if (isset($_SERVER['HTTP_REFERER'])) $back = $_SERVER['HTTP_REFERER'];
-$display = isset($_GET["display"]) ? $_GET["display"] : NULL;
+$display = isset($_GET["display']) ? $_GET["display"] : NULL;
 $order_by = isset($_GET["order_by"]) ? $_GET["order_by"] : NULL;
 $cochemail = isset($_GET["cochemail"]) ? $_GET["cochemail"] : NULL;
 $date_1 = isset($_GET["date_1"]) ? $_GET["date_1"] : NULL;
@@ -77,7 +77,7 @@ if ((isset($_GET['action'])) and ($_GET['action'] =="nettoyage") and (getSetting
         $user_source = $row[2];
         list($user, $groups)=people_get_variables($user_login, false);
         $flag = 1;
-        if ($user["uid"] == "") {
+        if ($user['uid'] == "") {
             if ($flag == 1) $msg=get_vocab("mess2_maj_base_locale");
             $flag = 0;
             // L'utilisateur n'est plus présent dans la base LCS, on le supprime
@@ -107,11 +107,11 @@ if ((isset($_GET['action'])) and ($_GET['action'] =="synchro") and (getSettingVa
     $liste_update = "";
     $liste_pb_update = "";
     for ( $loop=0; $loop<count($users); $loop++ ) {
-        $user_login = $users[$loop]["uid"];
+        $user_login = $users[$loop]['uid'];
         list($user, $groups)=people_get_variables($user_login, true);
-        $user_nom = $user["nom"];
-        $user_fullname = $user["fullname"];
-        $user_email = $user["email"];
+        $user_nom = $user['nom'];
+        $user_fullname = $user['fullname'];
+        $user_email = $user['email'];
         $long = strlen($user_fullname) - strlen($user_nom);
         $user_prenom = substr($user_fullname, 0, $long) ;
         if (is_eleve($user_login))
@@ -120,8 +120,8 @@ if ((isset($_GET['action'])) and ($_GET['action'] =="synchro") and (getSettingVa
             $user_statut = $statut_non_eleve;
         $groupe = "";
         for ( $loop2=0; $loop2<count($groups); $loop2++ ) {
-            if (($groups[$loop2]["cn"] == "Profs") or ($groups[$loop2]["cn"] == "Administratifs") or ($groups[$loop2]["cn"] == "Eleves") )
-            $groupe .= $groups[$loop2]["cn"].", ";
+            if (($groups[$loop2]['cn'] == "Profs") or ($groups[$loop2]['cn'] == "Administratifs") or ($groups[$loop2]['cn'] == "Eleves") )
+            $groupe .= $groups[$loop2]['cn'].", ";
         }
         if ($groupe == "") $groupe = "vide";
 

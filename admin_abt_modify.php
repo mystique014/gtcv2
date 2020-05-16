@@ -137,9 +137,9 @@ if (isset($_GET['change_abt'])) {
         $change_abt='modif';
         echo "<h2 ALIGN=CENTER>".get_vocab("admin_abt_modify_modify.php")."</h2>";
     } else {
-        $row["id"] = '0';
-        $row["abt_name"] = '';
-        $row["order_display"]  = 0;
+        $row['id'] = '0';
+        $row['abt_name'] = '';
+        $row['order_display']  = 0;
         echo "<h2 ALIGN=CENTER>".get_vocab('admin_abt_modify_create.php')."</h2>";
     }
 
@@ -153,12 +153,12 @@ if (isset($_GET['change_abt'])) {
     <TABLE border=1>\n";
     echo "<TR>";
     echo "<TD>".get_vocab("abt_name").get_vocab("deux_points")."</TD>\n";
-    echo "<TD><input type=\"text\" name=\"abt_name\" value=\"".htmlspecialchars($row["abt_name"])."\" size=\"20\" /></TD>\n";
+    echo "<TD><input type=\"text\" name=\"abt_name\" value=\"".htmlspecialchars($row['abt_name'])."\" size=\"20\" /></TD>\n";
     echo "</TR><TR>\n";
 
     echo "</TR><TR>\n";
     echo "<TD>".get_vocab("abt_order").get_vocab("deux_points")."</TD>\n";
-    echo "<TD><input type=\"text\" name=\"order_display\" value=\"".htmlspecialchars($row["order_display"])."\" size=\"20\" /></TD>\n";
+    echo "<TD><input type=\"text\" name=\"order_display\" value=\"".htmlspecialchars($row['order_display'])."\" size=\"20\" /></TD>\n";
     echo "</TR>";
 
     echo "</TABLE>\n";

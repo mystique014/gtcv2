@@ -318,14 +318,14 @@ for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
 
     for ($t = $start_t; $t <= $end_t; $t += $resolution)
     {
-        $today[$row[0]][$t]["id"]    = $row[4];
-        $today[$row[0]][$t]["color"] = $row[5];
-        $today[$row[0]][$t]["data"]  = "";
-        $today[$row[0]][$t]["who"] = "";
-        $today[$row[0]][$t]["statut"] = $row[7];
-        $today[$row[0]][$t]["option_reser"] = $row[9];
+        $today[$row[0]][$t]['id']    = $row[4];
+        $today[$row[0]][$t]['color'] = $row[5];
+        $today[$row[0]][$t]['data']  = "";
+        $today[$row[0]][$t]['who'] = "";
+        $today[$row[0]][$t]['statut'] = $row[7];
+        $today[$row[0]][$t]['option_reser'] = $row[9];
         if ((isset($display_full_description)) and ($display_full_description==1))
-            $today[$row[0]][$t]["description"] = $row[8];
+            $today[$row[0]][$t]['description'] = $row[8];
     }
 
     # Show the name of the booker in the first segment that the booking
@@ -337,25 +337,25 @@ for ($i = 0; ($row = grr_sql_row($res, $i)); $i++) {
     }
 
     if ($row[1] < $am7) {
-        $today[$row[0]][$am7]["data"] = $row[3];
+        $today[$row[0]][$am7]['data'] = $row[3];
         // Info-bulle
         if (!isset($display_info_bulle)) $display_info_bulle = "";
         if ($display_info_bulle == 1)
-            $today[$row[0]][$am7]["who"] = get_vocab("created_by").$row_user[0]." ".$row_user[1];
+            $today[$row[0]][$am7]['who'] = get_vocab("created_by").$row_user[0]." ".$row_user[1];
         else if ($display_info_bulle == 2)
-            $today[$row[0]][$am7]["who"] = $row[8];
+            $today[$row[0]][$am7]['who'] = $row[8];
         else
-            $today[$row[0]][$am7]["who"] = "";
+            $today[$row[0]][$am7]['who'] = "";
     } else {
-        $today[$row[0]][$start_t]["data"] = $row[3];
+        $today[$row[0]][$start_t]['data'] = $row[3];
         // Info-bulle
         if (!isset($display_info_bulle)) $display_info_bulle = "";
         if ($display_info_bulle == 1)
-            $today[$row[0]][$start_t]["who"] = get_vocab("created_by").$row_user[0]." ".$row_user[1];
+            $today[$row[0]][$start_t]['who'] = get_vocab("created_by").$row_user[0]." ".$row_user[1];
         else if ($display_info_bulle == 2)
-            $today[$row[0]][$start_t]["who"] = $row[8];
+            $today[$row[0]][$start_t]['who'] = $row[8];
         else
-            $today[$row[0]][$start_t]["who"] = "";
+            $today[$row[0]][$start_t]['who'] = "";
     }
 }
 # We need to know what all the rooms area called, so we can show them all
@@ -458,11 +458,11 @@ else
         // Début Deuxième boucle sur la liste des ressources du domaine
         while (list($key, $room) = each($rooms))
         {
-            if(isset($today[$room][$t]["id"])) // il y a une réservation sur le créneau
+            if(isset($today[$room][$t]['id'])) // il y a une réservation sur le créneau
             {
-                $id    = $today[$room][$t]["id"];
-                $color = $today[$room][$t]["color"];
-                $descr = htmlspecialchars($today[$room][$t]["data"]);
+                $id    = $today[$room][$t]['id'];
+                $color = $today[$room][$t]['color'];
+                $descr = htmlspecialchars($today[$room][$t]['data']);
             }
             else
                 unset($id);  // $id non défini signifie donc qu'il n'y a pas de résa sur le créneau
@@ -529,16 +529,16 @@ else
             elseif ($descr != "")
             {
                 // si la réservation est "en cours", on le signale
-                if ((isset($today[$room][$t]["statut"])) and ($today[$room][$t]["statut"]=='y')) echo "&nbsp;<img src=\"img_grr/buzy.png\" alt=\"".get_vocab("reservation_en_cours")."\" title=\"".get_vocab("reservation_en_cours")."\" width=\"20\" height=\"20\" border=\"0\" />&nbsp;\n";
+                if ((isset($today[$room][$t]['statut'])) and ($today[$room][$t]['statut']=='y')) echo "&nbsp;<img src=\"img_grr/buzy.png\" alt=\"".get_vocab("reservation_en_cours")."\" title=\"".get_vocab("reservation_en_cours")."\" width=\"20\" height=\"20\" border=\"0\" />&nbsp;\n";
                 // si la réservation est à confirmer, on le signale
-                if (($delais_option_reservation[$room] > 0) and (isset($today[$room][$t]["option_reser"])) and ($today[$room][$t]["option_reser"]!=-1)) echo "&nbsp;<img src=\"img_grr/small_flag.png\" alt=\"".get_vocab("reservation_a_confirmer_au_plus_tard_le")."\" title=\"".get_vocab("reservation_a_confirmer_au_plus_tard_le")."&nbsp;".time_date_string_jma($today[$room][$t]["option_reser"],$dformat)."\" width=\"20\" height=\"20\" border=\"0\" />&nbsp;\n";
+                if (($delais_option_reservation[$room] > 0) and (isset($today[$room][$t]['option_reser'])) and ($today[$room][$t]['option_reser']!=-1)) echo "&nbsp;<img src=\"img_grr/small_flag.png\" alt=\"".get_vocab("reservation_a_confirmer_au_plus_tard_le")."\" title=\"".get_vocab("reservation_a_confirmer_au_plus_tard_le")."&nbsp;".time_date_string_jma($today[$room][$t]['option_reser'],$dformat)."\" width=\"20\" height=\"20\" border=\"0\" />&nbsp;\n";
 
                 #if it is booked then show
                 if (($statut_room[$room] == "1") or
                 (($statut_room[$room] == "0") and (authGetUserLevel(getUserName(),$room) > 2) )) {
-                    echo " <a title=\"".htmlspecialchars($today[$room][$t]["who"])."\" href=\"view_entry.php?id=$id&amp;area=$area&amp;day=$day&amp;month=$month&amp;year=$year&amp;page=day\">$descr</a>";
-                    if ((isset($display_full_description)) and ($display_full_description==1) and ($today[$room][$t]["description"]!= ""))
-                    echo "<br><i>".$today[$room][$t]["description"]."</i>";
+                    echo " <a title=\"".htmlspecialchars($today[$room][$t]['who'])."\" href=\"view_entry.php?id=$id&amp;area=$area&amp;day=$day&amp;month=$month&amp;year=$year&amp;page=day\">$descr</a>";
+                    if ((isset($display_full_description)) and ($display_full_description==1) and ($today[$room][$t]['description']!= ""))
+                    echo "<br><i>".$today[$room][$t]['description']."</i>";
 
                 } else {
                     echo " $descr";
