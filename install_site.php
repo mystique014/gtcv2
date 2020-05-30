@@ -20,6 +20,15 @@ $table_prefix = strtolower ($table_prefix);
 // Limite le nombre de caractères à 20
 $table_prefix = substr($table_prefix, 0, 20);
 $description = isset($_GET["description"]) ? $_GET["description"] : NULL;
+$description = str_replace("'", "", $description);
+$search  = array(' ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ');
+$replace = array('', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 'a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y');
+$description = str_replace($search, $replace, $description);
+// Traite la chaine pour la transformer en minuscules
+$description = strtolower ($description);
+// Limite le nombre de caractères à 20
+$description = substr($description, 0, 20);
+
 $ad_mail = isset($_GET["ad_mail"]) ? $_GET["ad_mail"] : NULL;
 // Pour cette page uniquement, on désactive l'UTF8 et on impose l'ISO-8859-1
 $unicode_encoding = 1;
@@ -47,7 +56,7 @@ if ($etape == 5)
 	echo "<p>";
 	echo "<p>Vous pouvez maintenant commencer à utiliser le système de réservation pour votre site : ".$_COOKIE["table_prefix"]."</p>";
 	echo "<br>Soit, en passant par le <a href = 'site.php'>Portail </a>";
-	echo "<br>Soit, directement sans passer par le portail à cette adresse <a href = 'login.php?table_prefix=".$_COOKIE["table_prefix"].". Pensez à mettre ce lien en favori !' >Votre site </a>";
+	echo "<br>Soit, directement sans passer par le portail à cette adresse <a href = 'login.php?table_prefix=".$_COOKIE["table_prefix"]."' >Votre site </a>";
 	echo "<p>";
 	echo "<p>Pour vous connecter la première fois en tant qu'administrateur, utilisez l'identifiant de connection <b>\"administrateur\"</b> et le mot de passe <b>\"azerty\"</b>.</p>";
 	echo "<p>N'oubliez pas de changer le mot de passe !</p>";

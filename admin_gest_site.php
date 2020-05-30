@@ -25,6 +25,7 @@ if (isset($_SERVER['HTTP_REFERER'])) $back = $_SERVER['HTTP_REFERER'];
 include "include/connect.inc.php";
 // Paramètres langage
 include "include/language.inc.php";
+include "include/mysql.inc.php";
 $con= new mysqli($dbHost, $dbUser, $dbPass, $dbDb);
 
 
@@ -64,9 +65,9 @@ if (isset($_GET['table_sup']))
 
 		// On créé la requête
 $req = "SELECT name FROM sites ORDER BY name";
-
 $res = $con->query($req);
-
+$req1 ="SHOW TABLES FROM gtcv2multi_gtcv2 LIKE '%log'";
+$res1 = $con->query($req1);
 ?>
 <div align="center">
 <h1><?php echo "Interface de gestion"; ?></h1>
@@ -93,7 +94,9 @@ echo "<td><select name=\"table_sup\" size=\"1\">\n";
     echo $resultat[0].'</option>'."\n";
     }
     echo '</select>'."\n"; 
-echo "</td></tr>\n";
+	echo "</td></tr>\n";
+	
+	
 ?>
 </table>
 <input type="submit" name="submit" value="<?php echo get_vocab("delete"); ?>" style="font-variant: small-caps;">

@@ -823,7 +823,7 @@ $line = mysqli_fetch_row ($result);
 echo "<tr><td class=\"E\"><b>".get_vocab("match_area").get_vocab("deux_points")."</b></td></TR>\n";
 echo "<TR><TD class=\"CL\"><B>$area_name <B></TD></TR>";
 //echo "</td></tr>\n";
-echo "<tr><td class=\"E\"><b>".get_vocab("court").get_vocab("deux_points")."</b></td></TR>\n";
+
 //echo "<TR><td class=\"CL\" valign=\"top\"><table border=0><tr><td><select name=\"rooms[]\" multiple>";
 
 //Sélection de la "room" dans l'"area"
@@ -835,7 +835,13 @@ echo "<tr><td class=\"E\"><b>".get_vocab("court").get_vocab("deux_points")."</b>
 // if ($row[0] == $room_id) $selected = "SELECTED";
 //  echo "<option $selected value=\"".$row[0]."\">".$row[1];
 //}
-echo "<TR><TD class=\"CL\"><B>Court N $room</B></TD></TR>";
+$sql1 = "select room_name from ".$_COOKIE["table_prefix"]."_room where id='".$room_id."' AND area_id='".$area."'";
+$result1 = grr_sql_query($sql1);
+$line1 = mysqli_fetch_row ($result1);
+    $room_name = $line1[0];
+echo "<tr><td class=\"E\"><b>".get_vocab("court").get_vocab("deux_points")."</b></td></TR>\n";
+echo "<TR><TD class=\"CL\"><B>$room_name <B></TD></TR>";
+//echo "<TR><TD class=\"CL\"><B>Court N $room</B></TD></TR>";
 
 //echo "</select></td><td>".get_vocab("ctrl_click")."</td></tr></table>\n";
 //echo "</td></tr>\n";
@@ -1008,7 +1014,7 @@ echo'</div>'.PHP_EOL;
 
 ?>
 <SCRIPT type="text/javascript" LANGUAGE="JavaScript">
-document.writeln ( '<div id="fixe"><INPUT TYPE="button" VALUE="<?php echo get_vocab("save")?>" ONCLICK="validate_and_submit()"></div>' );
+document.writeln ( '<div id="center"><INPUT TYPE="button" VALUE="<?php echo get_vocab("save")?>" ONCLICK="validate_and_submit()"></div>' );
 </SCRIPT>
 <NOSCRIPT>
 <INPUT TYPE="submit" VALUE="<?php echo get_vocab("save")?>">

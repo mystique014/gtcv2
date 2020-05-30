@@ -142,7 +142,7 @@ if (getSettingValue('sso_statut') == 'lcs') {
 </fieldset>
 <br>
 <?php 
-echo "<a href=\"week.php?area=1&amp;room=1\">[".get_vocab("welcome")."]</A><br><br>\n";
+echo "<a href=\"http://gtcv2multi.alwaysdata.net/\">[".get_vocab("welcome")."]</A><br><br>\n";
 echo "<a href=\"help.php\">[".get_vocab("fonctions")."]</A><a href=\"#reg\"></a><br><br>\n";
 echo "<a href=\"mailto:".getSettingValue("webmaster_email")."\">[".get_vocab("administrator_contact")."]</A><br>\n";
 
