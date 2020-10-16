@@ -704,7 +704,7 @@ if ($error_booking_in_past == 'yes') {
     } else {
         echo "<p>" . get_vocab("booking_in_past_explain") . $str_date."</p>";
     }
-    echo $return_link;
+    //echo $return_link;
     include "include/trailer.inc.php";
     die();
 }
@@ -712,7 +712,7 @@ if ($error_booking_in_past == 'yes') {
 if ($error_delais_max_resa_room == 'yes') {
     print_header($day, $month, $year, $area);
     echo "<H2>" . get_vocab("error_delais_max_resa_room") ."</H2>";
-    echo $return_link;
+    //echo $return_link;
     include "include/trailer.inc.php";
     die();
 }
@@ -775,7 +775,7 @@ if ($error_booking_max_all_ressources == 'yes')  {
 if ($error_delais_min_resa_room == 'yes') {
     print_header($day, $month, $year, $area);
     echo "<H2>" . get_vocab("error_delais_min_resa_room") ."</H2>";
-    echo $return_link;
+    //echo $return_link;
     include "include/trailer.inc.php";
     die();
 }
@@ -784,7 +784,7 @@ if ($error_delais_min_resa_room == 'yes') {
 if ($error_date_option_reservation == 'yes') {
     print_header($day, $month, $year, $area);
     echo "<H2>" . get_vocab("error_date_confirm_reservation") ."</H2>";
-    echo $return_link;
+    //echo $return_link;
     include "include/trailer.inc.php";
     die();
 }
@@ -796,7 +796,7 @@ if ($error_booking_room_out == 'yes') {
     print_header($day, $month, $year, $area);
     echo "<H2>" . get_vocab("norights") . "</H2>";
     echo "<p><b>" . get_vocab("tentative_reservation_ressource_indisponible") . "</b></p>";
-    echo $return_link;
+    //echo $return_link;
     include "include/trailer.inc.php";
     die();
 }
@@ -811,7 +811,7 @@ if(strlen($err))
         echo get_vocab("conflict");
         echo "<UL>";
     }
-    echo $err;
+    //echo $err;
 
     if(!isset($hide_title))
         echo "</UL>";

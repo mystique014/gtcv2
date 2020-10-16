@@ -415,7 +415,7 @@ echo "\"></td>\n";
 echo "</td></tr>\n";
 $compteur = getSettingValue("compteurinvite");
 $compteurinvite = (int)$compteur;
-echo "<td>".get_vocab("invite").get_vocab("deux_points")."<span title=\"Activer pour un joueur qui souhaite inviter un joueur ext&eacute;rieur. R&eacute;glez le nombre d'invitations\"><img src=\"img_grr/pointinter.gif\"></span></td>";
+echo "<td>".get_vocab("invite").get_vocab("deux_points")."<span title=\"Activer pour un utilisateur qui souhaite inviter un utilisateur ext&eacute;rieur. R&eacute;glez le nombre d'invitations\"><img src=\"img_grr/pointinter.gif\"></span></td>";
 echo "<td><select name=\"reg_invite\" size=\"1\">\n";
 for ($c = 0; $c <= $compteurinvite; $c++){
 echo "<option value=\"$c\"";
@@ -445,7 +445,7 @@ $res = grr_sql_query($sql);
     }
     echo '</select>'."\n"; 
 echo "</td>\n";
-echo "<td>".get_vocab("championnat").get_vocab("deux_points")."<span title=\"Activer pour un joueur qui souhaite r&eacute;server 2 heures cons&eacute;cutives en championnat\"><img src=\"img_grr/pointinter.gif\"></span></td>";
+echo "<td>".get_vocab("championnat").get_vocab("deux_points")."<span title=\"Activer pour un utilisateur qui souhaite r&eacute;server 2 heures cons&eacute;cutives. championnat individuel sera choisi dans la liste des utilisateurs\"><img src=\"img_grr/pointinter.gif\"></span></td>";
 echo "<td><select name=\"reg_champio\" size=\"1\">\n";
 echo "<option value=\"actif\" ";
 if ($user_champio == "actif")  echo "SELECTED";
@@ -460,7 +460,7 @@ if ($user_licence) { echo " value=\"".htmlspecialchars($user_licence)."\"></td>"
 echo "<td>".get_vocab("classement").get_vocab("deux_points");
 echo "</td><td><input type=text name=reg_classement size=5";
 if ($user_classement) { echo " value=\"".htmlspecialchars($user_classement)."\"></td>";} else {echo">"; }
-echo "<td>".get_vocab("solo").get_vocab("deux_points")."<span title=\"Activer pour un joueur qui souhaite jouer seul\"><img src=\"img_grr/pointinter.gif\"></span></td>";
+echo "<td>".get_vocab("solo").get_vocab("deux_points")."<span title=\"Activer pour un utilisateur qui r&eacute;serve seul par exemple billard voiture. Mode exclusif, les autres utilisateurs sont invisibles dans le formulaire de r&eacute;servation.\"><img src=\"img_grr/pointinter.gif\"></span></td>";
 echo "<td><select name=\"reg_solo\" size=\"1\">\n";
 echo "<option value=\"actif\" ";
 if ($user_solo == "actif")  echo "SELECTED";

@@ -76,9 +76,9 @@ function verif_version() {
 function affiche_version() {
     global $version_grr, $version_grr_RC, $sous_version_grr;
     if (getSettingValue("versionRC")!="")
-  		return "<a href='http://clubtcr.teria.org/'>".getSettingValue("version").$sous_version_grr;
+  		return getSettingValue("version").$sous_version_grr;
     else
-     	return "<a href='http://clubtcr.teria.org/'>".getSettingValue("version").$sous_version_grr;
+     	return getSettingValue("version").$sous_version_grr;
     
 }
 
@@ -1395,7 +1395,7 @@ function AdvRoomMaxBooking($user, $description, $id_room, $number) {
 			$adversaire = $row[0];
 			}
 			}
-        $sql2 = "SELECT * FROM grr_entry WHERE (room_id = '".protect_data_sql($id_room)."' and create_by = '".protect_data_sql($adversaire)."' and end_time > '$now')";
+        $sql2 = "SELECT * FROM grr_entry WHERE (room_id = '".protect_data_sql($id_room)."' and (create_by = '".protect_data_sql($adversaire)."' OR description = '".protect_data_sql($description)."') and end_time > '$now')";
         $res = grr_sql_query($sql2);
         $nb_bookings = grr_sql_count($res) + $number;
         if ($nb_bookings > $max_booking) {

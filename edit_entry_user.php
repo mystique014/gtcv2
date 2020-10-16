@@ -478,7 +478,13 @@ WHERE statut != 'administrateur' AND login != '".$create_by."' AND etat = 'actif
 ORDER BY nom";
 $res = grr_sql_query($sql);
 
-if ($res)
+// on vérifie si lejoueur qui réserve possède le mode solo
+$user_solo = grr_sql_query1("select solo from grr_utilisateurs where login = '$create_by'");
+if ($user_solo == 'actif')
+{
+	echo "<OPTION VALUE=\"solo\">solo</option>\n";
+}else
+	{
   for ($i = 0; ($row = grr_sql_row($res, $i)); $i++)
     {
       // La requête sql précédente laisse passer les cas où un type est non valide
@@ -497,13 +503,14 @@ if ($res)
 				}
 		} elseif ($row[0]  == 'solo')
 		{
-		// test si l'adversaire peut jouer en mode solo
+		// le mode solo est retiré
 			$user_solo = grr_sql_query1("select solo from grr_utilisateurs where login = '$create_by'");
 			if ($user_solo == 'actif')
 				{
 				echo "<OPTION VALUE=\"".$row[1]." ".$row[2]."\"";
 				if ($description == $row[0]) echo " SELECTED";
 				echo " >".$row[1]."  ".$row[2]."</option>\n";
+				}else{
 				}
 		} elseif ( $row[0] == 'invite')
 		{
@@ -524,8 +531,8 @@ if ($res)
 		} else 
 		{
 		}
-	}
- 		
+		}
+	}		
 echo "<TR><TD class=\"E\"><B>$F</B></TD></TR>
 <TR><TD class=\"CL\">$G";
 
@@ -823,7 +830,7 @@ $line = mysqli_fetch_row ($result);
 echo "<tr><td class=\"E\"><b>".get_vocab("match_area").get_vocab("deux_points")."</b></td></TR>\n";
 echo "<TR><TD class=\"CL\"><B>$area_name <B></TD></TR>";
 //echo "</td></tr>\n";
-echo "<tr><td class=\"E\"><b>".get_vocab("court").get_vocab("deux_points")."</b></td></TR>\n";
+
 //echo "<TR><td class=\"CL\" valign=\"top\"><table border=0><tr><td><select name=\"rooms[]\" multiple>";
 
 //Sélection de la "room" dans l'"area"
@@ -835,7 +842,13 @@ echo "<tr><td class=\"E\"><b>".get_vocab("court").get_vocab("deux_points")."</b>
 // if ($row[0] == $room_id) $selected = "SELECTED";
 //  echo "<option $selected value=\"".$row[0]."\">".$row[1];
 //}
-echo "<TR><TD class=\"CL\"><B>Court N $room</B></TD></TR>";
+$sql1 = "select room_name from grr_room where id='".$room_id."' AND area_id='".$area."'";
+$result1 = grr_sql_query($sql1);
+$line1 = mysqli_fetch_row ($result1);
+    $room_name = $line1[0];
+echo "<tr><td class=\"E\"><b>".get_vocab("court").get_vocab("deux_points")."</b></td></TR>\n";
+echo "<TR><TD class=\"CL\"><B>$room_name <B></TD></TR>";
+//echo "<TR><TD class=\"CL\"><B>Court N $room</B></TD></TR>";
 
 //echo "</select></td><td>".get_vocab("ctrl_click")."</td></tr></table>\n";
 //echo "</td></tr>\n";
